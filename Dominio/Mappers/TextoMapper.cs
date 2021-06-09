@@ -21,6 +21,7 @@ namespace Dominio.Mappers
                 Id = texto.Id,
                 IdProyecto = texto.IdProyecto,
                 Texto1 = texto.Texto1,
+                Orden = texto.Orden,
             };
         }
 
@@ -34,6 +35,7 @@ namespace Dominio.Mappers
                 Id = texto.Id,
                 IdProyecto = texto.IdProyecto,
                 Texto1 = texto.Texto1,
+                Orden = texto.Orden,
             };
         }
 
@@ -50,6 +52,7 @@ namespace Dominio.Mappers
                     Id = tex.Id,
                     IdProyecto = tex.IdProyecto,
                     Texto1 = tex.Texto1,
+                    Orden = tex.Orden,
                 };
                 texto.Add(t);
             }
@@ -69,6 +72,7 @@ namespace Dominio.Mappers
                     Id = tex.Id,
                     IdProyecto = tex.IdProyecto,
                     Texto1 = tex.Texto1,
+                    Orden = tex.Orden,
                 };
                 texto.Add(t);
             }

@@ -14,27 +14,29 @@ namespace Dominio.Mappers
 {
     public class TagMapper
     {
-        public DTOTag MapToObject(Tag tags)
+        public DTOTag MapToObject(Tag tag)
         {
-            if (tags == null)
+            if (tag == null)
                 return null;
 
             return new DTOTag()
             {
-                IdProyecto = tags.IdProyecto,
-                Tag = tags.Tag1,
+                Id = tag.Id,
+                IdProyecto = tag.IdProyecto,
+                Tag = tag.Tag1,
             };
         }
 
-        public Tag MapToEntity(DTOTag tags)
+        public Tag MapToEntity(DTOTag tag)
         {
-            if (tags == null)
+            if (tag == null)
                 return null;
 
             return new Tag()
             {
-                IdProyecto = tags.IdProyecto,
-                Tag1 = tags.Tag,
+                Id = tag.Id,
+                IdProyecto = tag.IdProyecto,
+                Tag1 = tag.Tag,
             };
         }
 
@@ -48,6 +50,7 @@ namespace Dominio.Mappers
             {
                 var t = new DTOTag()
                 {
+                    Id = ta.Id,
                     IdProyecto = ta.IdProyecto,
                     Tag = ta.Tag1,
                 };
@@ -66,6 +69,7 @@ namespace Dominio.Mappers
             {
                 var t = new Tag()
                 {
+                    Id = ta.Id,
                     IdProyecto = ta.IdProyecto,
                     Tag1 = ta.Tag,
                 };

@@ -8,8 +8,8 @@ namespace Common.DataTransferObjects
 {
     public class DTOSeguimiento
     {
-        public string Usuario { get; set; }
-        public string Seguidor { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdSeguidor { get; set; }
         public int Id { get; set; }
     }
 }

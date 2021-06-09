@@ -18,7 +18,7 @@ namespace Dominio.Mappers
             return new DTOValoracion()
             {
                 Id = valoracion.Id,
-                Usuario = valoracion.Usuario,
+                IdUsuario = valoracion.IdUsuario,
                 IdProyecto = valoracion.IdProyecto,
             };
         }
@@ -31,7 +31,7 @@ namespace Dominio.Mappers
             return new Valoracion()
             {
                 Id = valoracion.Id,
-                Usuario = valoracion.Usuario,
+                IdUsuario = valoracion.IdUsuario,
                 IdProyecto = valoracion.IdProyecto,
             };
         }
@@ -47,7 +47,7 @@ namespace Dominio.Mappers
                 var v = new DTOValoracion()
                 {
                     Id = val.Id,
-                    Usuario = val.Usuario,
+                    IdUsuario = val.IdUsuario,
                     IdProyecto = val.IdProyecto,
                 };
                 valoracion.Add(v);
@@ -66,7 +66,7 @@ namespace Dominio.Mappers
                 var v = new Valoracion()
                 {
                     Id = val.Id,
-                    Usuario = val.Usuario,
+                    IdUsuario = val.IdUsuario,
                     IdProyecto = val.IdProyecto,
                 };
                 valoracion.Add(v);

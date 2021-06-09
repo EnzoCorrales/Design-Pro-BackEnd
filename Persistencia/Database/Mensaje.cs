@@ -18,9 +18,9 @@ namespace Persistencia.Database
         public string Asunto { get; set; }
         public string Contenido { get; set; }
         public System.DateTime Fecha { get; set; }
-        public string UsuarioE { get; set; }
-        public string UsuarioR { get; set; }
-        public bool Leído { get; set; }
+        public int IdUsuarioE { get; set; }
+        public int IdUsuarioR { get; set; }
+        public int Leído { get; set; }
     
         public virtual Usuario Usuario { get; set; }
         public virtual Usuario Usuario1 { get; set; }

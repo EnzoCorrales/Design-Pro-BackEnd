@@ -22,6 +22,7 @@ namespace Dominio.Mappers
                 IdProyecto = imagen.IdProyecto,
                 Nombre = imagen.Nombre,
                 Direccion = imagen.Direccion,
+                Orden = imagen.Orden,
             };
         }
 
@@ -36,6 +37,7 @@ namespace Dominio.Mappers
                 IdProyecto = imagen.IdProyecto,
                 Nombre = imagen.Nombre,
                 Direccion = imagen.Direccion,
+                Orden = imagen.Orden,
             };
         }
 
@@ -53,6 +55,7 @@ namespace Dominio.Mappers
                     IdProyecto = im.IdProyecto,
                     Nombre = im.Nombre,
                     Direccion = im.Direccion,
+                    Orden = im.Orden,
                 };
                 imagen.Add(i);
             }
@@ -73,6 +76,7 @@ namespace Dominio.Mappers
                     IdProyecto = im.IdProyecto,
                     Nombre = im.Nombre,
                     Direccion = im.Direccion,
+                    Orden = im.Orden,
                 };
                 imagen.Add(i);
             }

@@ -21,6 +21,7 @@ namespace Dominio.Mappers
 
             return new DTOUsuario()
             {
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
@@ -48,6 +49,7 @@ namespace Dominio.Mappers
 
             return new Usuario()
             {
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
@@ -78,6 +80,7 @@ namespace Dominio.Mappers
             {
                 var u = new Usuario()
                 {
+                    Id = usu.Id,
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
@@ -111,6 +114,7 @@ namespace Dominio.Mappers
             {
                 var u = new DTOUsuario()
                 {
+                    Id = usu.Id,
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
