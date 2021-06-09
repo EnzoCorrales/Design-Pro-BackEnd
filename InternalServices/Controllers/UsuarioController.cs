@@ -13,10 +13,10 @@ namespace InternalServices.Controllers
     public class UsuarioController : ApiController
     {
 
-        // localhost:{puerto}/api/usuario/Create
+        // localhost:{puerto}/api/usuario/register
         // Crea un usuario
         [HttpPost]
-        public IHttpActionResult Create(DTOUsuario usuario)
+        public IHttpActionResult Register(DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
