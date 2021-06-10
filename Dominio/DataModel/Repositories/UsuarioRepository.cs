@@ -72,6 +72,7 @@ namespace Dominio.DataModel.Repositories
             entity.Pais = usuario.Pais;
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
+            entity.Password = usuario.Password;
         }
 
         public void Remove(int id)

@@ -20,6 +20,7 @@ namespace Common.DataTransferObjects
             this.Siguiendo = new HashSet<DTOSeguimiento>();
             this.PValorados = new HashSet<DTOValoracion>();
         }
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Correo { get; set; }
@@ -30,7 +31,7 @@ namespace Common.DataTransferObjects
         public string ImgPerfil { get; set; }
         public string UrlWeb { get; set; }
         public string Descripcion { get; set; }
-        public int Id { get; set; }
+        public string Password { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
