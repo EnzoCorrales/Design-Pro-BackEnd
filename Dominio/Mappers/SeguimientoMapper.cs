@@ -18,8 +18,8 @@ namespace Dominio.Mappers
             return new DTOSeguimiento()
             {
                 Id = seguimiento.Id,
-                Usuario = seguimiento.Usuario,
-                Seguidor = seguimiento.Seguidor,
+                IdUsuario = seguimiento.IdUsuario,
+                IdSeguidor = seguimiento.IdSeguidor,
             };
         }
 
@@ -31,8 +31,8 @@ namespace Dominio.Mappers
             return new Seguimiento()
             {
                 Id = seguimiento.Id,
-                Usuario = seguimiento.Usuario,
-                Seguidor = seguimiento.Seguidor,
+                IdUsuario = seguimiento.IdUsuario,
+                IdSeguidor = seguimiento.IdSeguidor,
             };
         }
 
@@ -47,8 +47,8 @@ namespace Dominio.Mappers
                 var s = new DTOSeguimiento()
                 {
                     Id = seg.Id,
-                    Usuario = seg.Usuario,
-                    Seguidor = seg.Seguidor,
+                    IdUsuario = seg.IdUsuario,
+                    IdSeguidor = seg.IdSeguidor,
                 };
                 seguimiento.Add(s);
             }
@@ -66,8 +66,8 @@ namespace Dominio.Mappers
                 var s = new Seguimiento()
                 {
                     Id = seg.Id,
-                    Usuario = seg.Usuario,
-                    Seguidor = seg.Seguidor,
+                    IdUsuario = seg.IdUsuario,
+                    IdSeguidor = seg.IdSeguidor,
                 };
                 seguimiento.Add(s);
             }

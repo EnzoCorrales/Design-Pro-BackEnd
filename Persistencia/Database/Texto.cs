@@ -17,6 +17,7 @@ namespace Persistencia.Database
         public int Id { get; set; }
         public int IdProyecto { get; set; }
         public string Texto1 { get; set; }
+        public int Orden { get; set; }
     
         public virtual Proyecto Proyecto { get; set; }
     }

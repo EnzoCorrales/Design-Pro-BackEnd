@@ -54,16 +54,16 @@ namespace InternalServices.Controllers
             return Ok(response);
         }
 
-        // localhost:{puerto}/api/proyecto/Remove?correo={correo}
-        // Elimina todos los proyecto de cierto usuario dado el correo
+        // localhost:{puerto}/api/proyecto/RemoveByUsuario?idUsuario={idUsuario}
+        // Elimina todos los proyecto de cierto usuario dado el id
         [HttpPost]
-        public IHttpActionResult Remove(string correo)
+        public IHttpActionResult RemoveByUsuario(int idUsuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-                mantenimiento.Remove(correo);
+                mantenimiento.RemoveByUsuario(idUsuario);
                 response.Success = true;
             }
             catch (Exception ex)
@@ -96,12 +96,12 @@ namespace InternalServices.Controllers
             return mantenimiento.GetAll();
         }
 
-        // localhost:{puerto}/api/proyecto/GetAll?correo={correo}
-        // Devuelve todos los proyectos que tiene un usuario en especifico dado el correo
-        public IEnumerable<DTOProyecto> GetAll(string correo)
+        // localhost:{puerto}/api/proyecto/GetAll?idUsuario={idUsuario}
+        // Devuelve todos los proyectos que tiene un usuario en especifico dado el id
+        public IEnumerable<DTOProyecto> GetAll(int idUsuario)
         {
             MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            return mantenimiento.GetAll(correo);
+            return mantenimiento.GetAll(idUsuario);
         }
     }
 }

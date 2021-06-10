@@ -30,16 +30,16 @@ namespace Dominio.DataModel.Repositories
         /// </summary>
         /// <param name="correo"></param>
         /// <returns>una lista de comentarios dado un usuario</returns>
-        public List<Comentario> GetAll(String correo)
+        public List<Comentario> GetAllByUsuario(int idUsuario)
         {
-            return this._context.Comentario.Where(a => a.Usuario.Equals(correo)).ToList();
+            return this._context.Comentario.Where(a => a.IdUsuario == idUsuario).ToList();
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="idProyecto"></param>
         /// <returns>una lista de comentarios dado un proyecto</returns>
-        public List<Comentario> GetAll(int idProyecto)
+        public List<Comentario> GetAllByProyecto(int idProyecto)
         {
             return this._context.Comentario.Where(a => a.IdProyecto == idProyecto).ToList();
         }
@@ -56,12 +56,12 @@ namespace Dominio.DataModel.Repositories
             this._context.Comentario.Remove(entity);
         }
 
-        public void Remove(string correo)
+        public void RemoveByUsuario(int idUsuario)
         {
             var lista = this.GetAll();
             foreach(var comentario in lista)
             {
-                if(comentario.Usuario.Equals(correo))
+                if(comentario.IdUsuario == idUsuario)
                     this._context.Comentario.Remove(comentario);
             }
         }

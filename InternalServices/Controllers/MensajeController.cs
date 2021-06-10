@@ -40,28 +40,28 @@ namespace InternalServices.Controllers
             return mantenimiento.GetAll();
         }
 
-        // localhost:{puerto}/api/mensaje/GetAllByEmisor?correo={correo}
-        // Devuelve todos los mensajes enviados por un usuario en especifico dado un correo
-        public IEnumerable<DTOMensaje> GetAllByEmisor(string correo)
+        // localhost:{puerto}/api/mensaje/GetAllByEmisor?idUsuario={idUsuario}
+        // Devuelve todos los mensajes enviados por un usuario en especifico dado un id
+        public IEnumerable<DTOMensaje> GetAllByEmisor(int idUsuario)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
-            return mantenimiento.GetAllByEmisor(correo);
+            return mantenimiento.GetAllByEmisor(idUsuario);
         }
 
-        // localhost:{puerto}/api/mensaje/GetAllByReceptor?correo={correo}
-        // Devuelve todos los mensajes recibidos por un usuario en especifico dado un correo
-        public IEnumerable<DTOMensaje> GetAllByReceptor(string correo)
+        // localhost:{puerto}/api/mensaje/GetAllByReceptor?idUsuario={idUsuario}
+        // Devuelve todos los mensajes recibidos por un usuario en especifico dado un id
+        public IEnumerable<DTOMensaje> GetAllByReceptor(int idUsuario)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
-            return mantenimiento.GetAllByReceptor(correo);
+            return mantenimiento.GetAllByReceptor(idUsuario);
         }
 
-        // localhost:{puerto}/api/mensaje/GetConversacion?usuario1={usuario1}&usuario2={usuario2}
-        // Devuelve la conversacion ordenada por fecha entre dos usuarios dado sus correos respectivamente
-        public IEnumerable<DTOMensaje> GetConversacion(string usuario1, string usuario2)
+        // localhost:{puerto}/api/mensaje/GetConversacion?idUsuario1={idUsuario1}&idUsuario2={idUsuario2}
+        // Devuelve la conversacion ordenada por fecha entre dos usuarios dado sus id respectivamente
+        public IEnumerable<DTOMensaje> GetConversacion(int idUsuario1, int idUsuario2)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
-            return mantenimiento.GetConversacion(usuario1,usuario2);
+            return mantenimiento.GetConversacion(idUsuario1, idUsuario2);
         }
 
         // localhost:{puerto}/api/mensaje/Get?id={id}

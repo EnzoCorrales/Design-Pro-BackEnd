@@ -22,7 +22,7 @@ namespace Common.DataTransferObjects
         public int Id { get; set; }
         public string Titulo { get; set; }
         public string Portada { get; set; }
-        public string Autor { get; set; }
+        public int IdAutor { get; set; }
         public int Visitas { get; set; }
         public string Categoria { get; set; }
         public string Descripcion { get; set; }

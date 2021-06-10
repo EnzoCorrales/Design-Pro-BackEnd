@@ -16,9 +16,9 @@ namespace Dominio.DataModel.Repositories
             this._context = context;
         }
 
-        public Usuario Get(string correo)
+        public Usuario Get(int id)
         {
-            return this._context.Usuario.FirstOrDefault(a => a.Correo == correo);
+            return this._context.Usuario.FirstOrDefault(a => a.Id == id);
         }
 
         public List<Usuario> GetAll()
@@ -26,31 +26,31 @@ namespace Dominio.DataModel.Repositories
             return this._context.Usuario.Select(a => a).ToList();
         }
 
-        public List<Usuario> GetAllSeguidores(string correo, DesignProDB c)
+        public List<Usuario> GetAllSeguidores(int id, DesignProDB c)
         {
             var repositorySeguimiento = new SeguimientoRepository(c);
-            var seguidores = repositorySeguimiento.GetAllSeguidores(correo);
+            var seguidores = repositorySeguimiento.GetAllSeguidores(id);
 
             List<Usuario> resultado = new List<Usuario>();
             
             foreach(var seg in seguidores)
             {
-                resultado.Add(this.Get(seg.Seguidor));
+                resultado.Add(this.Get(seg.IdSeguidor));
             }
 
             return resultado;
         }
 
-        public List<Usuario> GetAllSiguiendo(string correo, DesignProDB c)
+        public List<Usuario> GetAllSiguiendo(int id, DesignProDB c)
         {
             var repositorySeguimiento = new SeguimientoRepository(c);
-            var seguidores = repositorySeguimiento.GetAllSiguiendo(correo);
+            var seguidores = repositorySeguimiento.GetAllSiguiendo(id);
 
             List<Usuario> resultado = new List<Usuario>();
 
             foreach (var seg in seguidores)
             {
-                resultado.Add(this.Get(seg.Usuario));
+                resultado.Add(this.Get(seg.IdUsuario));
             }
 
             return resultado;
@@ -63,7 +63,7 @@ namespace Dominio.DataModel.Repositories
 
         public void Update(Usuario usuario)
         {
-            var entity = this.Get(usuario.Correo);
+            var entity = this.Get(usuario.Id);
 
             entity.Nombre = usuario.Nombre;
             entity.Apellido = usuario.Apellido;
@@ -72,11 +72,12 @@ namespace Dominio.DataModel.Repositories
             entity.Pais = usuario.Pais;
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
+            entity.Password = usuario.Password;
         }
 
-        public void Remove(string correo)
+        public void Remove(int id)
         {
-            var entity = this.Get(correo);
+            var entity = this.Get(id);
             this._context.Usuario.Remove(entity);
         }
     }

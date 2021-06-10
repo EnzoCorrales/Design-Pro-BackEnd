@@ -21,6 +21,7 @@ namespace Dominio.Mappers
 
             return new DTOUsuario()
             {
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
@@ -31,6 +32,7 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Descripcion = usuario.Descripcion,
+                Password = usuario.Password,
                 Comentarios = ComentarioMapper.MapToCollectionObject(usuario.Comentario),
                 MensajesE = MensajeMapper.MapToCollectionObject(usuario.Mensaje),
                 MensajesR = MensajeMapper.MapToCollectionObject(usuario.Mensaje1),
@@ -48,6 +50,7 @@ namespace Dominio.Mappers
 
             return new Usuario()
             {
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
@@ -58,6 +61,7 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Descripcion = usuario.Descripcion,
+                Password = usuario.Password,
                 Comentario = ComentarioMapper.MapToCollectionEntity(usuario.Comentarios),
                 Mensaje = MensajeMapper.MapToCollectionEntity(usuario.MensajesE),
                 Mensaje1 = MensajeMapper.MapToCollectionEntity(usuario.MensajesR),
@@ -78,6 +82,7 @@ namespace Dominio.Mappers
             {
                 var u = new Usuario()
                 {
+                    Id = usu.Id,
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
@@ -88,6 +93,7 @@ namespace Dominio.Mappers
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Descripcion = usu.Descripcion,
+                    Password = usu.Password,
                     Comentario = ComentarioMapper.MapToCollectionEntity(usu.Comentarios),
                     Mensaje = MensajeMapper.MapToCollectionEntity(usu.MensajesE),
                     Mensaje1 = MensajeMapper.MapToCollectionEntity(usu.MensajesR),
@@ -111,6 +117,7 @@ namespace Dominio.Mappers
             {
                 var u = new DTOUsuario()
                 {
+                    Id = usu.Id,
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
@@ -121,6 +128,7 @@ namespace Dominio.Mappers
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Descripcion = usu.Descripcion,
+                    Password = usu.Password,
                     Comentarios = ComentarioMapper.MapToCollectionObject(usu.Comentario),
                     MensajesE = MensajeMapper.MapToCollectionObject(usu.Mensaje),
                     MensajesR = MensajeMapper.MapToCollectionObject(usu.Mensaje1),
