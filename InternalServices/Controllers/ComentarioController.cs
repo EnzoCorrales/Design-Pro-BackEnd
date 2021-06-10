@@ -53,16 +53,16 @@ namespace InternalServices.Controllers
             return Ok(response);
         }
 
-        // localhost:{puerto}/api/comentario/Remove?correo={correo}
+        // localhost:{puerto}/api/comentario/RemoveByUsuario?idUsuario={idUsuario}
         // Elimina todos los comentarios de un usuario en especifico dado el correo
         [HttpPost]
-        public IHttpActionResult Remove(string correo)
+        public IHttpActionResult RemoveByUsuario(int idUsuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoComentario mantenimiento = new MantenimientoComentario();
-                mantenimiento.Remove(correo);
+                mantenimiento.RemoveByUsuario(idUsuario);
                 response.Success = true;
             }
             catch (Exception ex)
@@ -115,20 +115,20 @@ namespace InternalServices.Controllers
             return mantenimiento.GetAll();
         }
 
-        // localhost:{puerto}/api/comentario/GetAll?idProyecto={idProyecto}
+        // localhost:{puerto}/api/comentario/GetAllByProyecto?idProyecto={idProyecto}
         // Devuelve todos los comentarios de un proyecto dada la id del proyecto
-        public IEnumerable<DTOComentario> GetAll(int idProyecto)
+        public IEnumerable<DTOComentario> GetAllByProyecto(int idProyecto)
         {
             MantenimientoComentario mantenimiento = new MantenimientoComentario();
-            return mantenimiento.GetAll(idProyecto);
+            return mantenimiento.GetAllByProyecto(idProyecto);
         }
 
-        // localhost:{puerto}/api/comentario/GetAll?correo={correo}
+        // localhost:{puerto}/api/comentario/GetAllByUsuario?idUsuario={idUsuario}
         // Devuelve todos los comentarios de un usuario dado el correo
-        public IEnumerable<DTOComentario> GetAll(string correo)
+        public IEnumerable<DTOComentario> GetAllByUsuario(int idUsuario)
         {
             MantenimientoComentario mantenimiento = new MantenimientoComentario();
-            return mantenimiento.GetAll(correo);
+            return mantenimiento.GetAllByUsuario(idUsuario);
         }
     }
 }

@@ -26,9 +26,9 @@ namespace Dominio.DataModel.Repositories
             return this._context.Proyecto.Select(a => a).ToList();
         }
 
-        public List<Proyecto> GetAll(string correo)
+        public List<Proyecto> GetAll(int idUsuario)
         {
-            return this._context.Proyecto.Where(a => a.Autor.Equals(correo)).ToList();
+            return this._context.Proyecto.Where(a => a.IdAutor == idUsuario).ToList();
         }
 
         public void Create(Proyecto proyecto)
@@ -42,12 +42,12 @@ namespace Dominio.DataModel.Repositories
             this._context.Proyecto.Remove(entity);
         }
 
-        public void Remove(string correo)
+        public void RemoveByUsuario(int idUsuario)
         {
             var lista = this.GetAll();
             foreach(var proyecto in lista)
             {
-                if(proyecto.Autor.Equals(correo))
+                if(proyecto.IdAutor == idUsuario)
                     this._context.Proyecto.Remove(proyecto);
             }
             

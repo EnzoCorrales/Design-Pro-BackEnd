@@ -22,6 +22,7 @@ namespace Dominio.Mappers
                 IdProyecto = video.IdProyecto,
                 Nombre = video.Nombre,
                 Direccion = video.Direccion,
+                Orden = video.Orden,
             };
         }
 
@@ -36,6 +37,7 @@ namespace Dominio.Mappers
                 IdProyecto = video.IdProyecto,
                 Nombre = video.Nombre,
                 Direccion = video.Direccion,
+                Orden = video.Orden,
             };
         }
 
@@ -53,6 +55,7 @@ namespace Dominio.Mappers
                     IdProyecto = vid.IdProyecto,
                     Nombre = vid.Nombre,
                     Direccion = vid.Direccion,
+                    Orden = vid.Orden,
                 };
                 video.Add(v);
             }
@@ -73,6 +76,7 @@ namespace Dominio.Mappers
                     IdProyecto = vid.IdProyecto,
                     Nombre = vid.Nombre,
                     Direccion = vid.Direccion,
+                    Orden = vid.Orden,
                 };
                 video.Add(v);
             }

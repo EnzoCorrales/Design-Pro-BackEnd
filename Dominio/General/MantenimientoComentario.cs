@@ -58,14 +58,14 @@ namespace Dominio.General
             }
         }
 
-        public void Remove(string correo)
+        public void RemoveByUsuario(int idUsuario)
         {
             try
             {
                 using (var context = new DesignProDB())
                 {
                     var repository = new ComentarioRepository(context);
-                    repository.Remove(correo);
+                    repository.RemoveByUsuario(idUsuario);
 
                     context.SaveChanges();
                 }
@@ -103,12 +103,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOComentario> GetAll(string correo)
+        public List<DTOComentario> GetAllByUsuario(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
-                var lista = repository.GetAll(correo);
+                var lista = repository.GetAllByUsuario(idUsuario);
 
                 List<DTOComentario> resultado = new List<DTOComentario>();
 
@@ -121,12 +121,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOComentario> GetAll(int idProyecto)
+        public List<DTOComentario> GetAllByProyecto(int idProyecto)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
-                var lista = repository.GetAll(idProyecto);
+                var lista = repository.GetAllByProyecto(idProyecto);
 
                 List<DTOComentario> resultado = new List<DTOComentario>();
 

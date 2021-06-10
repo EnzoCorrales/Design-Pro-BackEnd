@@ -24,7 +24,7 @@ namespace Dominio.Mappers
                 Id = comentario.Id,
                 Contenido = comentario.Contenido,
                 Fecha = comentario.Fecha,
-                Usuario = comentario.Usuario,
+                IdUsuario = comentario.IdUsuario,
                 IdProyecto = comentario.IdProyecto,
             };
         }
@@ -39,7 +39,7 @@ namespace Dominio.Mappers
                 Id = comentario.Id,
                 Contenido = comentario.Contenido,
                 Fecha = comentario.Fecha,
-                Usuario = comentario.Usuario,
+                IdUsuario = comentario.IdUsuario,
                 IdProyecto = comentario.IdProyecto,
             };
         }
@@ -57,7 +57,7 @@ namespace Dominio.Mappers
                     Id = com.Id,
                     Contenido = com.Contenido,
                     Fecha = com.Fecha,
-                    Usuario = com.Usuario,
+                    IdUsuario = com.IdUsuario,
                     IdProyecto = com.IdProyecto,
                 };
                 comentario.Add(c);
@@ -78,7 +78,7 @@ namespace Dominio.Mappers
                     Id = com.Id,
                     Contenido = com.Contenido,
                     Fecha = com.Fecha,
-                    Usuario = com.Usuario,
+                    IdUsuario = com.IdUsuario,
                     IdProyecto = com.IdProyecto,
                 };
                 comentario.Add(c);
