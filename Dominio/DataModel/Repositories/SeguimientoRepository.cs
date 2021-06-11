@@ -21,14 +21,14 @@ namespace Dominio.DataModel.Repositories
             this._context.Seguimiento.Add(seguimiento);
         }
 
-        public List<Seguimiento> GetAllSeguidores(string correo)
+        public List<Seguimiento> GetAllSeguidores(int idUsuario)
         {
-            return this._context.Seguimiento.Where(a => a.Usuario.Equals(correo)).ToList();
+            return this._context.Seguimiento.Where(a => a.IdUsuario == idUsuario).ToList();
         }
 
-        public List<Seguimiento> GetAllSiguiendo(string correo)
+        public List<Seguimiento> GetAllSiguiendo(int idUsuario)
         {
-            return this._context.Seguimiento.Where(a => a.Seguidor.Equals(correo)).ToList();
+            return this._context.Seguimiento.Where(a => a.IdSeguidor == idUsuario).ToList();
         }
     }
 }

@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="aa0aefe65d2147d7a484483783647cb7" Name="Diagram1">
-        <EntityTypeShape EntityType="DesignProModel.Comentario" Width="1.5" PointX="8.25" PointY="13.25" IsExpanded="true" />
+      <Diagram DiagramId="fb05af3f41b6409a92ebab46605a225b" Name="Diagram1">
+        <EntityTypeShape EntityType="DesignProModel.Comentario" Width="1.5" PointX="8.25" PointY="13.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DesignProModel.Imagen" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DesignProModel.Mensaje" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Proyecto" Width="1.5" PointX="3" PointY="14.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Seguimiento" Width="1.5" PointX="3" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Tag" Width="1.5" PointX="5.25" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Texto" Width="1.5" PointX="5.25" PointY="16.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Usuario" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Valoracion" Width="1.5" PointX="8.25" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Video" Width="1.5" PointX="5.25" PointY="21.75" IsExpanded="true" />
-        <AssociationConnector Association="DesignProModel.FK_Comentario_Comentario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DesignProModel.Proyecto" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Seguimiento" Width="1.5" PointX="3" PointY="22.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Tag" Width="1.5" PointX="5.25" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Texto" Width="1.5" PointX="5.25" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Usuario" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Valoracion" Width="1.5" PointX="8.25" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Video" Width="1.5" PointX="5.25" PointY="22.375" IsExpanded="true" />
         <AssociationConnector Association="DesignProModel.FK_Comentario_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="DesignProModel.FK_Comentario_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Imagen_Proyecto" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Mensaje_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Mensaje_Usuario1" ManuallyRouted="false" />

@@ -14,11 +14,11 @@ namespace Persistencia.Database
     
     public partial class Seguimiento
     {
-        public string Usuario { get; set; }
-        public string Seguidor { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdSeguidor { get; set; }
         public int Id { get; set; }
     
+        public virtual Usuario Usuario { get; set; }
         public virtual Usuario Usuario1 { get; set; }
-        public virtual Usuario Usuario2 { get; set; }
     }
 }

@@ -58,14 +58,14 @@ namespace Dominio.General
             }
         }
 
-        public void Remove(string correo)
+        public void RemoveByUsuario(int idUsuario)
         {
             try
             {
                 using (var context = new DesignProDB())
                 {
                     var repository = new ProyectoRepository(context);
-                    repository.Remove(correo);
+                    repository.RemoveByUsuario(idUsuario);
 
                     context.SaveChanges();
                 }
@@ -110,12 +110,12 @@ namespace Dominio.General
         /// </summary>
         /// <param name="correo"></param>
         /// <returns>una lista con los proyectos dado un cierto usuario</returns>
-        public List<DTOProyecto> GetAll(string correo)
+        public List<DTOProyecto> GetAll(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
-                var lista = repository.GetAll(correo);
+                var lista = repository.GetAll(idUsuario);
 
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 

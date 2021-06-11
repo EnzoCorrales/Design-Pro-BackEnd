@@ -41,12 +41,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOMensaje> GetAllByEmisor(string correo)
+        public List<DTOMensaje> GetAllByEmisor(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
-                var lista = repository.GetAllByEmisor(correo);
+                var lista = repository.GetAllByEmisor(idUsuario);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
@@ -59,12 +59,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOMensaje> GetAllByReceptor(string correo)
+        public List<DTOMensaje> GetAllByReceptor(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
-                var lista = repository.GetAllByReceptor(correo);
+                var lista = repository.GetAllByReceptor(idUsuario);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
@@ -77,12 +77,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOMensaje> GetConversacion(string usuario1, string usuario2)
+        public List<DTOMensaje> GetConversacion(int idUsuario1, int idUsuario2)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
-                var lista = repository.GetConversacion(usuario1, usuario2);
+                var lista = repository.GetConversacion(idUsuario1, idUsuario2);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 

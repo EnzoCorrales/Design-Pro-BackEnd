@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Common.DataTransferObjects;
 using Dominio.DataModel.Repositories;
 using Persistencia.Database;
+using System.Data.Entity.Validation;
 
 namespace Dominio.General
 {
@@ -27,7 +28,7 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Correo);
+                    var current = repository.Get(dtousuario.Id);
 
                     if (current != null)
                         throw new Exception("Correo en uso");
@@ -39,8 +40,18 @@ namespace Dominio.General
                     context.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (DbEntityValidationException e)
             {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
                 throw;
             }
         }
@@ -63,14 +74,14 @@ namespace Dominio.General
             }
         }
 
-        public void Remove(string correo)
+        public void Remove(int idUsuario)
         {
             try
             {
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    repository.Remove(correo);
+                    repository.Remove(idUsuario);
 
                     context.SaveChanges();
                 }
@@ -81,21 +92,21 @@ namespace Dominio.General
             }
         }
 
-        public DTOUsuario Get(string correo)
+        public DTOUsuario Get(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(correo));
+                return _mapper.MapToObject(repository.Get(idUsuario));
             }
         }
 
-        public List<DTOUsuario> GetAllSeguidores(string correo)
+        public List<DTOUsuario> GetAllSeguidores(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var lista = repository.GetAllSeguidores(correo, context);
+                var lista = repository.GetAllSeguidores(idUsuario, context);
 
                 List<DTOUsuario> resultado = new List<DTOUsuario>();
 
@@ -108,12 +119,12 @@ namespace Dominio.General
             }
         }
 
-        public List<DTOUsuario> GetAllSiguiendo(string correo)
+        public List<DTOUsuario> GetAllSiguiendo(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var lista = repository.GetAllSiguiendo(correo, context);
+                var lista = repository.GetAllSiguiendo(idUsuario, context);
 
                 List<DTOUsuario> resultado = new List<DTOUsuario>();
 

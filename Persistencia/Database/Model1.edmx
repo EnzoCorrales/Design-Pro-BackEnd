@@ -12,18 +12,18 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Contenido" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
-          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Imagen">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Orden" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Mensaje">
           <Key>
@@ -33,9 +33,9 @@
           <Property Name="Asunto" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Contenido" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
-          <Property Name="UsuarioE" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UsuarioR" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Leído" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioE" Type="int" Nullable="false" />
+          <Property Name="IdUsuarioR" Type="int" Nullable="false" />
+          <Property Name="Leído" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Proyecto">
           <Key>
@@ -44,7 +44,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Titulo" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Portada" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Autor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdAutor" Type="int" Nullable="false" />
           <Property Name="Visitas" Type="int" Nullable="false" />
           <Property Name="Categoria" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
@@ -54,72 +54,62 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Seguidor" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdSeguidor" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
-            <PropertyRef Name="IdProyecto" />
-            <PropertyRef Name="Tag" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Tag" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Texto">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Texto" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Orden" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
-            <PropertyRef Name="Correo" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Apellido" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Correo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FNac" Type="date" Nullable="false" />
-          <Property Name="Pais" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Pais" Type="varchar" MaxLength="25" />
           <Property Name="Profesion" Type="varchar" MaxLength="100" />
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
-          <Property Name="ImgPerfil" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="UrlWeb" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ImgPerfil" Type="varchar" MaxLength="100" />
+          <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
           <Property Name="Descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Valoracion">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Video">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Orden" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Comentario_Comentario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
-          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
-            </Principal>
-            <Dependent Role="Comentario">
-              <PropertyRef Name="Usuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Comentario_Proyecto">
           <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
@@ -132,8 +122,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Comentario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comentario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Imagen_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Imagen" Type="Self.Imagen" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -149,10 +155,10 @@
           <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Mensaje">
-              <PropertyRef Name="UsuarioE" />
+              <PropertyRef Name="IdUsuarioE" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -161,22 +167,24 @@
           <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Mensaje">
-              <PropertyRef Name="UsuarioR" />
+              <PropertyRef Name="IdUsuarioR" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Proyecto_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Proyecto">
-              <PropertyRef Name="Autor" />
+              <PropertyRef Name="IdAutor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -185,10 +193,10 @@
           <End Role="Seguimiento" Type="Self.Seguimiento" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Seguimiento">
-              <PropertyRef Name="Usuario" />
+              <PropertyRef Name="IdSeguidor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -197,15 +205,17 @@
           <End Role="Seguimiento" Type="Self.Seguimiento" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Seguimiento">
-              <PropertyRef Name="Seguidor" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tags_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -217,7 +227,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Texto_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Texto" Type="Self.Texto" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -229,14 +241,16 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoracion_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Valoracion">
-              <PropertyRef Name="Usuario" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -253,7 +267,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Video_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Video" Type="Self.Video" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -275,12 +291,12 @@
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Valoracion" EntityType="Self.Valoracion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Comentario_Comentario" Association="Self.FK_Comentario_Comentario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Comentario" EntitySet="Comentario" />
-          </AssociationSet>
           <AssociationSet Name="FK_Comentario_Proyecto" Association="Self.FK_Comentario_Proyecto">
             <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Comentario" EntitySet="Comentario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comentario_Usuario" Association="Self.FK_Comentario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Comentario" EntitySet="Comentario" />
           </AssociationSet>
           <AssociationSet Name="FK_Imagen_Proyecto" Association="Self.FK_Imagen_Proyecto">
@@ -340,20 +356,20 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Contenido" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Usuario1" Relationship="Self.FK_Comentario_Comentario" FromRole="Comentario" ToRole="Usuario" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Comentario_Proyecto" FromRole="Comentario" ToRole="Proyecto" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Comentario_Usuario" FromRole="Comentario" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Imagen">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Direccion" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Orden" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Imagen_Proyecto" FromRole="Imagen" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Mensaje">
@@ -364,9 +380,9 @@
           <Property Name="Asunto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="UsuarioE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UsuarioR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Leído" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioE" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioR" Type="Int32" Nullable="false" />
+          <Property Name="Leído" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Mensaje_Usuario" FromRole="Mensaje" ToRole="Usuario" />
           <NavigationProperty Name="Usuario1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Mensaje" ToRole="Usuario" />
         </EntityType>
@@ -377,7 +393,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Portada" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Autor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdAutor" Type="Int32" Nullable="false" />
           <Property Name="Visitas" Type="Int32" Nullable="false" />
           <Property Name="Categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
@@ -394,46 +410,48 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Seguidor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Usuario1" Relationship="Self.FK_Seguimiento_Usuario" FromRole="Seguimiento" ToRole="Usuario" />
-          <NavigationProperty Name="Usuario2" Relationship="Self.FK_Seguimiento_Usuario1" FromRole="Seguimiento" ToRole="Usuario" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdSeguidor" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Seguimiento_Usuario" FromRole="Seguimiento" ToRole="Usuario" />
+          <NavigationProperty Name="Usuario1" Relationship="Self.FK_Seguimiento_Usuario1" FromRole="Seguimiento" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
-            <PropertyRef Name="IdProyecto" />
-            <PropertyRef Name="Tag1" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Tag1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Tags_Proyecto" FromRole="Tag" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Texto">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Texto1" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Orden" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Texto_Proyecto" FromRole="Texto" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
-            <PropertyRef Name="Correo" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FNac" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Profesion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImgPerfil" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImgPerfil" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Comentario" FromRole="Usuario" ToRole="Comentario" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
           <NavigationProperty Name="Mensaje" Relationship="Self.FK_Mensaje_Usuario" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Mensaje1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Proyecto_Usuario" FromRole="Usuario" ToRole="Proyecto" />
@@ -445,35 +463,23 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Valoraciones_Proyecto" FromRole="Valoracion" ToRole="Proyecto" />
-          <NavigationProperty Name="Usuario1" Relationship="Self.FK_Valoracion_Usuario" FromRole="Valoracion" ToRole="Usuario" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Valoracion_Usuario" FromRole="Valoracion" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Video">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="IdProyecto" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Direccion" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Orden" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Video_Proyecto" FromRole="Video" ToRole="Proyecto" />
         </EntityType>
-        <Association Name="FK_Comentario_Comentario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
-          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
-            </Principal>
-            <Dependent Role="Comentario">
-              <PropertyRef Name="Usuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Comentario_Proyecto">
           <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
@@ -486,8 +492,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Comentario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comentario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Imagen_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Imagen" Type="Self.Imagen" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -503,10 +525,10 @@
           <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Mensaje">
-              <PropertyRef Name="UsuarioE" />
+              <PropertyRef Name="IdUsuarioE" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -515,27 +537,31 @@
           <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Mensaje">
-              <PropertyRef Name="UsuarioR" />
+              <PropertyRef Name="IdUsuarioR" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Proyecto_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Proyecto">
-              <PropertyRef Name="Autor" />
+              <PropertyRef Name="IdAutor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tags_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -547,7 +573,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Texto_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Texto" Type="Self.Texto" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -571,7 +599,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Video_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Video" Type="Self.Video" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -587,10 +617,10 @@
           <End Role="Seguimiento" Type="Self.Seguimiento" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Seguimiento">
-              <PropertyRef Name="Usuario" />
+              <PropertyRef Name="IdSeguidor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -599,22 +629,24 @@
           <End Role="Seguimiento" Type="Self.Seguimiento" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Seguimiento">
-              <PropertyRef Name="Seguidor" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoracion_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
-              <PropertyRef Name="Correo" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Valoracion">
-              <PropertyRef Name="Usuario" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -629,12 +661,12 @@
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
           <EntitySet Name="Valoracion" EntityType="Self.Valoracion" />
           <EntitySet Name="Video" EntityType="Self.Video" />
-          <AssociationSet Name="FK_Comentario_Comentario" Association="Self.FK_Comentario_Comentario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Comentario" EntitySet="Comentario" />
-          </AssociationSet>
           <AssociationSet Name="FK_Comentario_Proyecto" Association="Self.FK_Comentario_Proyecto">
             <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Comentario" EntitySet="Comentario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comentario_Usuario" Association="Self.FK_Comentario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Comentario" EntitySet="Comentario" />
           </AssociationSet>
           <AssociationSet Name="FK_Imagen_Proyecto" Association="Self.FK_Imagen_Proyecto">
@@ -694,7 +726,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Contenido" ColumnName="Contenido" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -706,6 +738,7 @@
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -716,8 +749,8 @@
                 <ScalarProperty Name="Asunto" ColumnName="Asunto" />
                 <ScalarProperty Name="Contenido" ColumnName="Contenido" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="UsuarioE" ColumnName="UsuarioE" />
-                <ScalarProperty Name="UsuarioR" ColumnName="UsuarioR" />
+                <ScalarProperty Name="IdUsuarioE" ColumnName="IdUsuarioE" />
+                <ScalarProperty Name="IdUsuarioR" ColumnName="IdUsuarioR" />
                 <ScalarProperty Name="Leído" ColumnName="Leído" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -728,7 +761,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Titulo" ColumnName="Titulo" />
                 <ScalarProperty Name="Portada" ColumnName="Portada" />
-                <ScalarProperty Name="Autor" ColumnName="Autor" />
+                <ScalarProperty Name="IdAutor" ColumnName="IdAutor" />
                 <ScalarProperty Name="Visitas" ColumnName="Visitas" />
                 <ScalarProperty Name="Categoria" ColumnName="Categoria" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
@@ -739,8 +772,8 @@
           <EntitySetMapping Name="Seguimiento">
             <EntityTypeMapping TypeName="DesignProModel.Seguimiento">
               <MappingFragment StoreEntitySet="Seguimiento">
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
-                <ScalarProperty Name="Seguidor" ColumnName="Seguidor" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdSeguidor" ColumnName="IdSeguidor" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -750,6 +783,7 @@
               <MappingFragment StoreEntitySet="Tag">
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Tag1" ColumnName="Tag" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -759,12 +793,14 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Texto1" ColumnName="Texto" />
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Usuario">
             <EntityTypeMapping TypeName="DesignProModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
                 <ScalarProperty Name="Correo" ColumnName="Correo" />
@@ -775,13 +811,14 @@
                 <ScalarProperty Name="ImgPerfil" ColumnName="ImgPerfil" />
                 <ScalarProperty Name="UrlWeb" ColumnName="UrlWeb" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Valoracion">
             <EntityTypeMapping TypeName="DesignProModel.Valoracion">
               <MappingFragment StoreEntitySet="Valoracion">
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -794,6 +831,7 @@
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
