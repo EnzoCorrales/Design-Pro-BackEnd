@@ -34,8 +34,40 @@ namespace InternalServices.Controllers
             return Ok(response);
         }
 
+        // localhost:{puerto}/api/usuario/Login
+        // login del usuario
+        [AllowAnonymous]
+        [HttpPost]
+        public IHttpActionResult Login(string correo, string password)
+        {
+            DTOBaseResponse response = new DTOBaseResponse();
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                if (mantenimiento.ValidarUsuario(correo, password))
+                {
+                    var token = TokenManager.GenerateTokenJwt(correo);
+                    return Ok(token);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Error = ex.ToString();
+            }
+
+            return Ok(response);
+        }
+
+
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
+        /// </summary>
+        [Authorize]
         [HttpPost]
         public IHttpActionResult Update(DTOUsuario usuario)
         {
@@ -58,6 +90,8 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/Remove?idUsuario={idUsuario}
         // Elimina un usuario
         // 
+        /// </summary>
+        [Authorize]
         [HttpPost]
         public IHttpActionResult Remove(int idUsuario)
         {
@@ -79,6 +113,8 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Get?idUsuario={idUsuario}
         // Devuelve un usuario dado el id
+        /// </summary>
+        [Authorize]
         public IHttpActionResult Get(int idUsuario)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
@@ -92,6 +128,8 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAllSeguidores?idUsuario={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
+        /// </summary>
+        [Authorize]
         public IEnumerable<DTOUsuario> GetAllSeguidores(int idUsuario)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
@@ -101,6 +139,8 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?idUsuario={idUsuario}
         // Devuelve una lista con todos los siguiendo del usuario dado el id
+        /// </summary>
+        [Authorize]
         public IEnumerable<DTOUsuario> GetAllSiguiendo(int idUsuario)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
@@ -110,6 +150,8 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
+        /// </summary>
+        [Authorize]
         public IEnumerable<DTOUsuario> GetAll()
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();

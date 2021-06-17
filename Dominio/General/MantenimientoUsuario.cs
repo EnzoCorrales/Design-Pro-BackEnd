@@ -56,6 +56,22 @@ namespace Dominio.General
             }
         }
 
+        public bool ValidarUsuario(string correo, string password)
+        {
+            try
+            {
+                using (var context = new DesignProDB())
+                {
+                    var repository = new UsuarioRepository(context);
+                    return repository.ValidarUsuario(correo, password);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void Update(DTOUsuario dtousuario)
         {
             try
