@@ -101,15 +101,6 @@ namespace Dominio.General
             }
         }
 
-        public DTOUsuario GetByCorreo(string correoUsuario)
-        {
-            using (var context = new DesignProDB())
-            {
-                var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.GetByCorreo(correoUsuario));
-            }
-        }
-
         public List<DTOUsuario> GetAllSeguidores(int idUsuario)
         {
             using (var context = new DesignProDB())
