@@ -28,7 +28,7 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Id);
+                    var current = repository.GetByCorreo(dtousuario.Correo);
 
                     if (current != null)
                         throw new Exception("Correo en uso");

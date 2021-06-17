@@ -28,10 +28,13 @@ namespace InternalServices.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Error = ex.ToString();
+                response.Error = ex.Message; // Obtiene el mensaje plano
             }
 
-            return Ok(response);
+            if (response.Success)
+                return Ok(response.Success);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -62,7 +65,6 @@ namespace InternalServices.Controllers
 
             return Ok(response);
         }
-
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
