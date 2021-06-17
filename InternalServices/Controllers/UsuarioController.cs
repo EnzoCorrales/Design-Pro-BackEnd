@@ -4,14 +4,50 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Net.Http;
 using System.Web.Http;
+using InternalServices.Models;
 
 namespace InternalServices.Controllers
 {
-
+    [AllowAnonymous]
+    [RoutePrefix("api/usuario")]
     public class UsuarioController : ApiController
     {
+        [HttpGet]
+        [Route("echoping")]
+        public IHttpActionResult EchoPing()
+        {
+            return Ok(true);
+        }
+
+        [HttpGet]
+        [Route("echouser")]
+        public IHttpActionResult EchoUser()
+        {
+            var identity = Thread.CurrentPrincipal.Identity;
+            return Ok($" IPrincipal-user: {identity.Name} - IsAuthenticated: {identity.IsAuthenticated}");
+        }
+        [HttpPost]
+        [Route("authenticate")]
+        public IHttpActionResult Authenticate(LoginRequest login)
+        {
+            if (login == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            //TODO: Validate credentials Correctly, this code is only for demo !!
+            bool isCredentialValid = (login.Password == "123456");
+            if (isCredentialValid)
+            {
+                var token = TokenGenerator.GenerateTokenJwt(login.Correo);
+                return Ok(token);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
 
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
@@ -36,12 +72,6 @@ namespace InternalServices.Controllers
             else
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
-
-        // ========================
-
-        //          LOGIN
-
-        // ========================
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
@@ -92,6 +122,19 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             var usuario = mantenimiento.Get(idUsuario);
+
+            if (usuario == null)
+                return NotFound();
+
+            return Ok(usuario);
+        }
+
+        // localhost:{puerto}/api/usuario/GetByCorreo?correoUsuario={correoUsuario}
+        // Devuelve un usuario dado el id
+        public IHttpActionResult GetByCorreo(string correoUsuario)
+        {
+            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+            var usuario = mantenimiento.GetByCorreo(correoUsuario);
 
             if (usuario == null)
                 return NotFound();
