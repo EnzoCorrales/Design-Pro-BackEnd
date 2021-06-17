@@ -1,5 +1,4 @@
-﻿using InternalServices.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -20,8 +19,6 @@ namespace InternalServices
 
             var cors = new EnableCorsAttribute("http://localhost:8080", "*", "*");
             config.EnableCors(cors);
-
-            config.MessageHandlers.Add(new TokenHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
