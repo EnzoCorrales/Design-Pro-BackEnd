@@ -75,8 +75,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
-        /// </summary>
-        [Authorize]
         [HttpPost]
         public IHttpActionResult Update(DTOUsuario usuario)
         {
@@ -99,8 +97,6 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
         // Elimina un usuario
         // 
-        /// </summary>
-        [Authorize]
         [HttpPost]
         public IHttpActionResult Remove(int id)
         {
