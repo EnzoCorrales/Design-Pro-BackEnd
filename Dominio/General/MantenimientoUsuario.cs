@@ -28,7 +28,7 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    var current = repository.GetByCorreo(dtousuario.Correo);
+                    var current = repository.Get(dtousuario.Correo);
 
                     if (current != null)
                         throw new Exception("Correo en uso");
@@ -98,6 +98,15 @@ namespace Dominio.General
             {
                 var repository = new UsuarioRepository(context);
                 return _mapper.MapToObject(repository.Get(idUsuario));
+            }
+        }
+
+        public DTOUsuario Get(string correo)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                return _mapper.MapToObject(repository.Get(correo));
             }
         }
 
