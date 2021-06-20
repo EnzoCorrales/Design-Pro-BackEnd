@@ -23,7 +23,10 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Create(usuario);
+                var token = TokenManager.GenerateTokenJwt(usuario.Correo);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Success = true;
+                response.Token = token;
             }
             catch (Exception ex)
             {
@@ -32,7 +35,7 @@ namespace InternalServices.Controllers
             }
 
             if (response.Success)
-                return Ok(response.Success);
+                return Ok(response);
             else
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
@@ -83,6 +86,7 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Success = true;
             }
             catch (Exception ex)

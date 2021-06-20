@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dominio.DataModel.Repositories
 {
@@ -78,6 +76,7 @@ namespace Dominio.DataModel.Repositories
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
             entity.Password = usuario.Password;
+            entity.Correo = usuario.Correo;
         }
 
         public void Remove(int id)
