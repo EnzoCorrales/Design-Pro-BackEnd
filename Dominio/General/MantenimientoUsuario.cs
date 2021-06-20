@@ -79,8 +79,20 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    repository.Update(_mapper.MapToEntity(dtousuario));
+                    var current = repository.Get(dtousuario.Id);
 
+                    if (dtousuario.Correo != "")
+                    {
+                        if (repository.Get(dtousuario.Correo) != null)
+                            throw new Exception("Correo en uso");
+                    }
+                    else
+                        dtousuario.Correo = current.Correo;
+
+                    if (dtousuario.Password == null)
+                        dtousuario.Password = current.Password;
+
+                    repository.Update(_mapper.MapToEntity(dtousuario));
                     context.SaveChanges();
                 }
             }
