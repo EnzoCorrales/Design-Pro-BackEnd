@@ -80,7 +80,7 @@ namespace InternalServices.Controllers
         // Modifica un usuario
         /// </summary>
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         public IHttpActionResult Update(DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
@@ -94,10 +94,13 @@ namespace InternalServices.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Error = ex.ToString();
+                response.Error = ex.Message;
             }
 
-            return Ok(response);
+            if (response.Success)
+                return Ok(response);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
@@ -105,7 +108,7 @@ namespace InternalServices.Controllers
         // 
         /// </summary>
         [Authorize]
-        [HttpPost]
+        [HttpDelete]
         public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();

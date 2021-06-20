@@ -78,13 +78,16 @@ namespace Dominio.DataModel.Repositories
 
             entity.Nombre = usuario.Nombre;
             entity.Apellido = usuario.Apellido;
+            entity.Correo = usuario.Correo;
+            entity.FNac = usuario.FNac;
             entity.Profesion = usuario.Profesion;
             entity.Empresa = usuario.Empresa;
             entity.Pais = usuario.Pais;
+            entity.Ciudad = usuario.Ciudad;
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
             entity.Password = usuario.Password;
-            entity.Correo = usuario.Correo;
+            entity.Descripcion = usuario.Descripcion;
         }
 
         public void Remove(int id)
