@@ -3,12 +3,10 @@ using Dominio.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Common.DataTransferObjects;
 using Dominio.DataModel.Repositories;
 using Persistencia.Database;
-using System.Data.Entity.Validation;
 
 namespace Dominio.General
 {
@@ -40,18 +38,8 @@ namespace Dominio.General
                     context.SaveChanges();
                 }
             }
-            catch (DbEntityValidationException e)
+            catch (Exception)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
                 throw;
             }
         }
@@ -65,6 +53,8 @@ namespace Dominio.General
                     var repository = new UsuarioRepository(context);
                     var current = repository.Get(dtousuario.Id);
 
+                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
+
                     if (dtousuario.Correo != "")
                     {
                         if (repository.Get(dtousuario.Correo) != null)
@@ -73,8 +63,10 @@ namespace Dominio.General
                     else
                         dtousuario.Correo = current.Correo;
 
-                    if (dtousuario.Password == null)
+                    if (dtousuario.Password == "")
                         dtousuario.Password = current.Password;
+
+                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
 
                     repository.Update(_mapper.MapToEntity(dtousuario));
                     context.SaveChanges();
@@ -104,12 +96,12 @@ namespace Dominio.General
             }
         }
 
-        public DTOUsuario Get(int idUsuario)
+        public DTOUsuario Get(int id)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(idUsuario));
+                return _mapper.MapToObject(repository.Get(id));
             }
         }
 

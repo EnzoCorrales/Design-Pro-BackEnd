@@ -78,7 +78,9 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
-        [HttpPost]
+        /// </summary>
+        [Authorize]
+        [HttpPut]
         public IHttpActionResult Update(DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
@@ -92,16 +94,21 @@ namespace InternalServices.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Error = ex.ToString();
+                response.Error = ex.Message;
             }
 
-            return Ok(response);
+            if (response.Success)
+                return Ok(response);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
         // Elimina un usuario
         // 
-        [HttpPost]
+        /// </summary>
+        [Authorize]
+        [HttpDelete]
         public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();
@@ -123,7 +130,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
         // Devuelve un usuario dado el id
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
@@ -139,7 +146,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
         {
@@ -163,7 +170,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAll()
         {
