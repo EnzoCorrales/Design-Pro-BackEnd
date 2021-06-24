@@ -19,17 +19,9 @@ namespace Dominio.DataModel.Repositories
             return this._context.Usuario.FirstOrDefault(a => a.Id == id);
         }
 
-        public Usuario Get(string correo)
+        public Usuario GetByCorreo(string correo)
         {
-            return this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo));
-        }
-
-        public bool ValidarUsuario(string correo, string password)
-        {
-            if ( (this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo) && a.Password.Equals(password)) != null ))
-                return true;
-            else 
-                return false;
+            return this._context.Usuario.FirstOrDefault(a => a.Correo == correo);
         }
 
         public List<Usuario> GetAll()
