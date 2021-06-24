@@ -130,7 +130,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
         // Devuelve un usuario dado el id
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
@@ -146,7 +146,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
         {
@@ -170,7 +170,7 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAll()
         {
