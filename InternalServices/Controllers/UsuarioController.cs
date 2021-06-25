@@ -23,15 +23,21 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Create(usuario);
+                var token = TokenManager.GenerateTokenJwt(usuario.Correo);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Success = true;
+                response.Token = token;
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Error = ex.ToString();
+                response.Error = ex.Message; // Obtiene el mensaje plano
             }
 
-            return Ok(response);
+            if (response.Success)
+                return Ok(response);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -47,11 +53,14 @@ namespace InternalServices.Controllers
                 if (mantenimiento.ValidarUsuario(correo, password))
                 {
                     var token = TokenManager.GenerateTokenJwt(correo);
-                    return Ok(token);
+                    response.Usuario = mantenimiento.Get(correo);
+                    response.Success = true;
+                    response.Token = token;
                 }
                 else
                 {
-                    return Unauthorized();
+                    response.Success = false;
+                    response.Error = "Las credenciales no son correctas";
                 }
             }
             catch (Exception ex)
@@ -60,15 +69,18 @@ namespace InternalServices.Controllers
                 response.Error = ex.ToString();
             }
 
-            return Ok(response);
-        }
+            if (response.Success)
+                return Ok(response);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
 
+        }
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
         /// </summary>
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         public IHttpActionResult Update(DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
@@ -76,30 +88,34 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Success = true;
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Error = ex.ToString();
+                response.Error = ex.Message;
             }
 
-            return Ok(response);
+            if (response.Success)
+                return Ok(response);
+            else
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
         }
 
-        // localhost:{puerto}/api/usuario/Remove?idUsuario={idUsuario}
+        // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
         // Elimina un usuario
         // 
         /// </summary>
         [Authorize]
-        [HttpPost]
-        public IHttpActionResult Remove(int idUsuario)
+        [HttpDelete]
+        public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                mantenimiento.Remove(idUsuario);
+                mantenimiento.Remove(id);
                 response.Success = true;
             }
             catch (Exception ex)
@@ -111,14 +127,15 @@ namespace InternalServices.Controllers
             return Ok(response);
         }
 
-        // localhost:{puerto}/api/usuario/Get?idUsuario={idUsuario}
+        // localhost:{puerto}/api/usuario/Get?id={idUsuario}
         // Devuelve un usuario dado el id
         /// </summary>
-        [Authorize]
-        public IHttpActionResult Get(int idUsuario)
+        [AllowAnonymous]
+        [HttpGet]
+        public IHttpActionResult Get(int id)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            var usuario = mantenimiento.Get(idUsuario);
+            var usuario = mantenimiento.Get(id);
 
             if (usuario == null)
                 return NotFound();
@@ -126,32 +143,35 @@ namespace InternalServices.Controllers
             return Ok(usuario);
         }
 
-        // localhost:{puerto}/api/usuario/GetAllSeguidores?idUsuario={idUsuario}
+        // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
         /// </summary>
-        [Authorize]
-        public IEnumerable<DTOUsuario> GetAllSeguidores(int idUsuario)
+        [AllowAnonymous]
+        [HttpGet]
+        public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            return mantenimiento.GetAllSeguidores(idUsuario);
+            return mantenimiento.GetAllSeguidores(id);
 
         }
 
-        // localhost:{puerto}/api/usuario/GetAllSiguiendo?idUsuario={idUsuario}
+        // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
         // Devuelve una lista con todos los siguiendo del usuario dado el id
         /// </summary>
         [Authorize]
-        public IEnumerable<DTOUsuario> GetAllSiguiendo(int idUsuario)
+        [HttpGet]
+        public IEnumerable<DTOUsuario> GetAllSiguiendo(int id)
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            return mantenimiento.GetAllSiguiendo(idUsuario);
+            return mantenimiento.GetAllSiguiendo(id);
 
         }
 
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
         /// </summary>
-        [Authorize]
+        [AllowAnonymous]
+        [HttpGet]
         public IEnumerable<DTOUsuario> GetAll()
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
