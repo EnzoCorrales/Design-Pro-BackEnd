@@ -1,4 +1,5 @@
 ﻿using Common.DataTransferObjects;
+using Common.Exceptions;
 using Dominio.General;
 using System;
 using System.Collections.Generic;
@@ -27,17 +28,20 @@ namespace InternalServices.Controllers
                 response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Success = true;
                 response.Token = token;
+                return Ok(response);
             }
-            catch (Exception ex)
+            catch (ValidateException e)
             {
                 response.Success = false;
-                response.Error = ex.Message; // Obtiene el mensaje plano
-            }
-
-            if (response.Success)
-                return Ok(response);
-            else
+                response.Error = e.Message; // Obtiene el mensaje plano
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
+            }
+            catch (Exception)
+            {
+                response.Success = false;
+                response.Error = "Fallo al procesar la opración!";
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -67,6 +71,7 @@ namespace InternalServices.Controllers
             {
                 response.Success = false;
                 response.Error = ex.ToString();
+                return BadRequest(response.Error);
             }
 
             if (response.Success)
