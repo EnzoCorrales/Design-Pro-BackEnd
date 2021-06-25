@@ -3,6 +3,7 @@ using Dominio.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Common.DataTransferObjects;
 using Dominio.DataModel.Repositories;
@@ -26,7 +27,7 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Correo);
+                    var current = repository.Get(dtousuario.Id);
 
                     if (current != null)
                         throw new Exception("Correo en uso");
@@ -51,24 +52,8 @@ namespace Dominio.General
                 using (var context = new DesignProDB())
                 {
                     var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Id);
-
-                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
-                    if (dtousuario.Correo != "")
-                    {
-                        if (repository.Get(dtousuario.Correo) != null)
-                            throw new Exception("Correo en uso");
-                    }
-                    else
-                        dtousuario.Correo = current.Correo;
-
-                    if (dtousuario.Password == "")
-                        dtousuario.Password = current.Password;
-
-                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
                     repository.Update(_mapper.MapToEntity(dtousuario));
+
                     context.SaveChanges();
                 }
             }
@@ -96,21 +81,12 @@ namespace Dominio.General
             }
         }
 
-        public DTOUsuario Get(int id)
+        public DTOUsuario Get(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
-            }
-        }
-
-        public DTOUsuario Get(string correo)
-        {
-            using (var context = new DesignProDB())
-            {
-                var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(correo));
+                return _mapper.MapToObject(repository.Get(idUsuario));
             }
         }
 
