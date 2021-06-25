@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dominio.DataModel.Repositories
 {
@@ -19,6 +17,11 @@ namespace Dominio.DataModel.Repositories
         public Usuario Get(int id)
         {
             return this._context.Usuario.FirstOrDefault(a => a.Id == id);
+        }
+
+        public Usuario GetByCorreo(string correo)
+        {
+            return this._context.Usuario.FirstOrDefault(a => a.Correo == correo);
         }
 
         public List<Usuario> GetAll()
@@ -67,11 +70,16 @@ namespace Dominio.DataModel.Repositories
 
             entity.Nombre = usuario.Nombre;
             entity.Apellido = usuario.Apellido;
+            entity.Correo = usuario.Correo;
+            entity.FNac = usuario.FNac;
             entity.Profesion = usuario.Profesion;
             entity.Empresa = usuario.Empresa;
             entity.Pais = usuario.Pais;
+            entity.Ciudad = usuario.Ciudad;
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
+            entity.Password = usuario.Password;
+            entity.Descripcion = usuario.Descripcion;
         }
 
         public void Remove(int id)
