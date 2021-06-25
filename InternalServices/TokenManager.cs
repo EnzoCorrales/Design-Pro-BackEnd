@@ -20,7 +20,7 @@ namespace InternalServices
             var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            // create a claimsIdentity
+            // create a claimsIdentity 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, correo) });
 
             // create token to the user
