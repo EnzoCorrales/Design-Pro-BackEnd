@@ -74,14 +74,12 @@ namespace Dominio.General
 
                     if (dtousuario.Correo != "")
                     {
-                        if (repository.Get(dtousuario.Correo) != null)
+                        if(current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
+                        {
                             throw new Exception("Correo en uso");
-                    }
-                    else
-                        dtousuario.Correo = current.Correo;
+                        }
 
-                    if (dtousuario.Password == "")
-                        dtousuario.Password = current.Password;
+                    }
 
                     //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
 
