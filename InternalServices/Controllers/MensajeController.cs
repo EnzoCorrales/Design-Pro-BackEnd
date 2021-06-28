@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Common.Exceptions;
 
 namespace InternalServices.Controllers
 {
@@ -21,15 +22,16 @@ namespace InternalServices.Controllers
             {
                 MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
                 mantenimiento.Create(mensaje);
-                response.Success = true;
+                return Ok(true);
             }
-            catch (Exception ex)
+            catch (ValidateException e)
             {
-                response.Success = false;
-                response.Error = ex.ToString();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
             }
-
-            return Ok(response);
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+            }
         }
 
         // localhost:{puerto}/api/mensaje/GetAll
