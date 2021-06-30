@@ -41,6 +41,34 @@ namespace Dominio.General
             }
         }
 
+        public void Update(DTOMensaje dtoMensaje)
+        {
+            try
+            {
+                using (var context = new DesignProDB())
+                {
+                    var repository = new MensajeRepository(context);
+
+                    repository.Update(_mapper.MapToEntity(dtoMensaje));
+
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public DTOMensaje Get(int id)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new MensajeRepository(context);
+                return _mapper.MapToObject(repository.Get(id));
+            }
+        }
+
         public List<DTOMensaje> GetAllByEmisor(int idUsuario)
         {
             using (var context = new DesignProDB())
@@ -92,15 +120,6 @@ namespace Dominio.General
                 }
 
                 return resultado;
-            }
-        }
-
-        public DTOMensaje Get(int id)
-        {
-            using (var context = new DesignProDB())
-            {
-                var repository = new MensajeRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
             }
         }
 

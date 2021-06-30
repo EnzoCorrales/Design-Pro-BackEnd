@@ -1,4 +1,5 @@
 ﻿using Common.DataTransferObjects;
+using Common.Exceptions;
 using Dominio.General;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using InternalServices.Filters;
 
 namespace InternalServices.Controllers
 {
@@ -15,6 +17,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
+        [ValidateUsuarioModel]
         [HttpPost]
         public IHttpActionResult Register(DTOUsuario usuario)
         {
@@ -23,21 +26,18 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Create(usuario);
-                var token = TokenManager.GenerateTokenJwt(usuario.Correo);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Success = true;
-                response.Token = token;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.Message; // Obtiene el mensaje plano
-            }
-
-            if (response.Success)
+                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo);
                 return Ok(response);
-            else
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
+            }
+            catch (ValidateException e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -52,28 +52,24 @@ namespace InternalServices.Controllers
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 if (mantenimiento.ValidarUsuario(correo, password))
                 {
-                    var token = TokenManager.GenerateTokenJwt(correo);
                     response.Usuario = mantenimiento.Get(correo);
-                    response.Success = true;
-                    response.Token = token;
+                    response.Token = TokenManager.GenerateTokenJwt(correo);
+                    return Ok(response);
                 }
                 else
                 {
-                    response.Success = false;
-                    response.Error = "Las credenciales no son correctas";
+                    throw new ValidateException("Las credenciales no son correctas");
                 }
             }
-            catch (Exception ex)
+            catch (ValidateException e)
             {
-                response.Success = false;
-                response.Error = ex.ToString();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
             }
 
-            if (response.Success)
-                return Ok(response);
-            else
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
-
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Update
@@ -89,18 +85,16 @@ namespace InternalServices.Controllers
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.Message;
-            }
-
-            if (response.Success)
                 return Ok(response);
-            else
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, response.Error));
+            }
+            catch (ValidateException e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}

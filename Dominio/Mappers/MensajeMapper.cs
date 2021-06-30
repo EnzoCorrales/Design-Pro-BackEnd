@@ -28,7 +28,7 @@ namespace Dominio.Mappers
                 Fecha = mensaje.Fecha,
                 IdUsuarioE = mensaje.IdUsuarioE,
                 IdUsuarioR = mensaje.IdUsuarioR,
-                Leído = mensaje.Leído,
+                Visto = mensaje.Visto,
             };
         }
 
@@ -45,7 +45,7 @@ namespace Dominio.Mappers
                 Fecha = mensaje.Fecha,
                 IdUsuarioE = mensaje.IdUsuarioE,
                 IdUsuarioR = mensaje.IdUsuarioR,
-                Leído = mensaje.Leído,
+                Visto = mensaje.Visto,
             };
         }
 
@@ -65,7 +65,7 @@ namespace Dominio.Mappers
                     Fecha = men.Fecha,
                     IdUsuarioE = men.IdUsuarioE,
                     IdUsuarioR = men.IdUsuarioR,
-                    Leído = men.Leído,
+                    Visto = men.Visto,
                 };
                 mensaje.Add(m);
             }
@@ -88,7 +88,7 @@ namespace Dominio.Mappers
                     Fecha = men.Fecha,
                     IdUsuarioE = men.IdUsuarioE,
                     IdUsuarioR = men.IdUsuarioR,
-                    Leído = men.Leído,
+                    Visto = men.Visto,
                 };
                 mensaje.Add(m);
             }
