@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Common.DataTransferObjects;
 using Dominio.DataModel.Repositories;
 using Persistencia.Database;
+using Common.Exceptions;
 
 namespace Dominio.General
 {
@@ -29,7 +30,7 @@ namespace Dominio.General
                     var current = repository.Get(dtousuario.Correo);
 
                     if (current != null)
-                        throw new Exception("Correo en uso");
+                        throw new ValidateException("Correo en uso");
 
                     var usuario = _mapper.MapToEntity(dtousuario);
 
@@ -73,17 +74,12 @@ namespace Dominio.General
 
                     if (dtousuario.Correo != "")
                     {
-                        if (repository.Get(dtousuario.Correo) != null)
+                        if(current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
+                        {
                             throw new Exception("Correo en uso");
+                        }
                     }
-                    else
-                        dtousuario.Correo = current.Correo;
-
-                    if (dtousuario.Password == "")
-                        dtousuario.Password = current.Password;
-
                     //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
                     repository.Update(_mapper.MapToEntity(dtousuario));
                     context.SaveChanges();
                 }
