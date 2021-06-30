@@ -78,11 +78,8 @@ namespace Dominio.General
                         {
                             throw new Exception("Correo en uso");
                         }
-
                     }
-
                     //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
                     repository.Update(_mapper.MapToEntity(dtousuario));
                     context.SaveChanges();
                 }

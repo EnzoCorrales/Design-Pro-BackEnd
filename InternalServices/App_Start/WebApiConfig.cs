@@ -27,6 +27,7 @@ namespace InternalServices
 
             // Los filtros en los controladores
             config.Filters.Add(new ValidateUsuarioModel());
+            config.Filters.Add(new ValidateMensajeModel());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

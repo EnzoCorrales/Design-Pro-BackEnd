@@ -48,5 +48,12 @@ namespace Dominio.DataModel.Repositories
             this._context.Mensaje.Add(mensaje);
         }
 
+        public void Update(Mensaje mensaje)
+        {
+            var entity = this.Get(mensaje.Id);
+
+            entity.Visto = 1;
+        }
+
     }
 }

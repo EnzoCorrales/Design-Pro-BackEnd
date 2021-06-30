@@ -31,7 +31,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Asunto" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Contenido" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Contenido" Type="varchar" MaxLength="5000" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
           <Property Name="IdUsuarioE" Type="int" Nullable="false" />
           <Property Name="IdUsuarioR" Type="int" Nullable="false" />
@@ -378,7 +378,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Asunto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Contenido" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contenido" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IdUsuarioE" Type="Int32" Nullable="false" />
           <Property Name="IdUsuarioR" Type="Int32" Nullable="false" />
