@@ -84,9 +84,69 @@ namespace Dominio.General
                 return _mapper.MapToObject(repository.Get(id));
             }
         }
-        /// <summary>
-        /// u
-        /// </summary>
+
+        public List<DTOProyecto> GetBusquedaXTitulo(string busqueda)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ProyectoRepository(context);
+                var lista = repository.GetBusquedaXTitulo(busqueda);
+
+                List<DTOProyecto> resultado = new List<DTOProyecto>();
+
+                foreach (var proyecto in lista)
+                {
+                    resultado.Add(_mapper.MapToObject(proyecto));
+                }
+                return resultado;
+            }
+        }
+
+        public List<DTOProyecto> GetBusquedaXAutor(string busqueda)
+        {
+            using (var context = new DesignProDB())
+            {
+                var P_repository = new ProyectoRepository(context);
+                var U_repository = new UsuarioRepository(context);
+                var lista = P_repository.GetBusquedaXAutor(U_repository.GetIdsByNombre(busqueda));
+
+                List<DTOProyecto> resultado = new List<DTOProyecto>();
+
+                foreach (var proyecto in lista)
+                {
+                    resultado.Add(_mapper.MapToObject(proyecto));
+                }
+                return resultado;
+            }
+        }
+
+        public List<DTOProyecto> GetBusquedaXTag(string busqueda)
+        {
+            using (var context = new DesignProDB())
+            {
+                var P_repository = new ProyectoRepository(context);
+                var T_repository = new TagRepository(context);
+                var lista = P_repository.GetAllByIds(T_repository.GetIdsByTag(busqueda));
+
+                List<DTOProyecto> resultado = new List<DTOProyecto>();
+
+                foreach (var proyecto in lista)
+                {
+                    resultado.Add(_mapper.MapToObject(proyecto));
+                }
+                return resultado;
+            }
+        }
+
+        public int GetIdAutor(int idProyecto)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ProyectoRepository(context);
+                return this.Get(idProyecto).IdAutor;
+            }
+        }
+
         /// <returns>todos los proyectos</returns>
         public List<DTOProyecto> GetAll()
         {
