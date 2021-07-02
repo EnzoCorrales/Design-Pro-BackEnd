@@ -23,7 +23,7 @@ namespace InternalServices
             config.EnableCors(cors);
 
             // Manejo de tokens
-            config.MessageHandlers.Add(new TokenHandler());
+            config.Filters.Add(new AuthorizeAttribute());
 
             // Los filtros en los controladores
             config.Filters.Add(new ValidateUsuarioModel());

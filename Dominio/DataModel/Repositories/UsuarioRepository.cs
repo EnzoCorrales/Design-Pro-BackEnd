@@ -37,6 +37,18 @@ namespace Dominio.DataModel.Repositories
             return this._context.Usuario.Select(a => a).ToList();
         }
 
+        public List<int> GetIdsByNombre(string nombre)
+        {
+            var usuarios = this._context.Usuario.Where(a => a.Nombre.Equals(nombre)).ToList();
+            List<int> ids = new List<int>();
+
+            foreach (var usuario in usuarios)
+            {
+                ids.Add(usuario.Id);
+            }
+            return ids;
+        }
+
         public List<Usuario> GetAllSeguidores(int id, DesignProDB c)
         {
             var repositorySeguimiento = new SeguimientoRepository(c);
@@ -78,16 +90,12 @@ namespace Dominio.DataModel.Repositories
 
             entity.Nombre = usuario.Nombre;
             entity.Apellido = usuario.Apellido;
-            entity.Correo = usuario.Correo;
-            entity.FNac = usuario.FNac;
             entity.Profesion = usuario.Profesion;
             entity.Empresa = usuario.Empresa;
             entity.Pais = usuario.Pais;
             entity.Ciudad = usuario.Ciudad;
             entity.ImgPerfil = usuario.ImgPerfil;
             entity.UrlWeb = usuario.UrlWeb;
-            entity.Password = usuario.Password;
-            entity.Descripcion = usuario.Descripcion;
         }
 
         public void Remove(int id)
