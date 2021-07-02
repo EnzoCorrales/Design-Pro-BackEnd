@@ -403,12 +403,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BusquedaController.cs" />
     <Compile Include="Controllers\ComentarioController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\MensajeController.cs" />
     <Compile Include="Controllers\ProyectoController.cs" />
-    <Compile Include="Controllers\TokenHandler.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Filters\AuthenticateUser.cs" />
     <Compile Include="Filters\ValidateMensajeModel.cs" />
     <Compile Include="Filters\ValidateUsuarioModel.cs" />
     <Compile Include="Global.asax.cs">
@@ -434,6 +435,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Busqueda\" />
     <Folder Include="Views\Usuario\" />
   </ItemGroup>
   <ItemGroup>

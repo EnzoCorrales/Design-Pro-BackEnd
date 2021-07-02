@@ -104,6 +104,7 @@
     <Compile Include="DataModel\Repositories\MensajeRepository.cs" />
     <Compile Include="DataModel\Repositories\ProyectoRepository.cs" />
     <Compile Include="DataModel\Repositories\SeguimientoRepository.cs" />
+    <Compile Include="DataModel\Repositories\TagRepository.cs" />
     <Compile Include="DataModel\Repositories\UsuarioRepository.cs" />
     <Compile Include="General\MantenimientoComentario.cs" />
     <Compile Include="General\MantenimientoMensaje.cs" />
