@@ -404,6 +404,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ComentarioController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\MensajeController.cs" />
     <Compile Include="Controllers\ProyectoController.cs" />
     <Compile Include="Controllers\TokenHandler.cs" />

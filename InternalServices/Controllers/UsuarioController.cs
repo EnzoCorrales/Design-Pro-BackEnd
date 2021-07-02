@@ -14,7 +14,6 @@ namespace InternalServices.Controllers
 
     public class UsuarioController : ApiController
     {
-
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
         [ValidateUsuarioModel]
@@ -146,7 +145,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAllSeguidores(id);
-
         }
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
@@ -158,7 +156,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAllSiguiendo(id);
-
         }
 
         // localhost:{puerto}/api/usuario/GetAll
@@ -170,7 +167,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAll();
-
         }
     }
 }
