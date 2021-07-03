@@ -109,6 +109,7 @@
     <Compile Include="General\MantenimientoComentario.cs" />
     <Compile Include="General\MantenimientoMensaje.cs" />
     <Compile Include="General\MantenimientoProyecto.cs" />
+    <Compile Include="General\MantenimientoSeguimiento.cs" />
     <Compile Include="General\MantenimientoUsuario.cs" />
     <Compile Include="Mappers\ComentarioMapper.cs" />
     <Compile Include="Mappers\ImagenMapper.cs" />

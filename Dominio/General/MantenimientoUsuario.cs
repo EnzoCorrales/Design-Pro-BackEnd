@@ -179,8 +179,5 @@ namespace Dominio.General
                 return resultado;
             }
         }
-
-
-
     }
 }
