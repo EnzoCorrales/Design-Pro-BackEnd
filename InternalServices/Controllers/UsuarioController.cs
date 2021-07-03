@@ -18,26 +18,34 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
         [ValidateUsuarioModel]
+        [AllowAnonymous]
         [HttpPost]
-        public IHttpActionResult Register(DTOUsuario usuario)
+        public IHttpActionResult Register([FromBody] DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
+            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             try
             {
-                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                mantenimiento.Create(usuario);
-                response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo,response.Usuario.Id);
-                return Ok(response);
+                if(usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
+                    throw new ValidateException("Contraseña vacía"); 
             }
-            catch (ValidateException e)
+            catch (ValidateException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
+            finally
+            {
+                mantenimiento.Create(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
+                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
+                response.Success = true;
+            }
+
+            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -50,31 +58,30 @@ namespace InternalServices.Controllers
             try
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                if (mantenimiento.ValidarUsuario(correo, password))
-                {
-                    response.Usuario = mantenimiento.Get(correo);
-                    response.Token = TokenManager.GenerateTokenJwt(correo,response.Usuario.Id);
-                    return Ok(response);
-                }
-                else
-                {
-                    throw new ValidateException("Las credenciales no son correctas");
-                }
+
+                if (!mantenimiento.ValidarUsuario(correo, password))
+                    throw new ArgumentException("Credenciales no válidas");
+
+                response.Success = true;
+                response.Usuario = mantenimiento.Get(correo);
+                response.Token = TokenManager.GenerateTokenJwt(correo, mantenimiento.Get(correo).Id);
             }
-            catch (ValidateException e)
+            catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
+
+            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
-        /// </summary>
+        [ValidateUsuarioModel]
         [AuthenticateUser]
         [HttpPut]
         public IHttpActionResult Update([FromBody] DTOUsuario usuario)
@@ -82,54 +89,57 @@ namespace InternalServices.Controllers
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
-                if (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo)) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
-                {
-                    MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                    mantenimiento.Update(usuario);
-                    response.Usuario = mantenimiento.Get(usuario.Correo);
-                    return Ok(response);
-                }
-                else
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No tiene la autorización para realizar la operación"));
-                }
+                if (! (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo) && TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, usuario.Id))) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
+                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                mantenimiento.Update(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
             }
-            catch (ValidateException e)
+            catch (UnauthorizedAccessException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
+
+            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
         // Elimina un usuario
-        // 
-        /// </summary>
         [AuthenticateUser]
         [HttpDelete]
         public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();
+            
             try
             {
-                if (TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
-                {
-                    MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                    mantenimiento.Remove(id);
-                    response.Success = true;
-                }
-                else
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No tiene la autorización para realizar la operación"));
-                }
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
+                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+                
+                if (mantenimiento.Get(id) == null) // se fija si existe el usuario que esta intentando eliminar
+                    throw new ArgumentException("Usuario no existe");
+
+                mantenimiento.Remove(id);
+                response.Success = true;
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                response.Success = false;
-                response.Error = ex.ToString();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
 
             return Ok(response);
@@ -137,19 +147,29 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
         // Devuelve un usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get(int id)
-        {            
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            var usuario = mantenimiento.Get(id);
+        {
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                if (mantenimiento.Get(id) == null)
+                    throw new ArgumentException("Usuario no existe");
 
-            if (usuario == null)
-                return NotFound();
+                var usuario = mantenimiento.Get(id);
+                usuario.Password = null;
 
-            usuario.Password = null;
-             return Ok(usuario);
+                return Ok(usuario);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Seguir
@@ -158,16 +178,35 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Seguir(DTOSeguimiento seguir)
         {
+            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
-                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
+                    throw new ArgumentException("Usuario no existente");
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
+                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+
+                if (mantenimiento.LoSigue(seguir))
+                    throw new ArgumentException("Este usuario ya sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
+
                 mantenimiento.Seguir(seguir);
-                return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
+
+            return Ok(true);
         }
 
         // localhost:{puerto}/api/usuario/DejarDeSeguir
@@ -176,21 +215,39 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult DejarDeSeguir(DTOSeguimiento seguir)
         {
+            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
-                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
+                    throw new ArgumentNullException("Usuario no existente");
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
+                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+
+                if (!mantenimiento.LoSigue(seguir))
+                    throw new ArgumentException("Este usuario no sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
+
                 mantenimiento.DejarDeSeguir(seguir);
-                return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
+
+            return Ok(true);
         }
 
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
@@ -201,7 +258,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
         // Devuelve una lista con todos los siguiendo del usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSiguiendo(int id)
@@ -212,7 +268,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAll()

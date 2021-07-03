@@ -27,39 +27,46 @@ namespace InternalServices.Controllers
         [HttpGet]
         public IEnumerable<DTOProyecto> Busqueda(string busqueda)
         {
-            List<DTOProyecto> resultado = new List<DTOProyecto>();
-            MantenimientoProyecto mProyecto = new MantenimientoProyecto();
-
-            // Primero agrega en la lista resultado las busquedas que coincidieron por el titulo, este resultado es parcial, es decir, si existe un proyecto con el titulo "Animales exoticos"
-            // y el usuario realiza la busqueda "animales", el proyecto "Animales exoticos" le saldra en la busqueda.
-
-            var XTitulo = mProyecto.GetBusquedaXTitulo(busqueda);
-
-            foreach (var proyecto in XTitulo)
+            try
             {
-                resultado.Add(proyecto);
+                List<DTOProyecto> resultado = new List<DTOProyecto>();
+                MantenimientoProyecto mProyecto = new MantenimientoProyecto();
+
+                // Primero agrega en la lista resultado las busquedas que coincidieron por el titulo, este resultado es parcial, es decir, si existe un proyecto con el titulo "Animales exoticos"
+                // y el usuario realiza la busqueda "animales", el proyecto "Animales exoticos" le saldra en la busqueda.
+
+                var XTitulo = mProyecto.GetBusquedaXTitulo(busqueda);
+
+                foreach (var proyecto in XTitulo)
+                {
+                    resultado.Add(proyecto);
+                }
+
+                // Segundo agrega en la lista resultado las busquedas que coincidieron por el nombre del autor, este resultado es exacto, es decir, solo devolvera proyectos siempre y cuando el nombre
+                // ingresado del autor sea exacto.
+
+                var XAutor = mProyecto.GetBusquedaXAutor(busqueda);
+
+                foreach (var proyecto in XAutor)
+                {
+                    resultado.Add(proyecto);
+                }
+
+                // Tercero agrega en la lista resultado las busquedas que coincidieron por tag, este resultado es exacto de igual manera que la busqueda por nombre de autor anteriormente explicada
+
+                var XTag = mProyecto.GetBusquedaXTag(busqueda);
+
+                foreach (var proyecto in XTag)
+                {
+                    resultado.Add(proyecto);
+                }
+
+                return resultado;
             }
-
-            // Segundo agrega en la lista resultado las busquedas que coincidieron por el nombre del autor, este resultado es exacto, es decir, solo devolvera proyectos siempre y cuando el nombre
-            // ingresado del autor sea exacto.
-
-            var XAutor = mProyecto.GetBusquedaXAutor(busqueda);
-
-            foreach (var proyecto in XAutor)
+            catch (Exception)
             {
-                resultado.Add(proyecto);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
-
-            // Tercero agrega en la lista resultado las busquedas que coincidieron por tag, este resultado es exacto de igual manera que la busqueda por nombre de autor anteriormente explicada
-
-            var XTag = mProyecto.GetBusquedaXTag(busqueda);
-
-            foreach (var proyecto in XTag)
-            {
-                resultado.Add(proyecto);
-            }
-
-            return resultado;
         }
     }
 }

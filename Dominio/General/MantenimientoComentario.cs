@@ -21,76 +21,48 @@ namespace Dominio.General
 
         public void Create(DTOComentario dtocomentario)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ComentarioRepository(context);
+                var repository = new ComentarioRepository(context);
 
-                    var comentario = _mapper.MapToEntity(dtocomentario);
+                var comentario = _mapper.MapToEntity(dtocomentario);
 
-                    repository.Create(comentario);
+                repository.Create(comentario);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
         public void Remove(int id)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ComentarioRepository(context);
-                    repository.Remove(id);
+                var repository = new ComentarioRepository(context);
+                repository.Remove(id);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
         public void RemoveByUsuario(int idUsuario)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ComentarioRepository(context);
-                    repository.RemoveByUsuario(idUsuario);
+                var repository = new ComentarioRepository(context);
+                repository.RemoveByUsuario(idUsuario);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
         public void RemoveByProyecto(int idProyecto)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ComentarioRepository(context);
-                    repository.RemoveByProyecto(idProyecto);
+                var repository = new ComentarioRepository(context);
+                repository.RemoveByProyecto(idProyecto);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 

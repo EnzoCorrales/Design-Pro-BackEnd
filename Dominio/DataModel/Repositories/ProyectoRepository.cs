@@ -75,7 +75,6 @@ namespace Dominio.DataModel.Repositories
                 if(proyecto.IdAutor == idUsuario)
                     this._context.Proyecto.Remove(proyecto);
             }
-            
         }
 
     }

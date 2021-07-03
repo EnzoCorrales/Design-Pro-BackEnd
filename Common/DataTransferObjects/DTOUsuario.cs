@@ -40,8 +40,6 @@ namespace Common.DataTransferObjects
         [DataType(DataType.Text)]
         public string UrlWeb { get; set; }
         [MaxLength(100)]
-        public string Descripcion { get; set; }
-        [Required(ErrorMessage = "La contraseña es requerida"), MinLength(6)]
         public string Password { get; set; }
         [MaxLength(50)]
         public string Ciudad { get; set; }

@@ -22,89 +22,70 @@ namespace Dominio.General
 
         public void Create(DTOUsuario dtousuario)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Correo);
+                var repository = new UsuarioRepository(context);
+                var current = repository.Get(dtousuario.Correo);
 
-                    if (current != null)
-                        throw new ValidateException("Correo en uso");
+                if (current != null)
+                    throw new ValidateException("Correo en uso");
 
-                    var usuario = _mapper.MapToEntity(dtousuario);
+                var usuario = _mapper.MapToEntity(dtousuario);
 
-                    repository.Create(usuario);
+                repository.Create(usuario);
 
-                    context.SaveChanges();
-                }
+                context.SaveChanges();
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            
+
         }
 
         public bool ValidarUsuario(string correo, string password)
         {
-            try
-            {
-                using (var context = new DesignProDB())
-                {
+              using (var context = new DesignProDB())
+              {
                     var repository = new UsuarioRepository(context);
-                    return repository.ValidarUsuario(correo, password);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                    var usuario = repository.Get(correo);
+                    if (usuario.Password.Equals(password))
+                        return true;
+                    else
+                        return false;
+              }
         }
 
         public void Update(DTOUsuario dtousuario)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
+                var repository = new UsuarioRepository(context);
+                var current = repository.Get(dtousuario.Id);
+
+                //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
+
+                if (dtousuario.Correo != "")
                 {
-                    var repository = new UsuarioRepository(context);
-                    var current = repository.Get(dtousuario.Id);
-
-                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
-                    if (dtousuario.Correo != "")
+                    if (current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
                     {
-                        if(current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
-                        {
-                            throw new Exception("Correo en uso");
-                        }
+                        throw new Exception("Correo en uso");
                     }
-                    //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-                    repository.Update(_mapper.MapToEntity(dtousuario));
-                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
+                repository.Update(_mapper.MapToEntity(dtousuario));
+                context.SaveChanges();
             }
         }
 
         public void Remove(int idUsuario)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new UsuarioRepository(context);
-                    repository.Remove(idUsuario);
-
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                var U_repository = new UsuarioRepository(context);
+                var S_repository = new SeguimientoRepository(context);
+                var M_repository = new MensajeRepository(context);
+                M_repository.RemoveByUsuario(idUsuario);
+                S_repository.RemoveByUsuario(idUsuario);
+                U_repository.Remove(idUsuario);
+                context.SaveChanges();
             }
         }
 

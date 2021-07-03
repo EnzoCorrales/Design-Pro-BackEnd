@@ -38,6 +38,18 @@ namespace Dominio.DataModel.Repositories
             return lista.OrderBy(a => a.Fecha).Union(lista2).ToList(); // uno las dos listas anteriores y las ordeno por fecha, entonces los mensajes me quedan en el orden que se lo mandaron los dos usuarios
         }
 
+        public void RemoveByUsuario(int idUsuario)
+        {
+            var lista = this.GetAll();
+            foreach (var usuario in lista)
+            {
+                if ((usuario.IdUsuarioE == idUsuario) || (usuario.IdUsuarioR == idUsuario))
+                {
+                    this._context.Mensaje.Remove(usuario);
+                }
+            }
+        }
+
         public Mensaje Get(int id)
         {
             return this._context.Mensaje.FirstOrDefault(a => a.Id == id);

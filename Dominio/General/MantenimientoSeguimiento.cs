@@ -22,36 +22,39 @@ namespace Dominio.General
 
         public void Seguir(DTOSeguimiento dtoseguir)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using(var context = new DesignProDB())
-                {
-                    var repository = new SeguimientoRepository(context);
-                    var seguir = _mapper.MapToEntity(dtoseguir);
-                    repository.Create(seguir);
-                    context.SaveChanges();
-                }
+                var repository = new SeguimientoRepository(context);
+                repository.Create(_mapper.MapToEntity(dtoseguir));
+                context.SaveChanges();
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            
         }
         public void DejarDeSeguir(DTOSeguimiento dtoseguir)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new SeguimientoRepository(context);
-                    var seguir = _mapper.MapToEntity(dtoseguir);
-                    repository.Remove(seguir.Id);
-                    context.SaveChanges();
-                }
+                var repository = new SeguimientoRepository(context);
+                repository.Remove(this.Get(dtoseguir.IdUsuario,dtoseguir.IdSeguidor).Id);
+                context.SaveChanges();
             }
-            catch (Exception)
+        }
+
+        public DTOSeguimiento Get(int idUsuario, int idSeguidor)
+        {
+            using (var context = new DesignProDB())
             {
-                throw;
+                var repository = new SeguimientoRepository(context);
+                return _mapper.MapToObject(repository.Get(idUsuario, idSeguidor));
+            }
+        }
+
+        public bool LoSigue(DTOSeguimiento dtoseguir)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new SeguimientoRepository(context);
+                return repository.LoSigue(dtoseguir.IdUsuario, dtoseguir.IdSeguidor);
             }
         }
     }
