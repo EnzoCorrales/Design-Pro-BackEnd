@@ -15,7 +15,6 @@ namespace InternalServices.Controllers
 
     public class UsuarioController : ApiController
     {
-
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
         [ValidateUsuarioModel]
@@ -149,8 +148,44 @@ namespace InternalServices.Controllers
             if (usuario == null)
                 return NotFound();
 
-                usuario.Password = null;
-                return Ok(usuario);
+            usuario.Password = null;
+             return Ok(usuario);
+        }
+
+        // localhost:{puerto}/api/usuario/Seguir
+        // Comienza a seguir a otro usuario
+        [AuthenticateUser]
+        [HttpPost]
+        public IHttpActionResult Seguir(DTOSeguimiento seguir)
+        {
+            try
+            {
+                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                mantenimiento.Seguir(seguir);
+                return Ok(true);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+            }
+        }
+
+        // localhost:{puerto}/api/usuario/DejarDeSeguir
+        // Deja de seguir al usuario
+        [AuthenticateUser]
+        [HttpPost]
+        public IHttpActionResult DejarDeSeguir(DTOSeguimiento seguir)
+        {
+            try
+            {
+                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                mantenimiento.DejarDeSeguir(seguir);
+                return Ok(true);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+            }
         }
 
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
@@ -162,7 +197,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAllSeguidores(id);
-
         }
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
@@ -174,7 +208,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAllSiguiendo(id);
-
         }
 
         // localhost:{puerto}/api/usuario/GetAll
@@ -186,7 +219,6 @@ namespace InternalServices.Controllers
         {
             MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             return mantenimiento.GetAll();
-
         }
     }
 }
