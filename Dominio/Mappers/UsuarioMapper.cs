@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Persistencia.Database;
 using Common.DataTransferObjects;
+using System.Globalization;
 
 /// <summary>
 // una clase que mappea los DTO a Entidades y viceversa; también mappea colecciones de Entidades a colecciones de DTO y viceversa
@@ -25,7 +26,7 @@ namespace Dominio.Mappers
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
-                FNac = usuario.FNac,
+                FNac = usuario.FNac.ToShortDateString(),
                 Pais = usuario.Pais,
                 Profesion = usuario.Profesion,
                 Empresa = usuario.Empresa,
@@ -54,7 +55,7 @@ namespace Dominio.Mappers
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Correo = usuario.Correo,
-                FNac = usuario.FNac,
+                FNac = this.ParseToDateType(usuario.FNac),
                 Pais = usuario.Pais,
                 Profesion = usuario.Profesion,
                 Empresa = usuario.Empresa,
@@ -72,6 +73,12 @@ namespace Dominio.Mappers
             };
         }
 
+        public System.DateTime ParseToDateType(string date)
+        {
+            string inputFormat = "dd/MM/yyyy";
+            return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
+        }
+        /*
         public static HashSet<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)
         {
             if (usuarios == null)
@@ -106,7 +113,7 @@ namespace Dominio.Mappers
             }
             return usuario;
         }
-
+        
         public static HashSet<DTOUsuario> MapToCollectionObject(ICollection<Usuario> usuarios)
         {
             if (usuarios == null)
@@ -140,6 +147,6 @@ namespace Dominio.Mappers
                 usuario.Add(u);
             }
             return usuario;
-        }
+        }*/
     }
 }

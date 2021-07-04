@@ -28,7 +28,7 @@ namespace Common.DataTransferObjects
         [EmailAddress(ErrorMessage = "El correo es inválido")]
         public string Correo { get; set; }
         [Required(ErrorMessage = "La fecha de nacimiento es requerida")]
-        public System.DateTime FNac { get; set; }
+        public string FNac { get; set; }
         [Required(ErrorMessage = "El país es requerido")]
         public string Pais { get; set; }
         [MaxLength(50)]

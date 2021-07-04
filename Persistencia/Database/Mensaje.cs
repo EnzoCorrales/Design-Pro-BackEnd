@@ -20,7 +20,7 @@ namespace Persistencia.Database
         public System.DateTime Fecha { get; set; }
         public int IdUsuarioE { get; set; }
         public int IdUsuarioR { get; set; }
-        public byte Visto { get; set; }
+        public bool Visto { get; set; }
     
         public virtual Usuario Usuario { get; set; }
         public virtual Usuario Usuario1 { get; set; }

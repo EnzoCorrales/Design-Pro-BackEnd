@@ -35,7 +35,6 @@ namespace Persistencia.Database
         public string Empresa { get; set; }
         public string ImgPerfil { get; set; }
         public string UrlWeb { get; set; }
-        public string Descripcion { get; set; }
         public int Id { get; set; }
         public string Password { get; set; }
         public string Ciudad { get; set; }

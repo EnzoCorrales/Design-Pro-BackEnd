@@ -1,5 +1,4 @@
 ﻿using Common.DataTransferObjects;
-using Common.Exceptions;
 using Dominio.General;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using InternalServices.Filters;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace InternalServices.Controllers
 {
@@ -27,22 +27,23 @@ namespace InternalServices.Controllers
             try
             {
                 if(usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
-                    throw new ValidateException("Contraseña vacía"); 
+                    throw new ArgumentException("Contraseña vacía");
+
+                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
+
+                mantenimiento.Create(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
+                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
+                response.Success = true;
             }
-            catch (ValidateException ex)
+            catch (ArgumentException ex)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
-            }
-            finally
-            {
-                mantenimiento.Create(usuario);
-                response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
-                response.Success = true;
             }
 
             return Ok(response);
@@ -65,6 +66,8 @@ namespace InternalServices.Controllers
                 response.Success = true;
                 response.Usuario = mantenimiento.Get(correo);
                 response.Token = TokenManager.GenerateTokenJwt(correo, mantenimiento.Get(correo).Id);
+
+                return Ok(response);
             }
             catch (ArgumentException ex)
             {
@@ -75,8 +78,6 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
-
-            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Update
@@ -90,13 +91,23 @@ namespace InternalServices.Controllers
             try
             {
                 if (! (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo) && TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, usuario.Id))) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
-                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
 
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
+                response.Success = true;
+
+                return Ok(response);
             }
             catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
@@ -104,8 +115,6 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
-
-            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
@@ -121,17 +130,19 @@ namespace InternalServices.Controllers
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
 
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
-                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
                 
                 if (mantenimiento.Get(id) == null) // se fija si existe el usuario que esta intentando eliminar
                     throw new ArgumentException("Usuario no existe");
 
                 mantenimiento.Remove(id);
                 response.Success = true;
+
+                return Ok(response);
             }
             catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -140,9 +151,7 @@ namespace InternalServices.Controllers
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
-            }
-
-            return Ok(response);
+            } 
         }
 
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
@@ -164,7 +173,7 @@ namespace InternalServices.Controllers
             }
             catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
@@ -186,12 +195,14 @@ namespace InternalServices.Controllers
                     throw new ArgumentException("Usuario no existente");
 
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
-                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
                 if (mantenimiento.LoSigue(seguir))
                     throw new ArgumentException("Este usuario ya sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
 
                 mantenimiento.Seguir(seguir);
+
+                return Ok(true);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -199,14 +210,12 @@ namespace InternalServices.Controllers
             }
             catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
-
-            return Ok(true);
         }
 
         // localhost:{puerto}/api/usuario/DejarDeSeguir
@@ -223,12 +232,14 @@ namespace InternalServices.Controllers
                     throw new ArgumentNullException("Usuario no existente");
 
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
-                    throw new UnauthorizedAccessException("No tiene autorización para realizar esta operación");
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
                 if (!mantenimiento.LoSigue(seguir))
                     throw new ArgumentException("Este usuario no sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
 
                 mantenimiento.DejarDeSeguir(seguir);
+
+                return Ok(true);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -236,14 +247,12 @@ namespace InternalServices.Controllers
             }
             catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
-
-            return Ok(true);
         }
 
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}

@@ -64,7 +64,7 @@ namespace Dominio.DataModel.Repositories
         {
             var entity = this.Get(mensaje.Id);
 
-            entity.Visto = 1;
+            entity.Visto = true;
         }
 
     }
