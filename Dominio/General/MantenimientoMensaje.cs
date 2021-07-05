@@ -22,41 +22,28 @@ namespace Dominio.General
 
         public void Create(DTOMensaje dtomensaje)
         {
-            try
+
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new MensajeRepository(context);
+                var repository = new MensajeRepository(context);
 
-                    var mensaje = _mapper.MapToEntity(dtomensaje);
+                var mensaje = _mapper.MapToEntity(dtomensaje);
 
-                    repository.Create(mensaje);
+                repository.Create(mensaje);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
         public void Update(DTOMensaje dtoMensaje)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new MensajeRepository(context);
+                var repository = new MensajeRepository(context);
 
-                    repository.Update(_mapper.MapToEntity(dtoMensaje));
+                repository.Update(_mapper.MapToEntity(dtoMensaje));
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 

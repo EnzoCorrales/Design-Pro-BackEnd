@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
@@ -30,12 +30,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Asunto" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Asunto" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Contenido" Type="varchar" MaxLength="5000" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
           <Property Name="IdUsuarioE" Type="int" Nullable="false" />
           <Property Name="IdUsuarioR" Type="int" Nullable="false" />
-          <Property Name="Visto" Type="tinyint" Nullable="false" />
+          <Property Name="Visto" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Proyecto">
           <Key>
@@ -79,19 +79,18 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Apellido" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Correo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FNac" Type="date" Nullable="false" />
-          <Property Name="Pais" Type="varchar" MaxLength="25" />
-          <Property Name="Ciudad" Type="varchar" MaxLength="50" />
+          <Property Name="Pais" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Profesion" Type="varchar" MaxLength="100" />
           <Property Name="ImgPerfil" Type="text" />
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
           <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
-          <Property Name="Descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Valoracion">
           <Key>
@@ -112,7 +111,9 @@
           <Property Name="Orden" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Comentario_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -124,9 +125,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Comentario_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -242,9 +241,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoracion_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -256,7 +253,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoraciones_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -345,7 +344,8 @@
             <End Role="Video" EntitySet="Video" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DesignProDB" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -377,12 +377,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Asunto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Asunto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IdUsuarioE" Type="Int32" Nullable="false" />
           <Property Name="IdUsuarioR" Type="Int32" Nullable="false" />
-          <Property Name="Visto" Type="Byte" Nullable="false" />
+          <Property Name="Visto" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Mensaje_Usuario" FromRole="Mensaje" ToRole="Usuario" />
           <NavigationProperty Name="Usuario1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Mensaje" ToRole="Usuario" />
         </EntityType>
@@ -444,7 +444,7 @@
           <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FNac" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Profesion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ImgPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -482,7 +482,9 @@
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Video_Proyecto" FromRole="Video" ToRole="Proyecto" />
         </EntityType>
         <Association Name="FK_Comentario_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -494,9 +496,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Comentario_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -588,7 +588,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoraciones_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -638,9 +640,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Valoracion_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">

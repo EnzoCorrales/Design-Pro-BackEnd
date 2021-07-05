@@ -21,22 +21,16 @@ namespace Dominio.General
 
         public void Create(DTOProyecto dtoproyecto)
         {
-            try
+
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ProyectoRepository(context);
+                var repository = new ProyectoRepository(context);
 
-                    var proyecto = _mapper.MapToEntity(dtoproyecto);
+                var proyecto = _mapper.MapToEntity(dtoproyecto);
 
-                    repository.Create(proyecto);
+                repository.Create(proyecto);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
@@ -60,19 +54,13 @@ namespace Dominio.General
 
         public void RemoveByUsuario(int idUsuario)
         {
-            try
-            {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new ProyectoRepository(context);
-                    repository.RemoveByUsuario(idUsuario);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
+            using (var context = new DesignProDB())
             {
-                throw;
+                var repository = new ProyectoRepository(context);
+                repository.RemoveByUsuario(idUsuario);
+
+                context.SaveChanges();
             }
         }
 

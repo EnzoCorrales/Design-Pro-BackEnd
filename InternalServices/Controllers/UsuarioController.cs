@@ -1,5 +1,4 @@
 ﻿using Common.DataTransferObjects;
-using Common.Exceptions;
 using Dominio.General;
 using System;
 using System.Collections.Generic;
@@ -7,9 +6,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using InternalServices.Filters;
-using System.Web;
-using System.IO;
-using System.Linq;
+using System.Security.Claims;
+using System.Globalization;
+
 
 namespace InternalServices.Controllers
 {
@@ -18,26 +17,35 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/usuario/register
         // Crea un usuario
         [ValidateUsuarioModel]
+        [AllowAnonymous]
         [HttpPost]
-        public IHttpActionResult Register(DTOUsuario usuario)
+        public IHttpActionResult Register([FromBody] DTOUsuario usuario)
         {
             DTOBaseResponse response = new DTOBaseResponse();
+            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
             try
             {
-                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                if(usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
+                    throw new ArgumentException("Contraseña vacía");
+
+                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
+
                 mantenimiento.Create(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo,response.Usuario.Id);
-                return Ok(response);
+                response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
+                response.Success = true;
             }
-            catch (ValidateException e)
+            catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
+
+            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -50,30 +58,30 @@ namespace InternalServices.Controllers
             try
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                if (mantenimiento.ValidarUsuario(correo, password))
-                {
-                    response.Usuario = mantenimiento.Get(correo);
-                    response.Token = TokenManager.GenerateTokenJwt(correo,response.Usuario.Id);
-                    return Ok(response);
-                }
-                else
-                {
-                    throw new ValidateException("Las credenciales no son correctas");
-                }
+
+                if (!mantenimiento.ValidarUsuario(correo, password))
+                    throw new ArgumentException("Credenciales no válidas");
+
+                response.Success = true;
+                response.Usuario = mantenimiento.Get(correo);
+                response.Token = TokenManager.GenerateTokenJwt(correo, mantenimiento.Get(correo).Id);
+
+                return Ok(response);
             }
-            catch (ValidateException e)
+            catch (ArgumentException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
         }
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
+        [ValidateUsuarioModel]
         [AuthenticateUser]
         [HttpPut]
         public IHttpActionResult Update(DTOUsuario usuario)
@@ -82,25 +90,30 @@ namespace InternalServices.Controllers
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
-                if (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo)) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
-                {
-                    MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                    mantenimiento.Update(usuario);
-                    response.Usuario = mantenimiento.Get(usuario.Correo);
-                    return Ok(response);
-                }
-                else
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No tiene la autorización para realizar la operación"));
-                }
+                if (! (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo) && TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, usuario.Id))) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
+
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                mantenimiento.Update(usuario);
+                response.Usuario = mantenimiento.Get(usuario.Correo);
+                response.Success = true;
+
+                return Ok(response);
             }
-            catch (ValidateException e)
+            catch (UnauthorizedAccessException ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
         }
 
@@ -111,26 +124,34 @@ namespace InternalServices.Controllers
         public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();
+            
             try
             {
-                if (TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
-                {
-                    MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-                    mantenimiento.Remove(id);
-                    response.Success = true;
-                }
-                else
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No tiene la autorización para realizar la operación"));
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.ToString();
-            }
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
 
-            return Ok(response);
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+                
+                if (mantenimiento.Get(id) == null) // se fija si existe el usuario que esta intentando eliminar
+                    throw new ArgumentException("Usuario no existe");
+
+                mantenimiento.Remove(id);
+                response.Success = true;
+
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            } 
         }
 
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
@@ -138,15 +159,26 @@ namespace InternalServices.Controllers
         [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get(int id)
-        {            
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            var usuario = mantenimiento.Get(id);
+        {
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                if (mantenimiento.Get(id) == null)
+                    throw new ArgumentException("Usuario no existe");
 
-            if (usuario == null)
-                return NotFound();
+                var usuario = mantenimiento.Get(id);
+                usuario.Password = null;
 
-            usuario.Password = null;
-             return Ok(usuario);
+                return Ok(usuario);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         // localhost:{puerto}/api/usuario/Seguir
@@ -155,15 +187,34 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Seguir(DTOSeguimiento seguir)
         {
+            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
-                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
+                    throw new ArgumentException("Usuario no existente");
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (mantenimiento.LoSigue(seguir))
+                    throw new ArgumentException("Este usuario ya sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
+
                 mantenimiento.Seguir(seguir);
+
                 return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
         }
 
@@ -173,15 +224,34 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult DejarDeSeguir(DTOSeguimiento seguir)
         {
+            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
-                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
+                    throw new ArgumentNullException("Usuario no existente");
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (!mantenimiento.LoSigue(seguir))
+                    throw new ArgumentException("Este usuario no sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
+
                 mantenimiento.DejarDeSeguir(seguir);
+
                 return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
         }
 

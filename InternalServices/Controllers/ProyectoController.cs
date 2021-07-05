@@ -71,27 +71,6 @@ namespace InternalServices.Controllers
             return Ok(response);
         }
 
-        // localhost:{puerto}/api/proyecto/RemoveByUsuario?idUsuario={idUsuario}
-        // Elimina todos los proyecto de cierto usuario dado el id
-        /*[HttpPost]
-        public IHttpActionResult RemoveByUsuario(int idUsuario)
-        {
-            DTOBaseResponse response = new DTOBaseResponse();
-            try
-            {
-                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-                mantenimiento.RemoveByUsuario(idUsuario);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.ToString();
-            }
-
-            return Ok(response);
-        }
-        */
         // localhost:{puerto}/api/proyecto/Get?id={id}
         // Devuelve un proyecto dado el id
         [AllowAnonymous]
