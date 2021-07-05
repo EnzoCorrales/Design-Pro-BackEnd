@@ -3,16 +3,16 @@ using Common.Exceptions;
 using Dominio.General;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using InternalServices.Filters;
-using System.Security.Claims;
+using System.Web;
+using System.IO;
+using System.Linq;
 
 namespace InternalServices.Controllers
 {
-
     public class UsuarioController : ApiController
     {
         // localhost:{puerto}/api/usuario/register
@@ -74,10 +74,10 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Update
         // Modifica un usuario
-        /// </summary>
         [AuthenticateUser]
         [HttpPut]
-        public IHttpActionResult Update([FromBody] DTOUsuario usuario)
+        public IHttpActionResult Update(DTOUsuario usuario)
+
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
@@ -98,16 +98,14 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
             }
         }
 
         // localhost:{puerto}/api/usuario/Remove?id={idUsuario}
         // Elimina un usuario
-        // 
-        /// </summary>
         [AuthenticateUser]
         [HttpDelete]
         public IHttpActionResult Remove(int id)
@@ -137,7 +135,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/Get?id={idUsuario}
         // Devuelve un usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get(int id)
@@ -190,7 +187,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAllSeguidores?id={idUsuario}
         // Devuelve una lista con todos los seguidores del usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
@@ -201,7 +197,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
         // Devuelve una lista con todos los siguiendo del usuario dado el id
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAllSiguiendo(int id)
@@ -212,7 +207,6 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
-        /// </summary>
         [AllowAnonymous]
         [HttpGet]
         public IEnumerable<DTOUsuario> GetAll()
