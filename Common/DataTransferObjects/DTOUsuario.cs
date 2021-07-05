@@ -42,6 +42,8 @@ namespace Common.DataTransferObjects
         public string Password { get; set; }
         [MaxLength(50)]
         public string Ciudad { get; set; }
+        [MaxLength(500)]
+        public string Descripcion { get; set; }
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
         public virtual ICollection<DTOMensaje> MensajesE { get; set; }

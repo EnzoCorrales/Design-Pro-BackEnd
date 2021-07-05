@@ -36,8 +36,6 @@ namespace Dominio.General
 
                 context.SaveChanges();
             }
-            
-
         }
 
         public bool ValidarUsuario(string correo, string password)

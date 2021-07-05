@@ -75,7 +75,7 @@ namespace Dominio.Mappers
 
         public System.DateTime ParseToDateType(string date)
         {
-            string inputFormat = "dd/MM/yyyy";
+            string inputFormat = "dd-MM-yyyy";
             return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
         }
         /*

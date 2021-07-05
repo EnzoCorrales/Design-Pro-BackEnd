@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DesignProDB.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DesignProModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Comentario">
           <Key>
             <PropertyRef Name="Id" />
@@ -85,8 +85,9 @@
           <Property Name="FNac" Type="date" Nullable="false" />
           <Property Name="Pais" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Profesion" Type="varchar" MaxLength="100" />
-          <Property Name="ImgPerfil" Type="text" />
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
+          <Property Name="ImgPerfil" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="text" />
           <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
@@ -280,7 +281,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="DesignProDBStoreContainer">
+        <EntityContainer Name="DesignProModelStoreContainer">
           <EntitySet Name="Comentario" EntityType="Self.Comentario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Imagen" EntityType="Self.Imagen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mensaje" EntityType="Self.Mensaje" Schema="dbo" store:Type="Tables" />
@@ -344,11 +345,10 @@
             <End Role="Video" EntitySet="Video" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DesignProDB" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="DesignProModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Comentario">
           <Key>
             <PropertyRef Name="Id" />
@@ -439,19 +439,18 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FNac" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Profesion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ImgPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImgPerfil" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
           <NavigationProperty Name="Mensaje" Relationship="Self.FK_Mensaje_Usuario" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Mensaje1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Usuario" ToRole="Mensaje" />
@@ -459,6 +458,7 @@
           <NavigationProperty Name="Seguimiento" Relationship="Self.FK_Seguimiento_Usuario" FromRole="Usuario" ToRole="Seguimiento" />
           <NavigationProperty Name="Seguimiento1" Relationship="Self.FK_Seguimiento_Usuario1" FromRole="Usuario" ToRole="Seguimiento" />
           <NavigationProperty Name="Valoracion" Relationship="Self.FK_Valoracion_Usuario" FromRole="Usuario" ToRole="Valoracion" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Valoracion">
           <Key>
@@ -720,9 +720,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DesignProDBStoreContainer" CdmEntityContainer="Entities">
+        <EntityContainerMapping StorageEntityContainer="DesignProModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Comentario">
-            <EntityTypeMapping TypeName="DesignProDB.Comentario">
+            <EntityTypeMapping TypeName="DesignProModel.Comentario">
               <MappingFragment StoreEntitySet="Comentario">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Contenido" ColumnName="Contenido" />
@@ -733,7 +733,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Imagen">
-            <EntityTypeMapping TypeName="DesignProDB.Imagen">
+            <EntityTypeMapping TypeName="DesignProModel.Imagen">
               <MappingFragment StoreEntitySet="Imagen">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
@@ -744,7 +744,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Mensaje">
-            <EntityTypeMapping TypeName="DesignProDB.Mensaje">
+            <EntityTypeMapping TypeName="DesignProModel.Mensaje">
               <MappingFragment StoreEntitySet="Mensaje">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Asunto" ColumnName="Asunto" />
@@ -757,7 +757,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Proyecto">
-            <EntityTypeMapping TypeName="DesignProDB.Proyecto">
+            <EntityTypeMapping TypeName="DesignProModel.Proyecto">
               <MappingFragment StoreEntitySet="Proyecto">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Titulo" ColumnName="Titulo" />
@@ -771,7 +771,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Seguimiento">
-            <EntityTypeMapping TypeName="DesignProDB.Seguimiento">
+            <EntityTypeMapping TypeName="DesignProModel.Seguimiento">
               <MappingFragment StoreEntitySet="Seguimiento">
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdSeguidor" ColumnName="IdSeguidor" />
@@ -780,7 +780,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tag">
-            <EntityTypeMapping TypeName="DesignProDB.Tag">
+            <EntityTypeMapping TypeName="DesignProModel.Tag">
               <MappingFragment StoreEntitySet="Tag">
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Tag1" ColumnName="Tag" />
@@ -789,7 +789,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Texto">
-            <EntityTypeMapping TypeName="DesignProDB.Texto">
+            <EntityTypeMapping TypeName="DesignProModel.Texto">
               <MappingFragment StoreEntitySet="Texto">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
@@ -799,26 +799,26 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Usuario">
-            <EntityTypeMapping TypeName="DesignProDB.Usuario">
+            <EntityTypeMapping TypeName="DesignProModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
                 <ScalarProperty Name="Correo" ColumnName="Correo" />
                 <ScalarProperty Name="FNac" ColumnName="FNac" />
                 <ScalarProperty Name="Pais" ColumnName="Pais" />
-                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
                 <ScalarProperty Name="Profesion" ColumnName="Profesion" />
-                <ScalarProperty Name="ImgPerfil" ColumnName="ImgPerfil" />
                 <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+                <ScalarProperty Name="ImgPerfil" ColumnName="ImgPerfil" />
                 <ScalarProperty Name="UrlWeb" ColumnName="UrlWeb" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Valoracion">
-            <EntityTypeMapping TypeName="DesignProDB.Valoracion">
+            <EntityTypeMapping TypeName="DesignProModel.Valoracion">
               <MappingFragment StoreEntitySet="Valoracion">
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
@@ -827,7 +827,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Video">
-            <EntityTypeMapping TypeName="DesignProDB.Video">
+            <EntityTypeMapping TypeName="DesignProModel.Video">
               <MappingFragment StoreEntitySet="Video">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
