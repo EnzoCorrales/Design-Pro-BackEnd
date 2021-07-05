@@ -19,7 +19,7 @@ namespace Dominio.DataModel.Repositories
             return this._context.Usuario.FirstOrDefault(a => a.Id == id);
         }
 
-        public Usuario Get(string correo)
+        public Usuario GetByCorreo(string correo)
         {
             return this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo));
         }
