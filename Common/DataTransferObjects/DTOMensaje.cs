@@ -19,6 +19,6 @@ namespace Common.DataTransferObjects
         public int IdUsuarioE { get; set; }
         [Required(ErrorMessage = "El receptor es requerido")]
         public int IdUsuarioR { get; set; }
-        public byte Visto { get; set; }
+        public bool Visto { get; set; }
     }
 }

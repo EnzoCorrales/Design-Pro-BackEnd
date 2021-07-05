@@ -21,12 +21,24 @@ namespace Dominio.DataModel.Repositories
 
         public Usuario GetByCorreo(string correo)
         {
-            return this._context.Usuario.FirstOrDefault(a => a.Correo == correo);
+            return this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo));
         }
 
         public List<Usuario> GetAll()
         {
             return this._context.Usuario.Select(a => a).ToList();
+        }
+
+        public List<int> GetIdsByNombre(string nombre)
+        {
+            var usuarios = this._context.Usuario.Where(a => a.Nombre.Equals(nombre)).ToList();
+            List<int> ids = new List<int>();
+
+            foreach (var usuario in usuarios)
+            {
+                ids.Add(usuario.Id);
+            }
+            return ids;
         }
 
         public List<Usuario> GetAllSeguidores(int id, DesignProDB c)

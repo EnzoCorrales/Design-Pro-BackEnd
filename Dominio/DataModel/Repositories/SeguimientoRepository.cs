@@ -21,6 +21,46 @@ namespace Dominio.DataModel.Repositories
             this._context.Seguimiento.Add(seguimiento);
         }
 
+        public void Remove(int id)
+        {
+            var entity = this.Get(id);
+            this._context.Seguimiento.Remove(entity);
+        }
+
+        public void RemoveByUsuario(int idUsuario)
+        {
+            var lista = this.GetAll();
+            foreach (var usuario in lista)
+            {
+                if((usuario.IdUsuario == idUsuario) || (usuario.IdSeguidor == idUsuario))
+                {
+                    this._context.Seguimiento.Remove(usuario);
+                }
+            }
+        }
+
+        public bool LoSigue(int idUsuario, int idSeguidor)
+        {
+            if (this._context.Seguimiento.FirstOrDefault(a => a.IdUsuario == idUsuario && a.IdSeguidor == idSeguidor) == null)
+                return false;
+            else
+                return true;
+        }
+
+        public List<Seguimiento> GetAll()
+        {
+            return this._context.Seguimiento.Select(a => a).ToList();
+        }
+        public Seguimiento Get(int id)
+        {
+            return this._context.Seguimiento.FirstOrDefault(a => a.Id.Equals(id));
+        }
+
+        public Seguimiento Get(int idUsuario, int idSeguidor)
+        {
+            return this._context.Seguimiento.FirstOrDefault(a => a.IdUsuario == idUsuario && a.IdSeguidor == idSeguidor);
+        }
+
         public List<Seguimiento> GetAllSeguidores(int idUsuario)
         {
             return this._context.Seguimiento.Where(a => a.IdUsuario == idUsuario).ToList();
