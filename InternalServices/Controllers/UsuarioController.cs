@@ -2,7 +2,6 @@
 using Dominio.General;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -10,9 +9,9 @@ using InternalServices.Filters;
 using System.Security.Claims;
 using System.Globalization;
 
+
 namespace InternalServices.Controllers
 {
-
     public class UsuarioController : ApiController
     {
         // localhost:{puerto}/api/usuario/register
@@ -85,7 +84,8 @@ namespace InternalServices.Controllers
         [ValidateUsuarioModel]
         [AuthenticateUser]
         [HttpPut]
-        public IHttpActionResult Update([FromBody] DTOUsuario usuario)
+        public IHttpActionResult Update(DTOUsuario usuario)
+
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
@@ -111,7 +111,7 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }

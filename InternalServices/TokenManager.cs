@@ -26,7 +26,7 @@ namespace InternalServices
                             new Claim("id", id.ToString())
                         }),
 
-                Expires = now.AddMinutes(Convert.ToInt32(30)),
+                Expires = now.AddMinutes(Convert.ToInt32(60)),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
             };
