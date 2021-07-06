@@ -112,15 +112,13 @@
     <Compile Include="General\MantenimientoSeguimiento.cs" />
     <Compile Include="General\MantenimientoUsuario.cs" />
     <Compile Include="Mappers\ComentarioMapper.cs" />
-    <Compile Include="Mappers\ImagenMapper.cs" />
     <Compile Include="Mappers\MensajeMapper.cs" />
+    <Compile Include="Mappers\PortafolioMapper.cs" />
     <Compile Include="Mappers\ProyectoMapper.cs" />
     <Compile Include="Mappers\SeguimientoMapper.cs" />
     <Compile Include="Mappers\TagMapper.cs" />
-    <Compile Include="Mappers\TextoMapper.cs" />
     <Compile Include="Mappers\UsuarioMapper.cs" />
     <Compile Include="Mappers\ValoracionMapper.cs" />
-    <Compile Include="Mappers\VideoMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

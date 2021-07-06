@@ -30,9 +30,7 @@ namespace Dominio.Mappers
                 Descripcion = proyecto.Descripcion,
                 FechaPub = proyecto.FechaPub,
                 Comentarios = ComentarioMapper.MapToCollectionObject(proyecto.Comentario),
-                Imagenes = ImagenMapper.MapToCollectionObject(proyecto.Imagen),
-                Videos = VideoMapper.MapToCollectionObject(proyecto.Video),
-                Textos = TextoMapper.MapToCollectionObject(proyecto.Texto),
+                Portafolios = PortafolioMapper.MapToCollectionObject(proyecto.Portafolio),
                 Tags = TagMapper.MapToCollectionObject(proyecto.Tag),
                 Valoraciones = ValoracionMapper.MapToCollectionObject(proyecto.Valoracion),
             };
@@ -54,9 +52,7 @@ namespace Dominio.Mappers
                 Descripcion = proyecto.Descripcion,
                 FechaPub = proyecto.FechaPub,
                 Comentario = ComentarioMapper.MapToCollectionEntity(proyecto.Comentarios),
-                Imagen = ImagenMapper.MapToCollectionEntity(proyecto.Imagenes),
-                Video = VideoMapper.MapToCollectionEntity(proyecto.Videos),
-                Texto = TextoMapper.MapToCollectionEntity(proyecto.Textos),
+                Portafolio = PortafolioMapper.MapToCollectionEntity(proyecto.Portafolios),
                 Tag = TagMapper.MapToCollectionEntity(proyecto.Tags),
                 Valoracion = ValoracionMapper.MapToCollectionEntity(proyecto.Valoraciones),
             };
@@ -81,9 +77,7 @@ namespace Dominio.Mappers
                     Descripcion = pro.Descripcion,
                     FechaPub = pro.FechaPub,
                     Comentario = ComentarioMapper.MapToCollectionEntity(pro.Comentarios),
-                    Imagen = ImagenMapper.MapToCollectionEntity(pro.Imagenes),
-                    Video = VideoMapper.MapToCollectionEntity(pro.Videos),
-                    Texto = TextoMapper.MapToCollectionEntity(pro.Textos),
+                    Portafolio = PortafolioMapper.MapToCollectionEntity(pro.Portafolios),
                     Tag = TagMapper.MapToCollectionEntity(pro.Tags),
                     Valoracion = ValoracionMapper.MapToCollectionEntity(pro.Valoraciones),
                 };
@@ -111,9 +105,7 @@ namespace Dominio.Mappers
                     Descripcion = pro.Descripcion,
                     FechaPub = pro.FechaPub,
                     Comentarios = ComentarioMapper.MapToCollectionObject(pro.Comentario),
-                    Imagenes = ImagenMapper.MapToCollectionObject(pro.Imagen),
-                    Videos = VideoMapper.MapToCollectionObject(pro.Video),
-                    Textos = TextoMapper.MapToCollectionObject(pro.Texto),
+                    Portafolios = PortafolioMapper.MapToCollectionObject(pro.Portafolio),
                     Tags = TagMapper.MapToCollectionObject(pro.Tag),
                     Valoraciones = ValoracionMapper.MapToCollectionObject(pro.Valoracion),
                 };

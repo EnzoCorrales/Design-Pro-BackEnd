@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using InternalServices.Filters;
-using System.Security.Claims;
 using System.Globalization;
 
 
@@ -28,8 +27,11 @@ namespace InternalServices.Controllers
                 if(usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
                     throw new ArgumentException("Contraseña vacía");
 
-                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
-                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
+                if (!DateTime.TryParseExact(usuario.FNac, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd-MM-yyyy");
+
+                if(mantenimiento.Get(usuario.Correo) != null)
+                    throw new ArgumentException("Correo en uso");
 
                 mantenimiento.Create(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
@@ -40,9 +42,9 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
             }
 
             return Ok(response);
@@ -111,7 +113,7 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }

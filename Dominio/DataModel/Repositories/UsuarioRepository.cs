@@ -24,6 +24,12 @@ namespace Dominio.DataModel.Repositories
             return this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo));
         }
 
+
+        public Usuario GetByCorreo(string correo)
+        {
+            return this._context.Usuario.FirstOrDefault(a => a.Correo.Equals(correo));
+        }
+
         public List<Usuario> GetAll()
         {
             return this._context.Usuario.Select(a => a).ToList();

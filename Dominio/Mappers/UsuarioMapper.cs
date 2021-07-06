@@ -33,7 +33,6 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
-                Ciudad = usuario.Ciudad,
                 Comentarios = ComentarioMapper.MapToCollectionObject(usuario.Comentario),
                 MensajesE = MensajeMapper.MapToCollectionObject(usuario.Mensaje),
                 MensajesR = MensajeMapper.MapToCollectionObject(usuario.Mensaje1),
@@ -62,7 +61,6 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
-                Ciudad = usuario.Ciudad,
                 Comentario = ComentarioMapper.MapToCollectionEntity(usuario.Comentarios),
                 Mensaje = MensajeMapper.MapToCollectionEntity(usuario.MensajesE),
                 Mensaje1 = MensajeMapper.MapToCollectionEntity(usuario.MensajesR),
@@ -75,7 +73,7 @@ namespace Dominio.Mappers
 
         public System.DateTime ParseToDateType(string date)
         {
-            string inputFormat = "dd/MM/yyyy";
+            string inputFormat = "dd-MM-yyyy";
             return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
         }
         /*
@@ -100,7 +98,6 @@ namespace Dominio.Mappers
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Password = usu.Password,
-                    Ciudad = usu.Ciudad,
                     Comentario = ComentarioMapper.MapToCollectionEntity(usu.Comentarios),
                     Mensaje = MensajeMapper.MapToCollectionEntity(usu.MensajesE),
                     Mensaje1 = MensajeMapper.MapToCollectionEntity(usu.MensajesR),
@@ -135,7 +132,6 @@ namespace Dominio.Mappers
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Password = usu.Password,
-                    Ciudad = usu.Ciudad,
                     Comentarios = ComentarioMapper.MapToCollectionObject(usu.Comentario),
                     MensajesE = MensajeMapper.MapToCollectionObject(usu.Mensaje),
                     MensajesR = MensajeMapper.MapToCollectionObject(usu.Mensaje1),
