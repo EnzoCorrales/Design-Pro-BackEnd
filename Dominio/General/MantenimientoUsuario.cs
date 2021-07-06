@@ -25,14 +25,8 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var current = repository.Get(dtousuario.Correo);
 
-                if (current != null)
-                    throw new ValidateException("Correo en uso");
-
-                var usuario = _mapper.MapToEntity(dtousuario);
-
-                repository.Create(usuario);
+                repository.Create(_mapper.MapToEntity(dtousuario));
 
                 context.SaveChanges();
             }

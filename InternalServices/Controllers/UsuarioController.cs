@@ -30,6 +30,9 @@ namespace InternalServices.Controllers
                 if (!DateTime.TryParseExact(usuario.FNac, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
                     throw new ArgumentException("Debe ingresar la fecha con formato dd-MM-yyyy");
 
+                if(mantenimiento.Get(usuario.Correo) != null)
+                    throw new ArgumentException("Correo en uso");
+
                 mantenimiento.Create(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
                 response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
