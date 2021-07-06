@@ -37,8 +37,7 @@ namespace Dominio.General
               using (var context = new DesignProDB())
               {
                     var repository = new UsuarioRepository(context);
-                    var usuario = repository.Get(correo);
-                    if (usuario.Password.Equals(password))
+                    if (repository.Get(correo).Password.Equals(password))
                         return true;
                     else
                         return false;
@@ -50,18 +49,6 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var current = repository.Get(dtousuario.Id);
-
-                //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
-                if (dtousuario.Correo != "")
-                {
-                    if (current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
-                    {
-                        throw new Exception("Correo en uso");
-                    }
-                }
-                
                 repository.Update(_mapper.MapToEntity(dtousuario));
                 context.SaveChanges();
             }

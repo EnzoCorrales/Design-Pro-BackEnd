@@ -33,6 +33,7 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
+                Descripcion = usuario.Descripcion,
                 Comentarios = ComentarioMapper.MapToCollectionObject(usuario.Comentario),
                 MensajesE = MensajeMapper.MapToCollectionObject(usuario.Mensaje),
                 MensajesR = MensajeMapper.MapToCollectionObject(usuario.Mensaje1),
@@ -61,6 +62,7 @@ namespace Dominio.Mappers
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
+                Descripcion = usuario.Descripcion,
                 Comentario = ComentarioMapper.MapToCollectionEntity(usuario.Comentarios),
                 Mensaje = MensajeMapper.MapToCollectionEntity(usuario.MensajesE),
                 Mensaje1 = MensajeMapper.MapToCollectionEntity(usuario.MensajesR),
@@ -73,8 +75,16 @@ namespace Dominio.Mappers
 
         public System.DateTime ParseToDateType(string date)
         {
-            string inputFormat = "dd-MM-yyyy";
-            return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
+            if (DateTime.TryParseExact(date, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                return DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime di))
+                return DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime die))
+                return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return DateTime.Now;
         }
         /*
         public static HashSet<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)

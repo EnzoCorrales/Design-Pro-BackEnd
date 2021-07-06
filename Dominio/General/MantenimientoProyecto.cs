@@ -69,7 +69,22 @@ namespace Dominio.General
             using(var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
+                var U_repository = new UsuarioRepository(context);
+                var p = _mapper.MapToObject(repository.Get(id));
+                p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
+                return p;
+            }
+        }
+
+        public bool ExisteProyecto(int id)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ProyectoRepository(context);
+                if (repository.Get(id) == null)
+                    return false;
+                else
+                    return true;
             }
         }
 
@@ -78,13 +93,16 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetBusquedaXTitulo(busqueda);
 
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 
                 foreach (var proyecto in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(proyecto));
+                    var p = _mapper.MapToObject(proyecto);
+                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
+                    resultado.Add(p);
                 }
                 return resultado;
             }
@@ -102,7 +120,9 @@ namespace Dominio.General
 
                 foreach (var proyecto in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(proyecto));
+                    var p = _mapper.MapToObject(proyecto);
+                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
+                    resultado.Add(p);
                 }
                 return resultado;
             }
@@ -114,24 +134,18 @@ namespace Dominio.General
             {
                 var P_repository = new ProyectoRepository(context);
                 var T_repository = new TagRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = P_repository.GetAllByIds(T_repository.GetIdsByTag(busqueda));
 
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 
                 foreach (var proyecto in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(proyecto));
+                    var p = _mapper.MapToObject(proyecto);
+                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
+                    resultado.Add(p);
                 }
                 return resultado;
-            }
-        }
-
-        public int GetIdAutor(int idProyecto)
-        {
-            using (var context = new DesignProDB())
-            {
-                var repository = new ProyectoRepository(context);
-                return this.Get(idProyecto).IdAutor;
             }
         }
 
@@ -141,13 +155,16 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAll();
 
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 
                 foreach (var proyecto in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(proyecto));
+                    var p = _mapper.MapToObject(proyecto);
+                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
+                    resultado.Add(p);
                 }
 
                 return resultado;
@@ -163,13 +180,16 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
+                var u_repository = new UsuarioRepository(context);
                 var lista = repository.GetAll(idUsuario);
 
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 
                 foreach (var proyecto in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(proyecto));
+                    var p = _mapper.MapToObject(proyecto);
+                    p.NombreAutor = u_repository.Get(idUsuario).Nombre;
+                    resultado.Add(p);
                 }
 
                 return resultado;
