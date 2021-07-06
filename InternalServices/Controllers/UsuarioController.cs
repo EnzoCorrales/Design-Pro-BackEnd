@@ -39,9 +39,9 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
 
             return Ok(response);
@@ -74,7 +74,7 @@ namespace InternalServices.Controllers
 
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
         }
 
@@ -92,8 +92,8 @@ namespace InternalServices.Controllers
                 if (! (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo) && TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, usuario.Id))) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
-                if (!DateTime.TryParseExact(usuario.FNac, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
-                    throw new ArgumentException("Debe ingresar la fecha con formato dd/MM/yyyy");
+                if (!DateTime.TryParseExact(usuario.FNac, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Debe ingresar la fecha con formato dd-MM-yyyy");
 
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
