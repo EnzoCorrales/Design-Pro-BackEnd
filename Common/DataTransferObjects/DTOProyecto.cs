@@ -12,11 +12,9 @@ namespace Common.DataTransferObjects
         public DTOProyecto()
         {
             this.Comentarios = new HashSet<DTOComentario>();
-            this.Imagenes = new HashSet<DTOImagen>();
             this.Tags = new HashSet<DTOTag>();
-            this.Textos = new HashSet<DTOTexto>();
-            this.Videos = new HashSet<DTOVideo>();
             this.Valoraciones = new HashSet<DTOValoracion>();
+            this.Portafolios = new HashSet<DTOPortafolio>();
         }
 
         public int Id { get; set; }
@@ -31,12 +29,11 @@ namespace Common.DataTransferObjects
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
 
-        public virtual ICollection<DTOImagen> Imagenes { get; set; }
         public virtual ICollection<DTOTag> Tags { get; set; }
-        public virtual ICollection<DTOTexto> Textos { get; set; }
 
         public virtual ICollection<DTOValoracion> Valoraciones { get; set; }
 
-        public virtual ICollection<DTOVideo> Videos { get; set; }
+        public virtual ICollection<DTOPortafolio> Portafolios { get; set; }
+
     }
 }
