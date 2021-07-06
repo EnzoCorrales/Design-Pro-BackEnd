@@ -69,15 +69,13 @@
   <ItemGroup>
     <Compile Include="DataTransferObjects\DTOBaseResponse.cs" />
     <Compile Include="DataTransferObjects\DTOComentario.cs" />
-    <Compile Include="DataTransferObjects\DTOImagen.cs" />
     <Compile Include="DataTransferObjects\DTOMensaje.cs" />
+    <Compile Include="DataTransferObjects\DTOPortafolio.cs" />
     <Compile Include="DataTransferObjects\DTOProyecto.cs" />
     <Compile Include="DataTransferObjects\DTOSeguimiento.cs" />
     <Compile Include="DataTransferObjects\DTOTag.cs" />
-    <Compile Include="DataTransferObjects\DTOTexto.cs" />
     <Compile Include="DataTransferObjects\DTOUsuario.cs" />
     <Compile Include="DataTransferObjects\DTOValoracion.cs" />
-    <Compile Include="DataTransferObjects\DTOVideo.cs" />
     <Compile Include="Exceptions\ValidateException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
