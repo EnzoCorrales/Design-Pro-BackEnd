@@ -4,15 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="11d47d60bbd545499640a3374df35022" Name="Diagram1">
-        <EntityTypeShape EntityType="DesignProModel.Comentario" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Mensaje" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Portafolio" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Proyecto" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Seguimiento" Width="1.5" PointX="3" PointY="16.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Tag" Width="1.5" PointX="5.25" PointY="13.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Usuario" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DesignProModel.Valoracion" Width="1.5" PointX="8.25" PointY="10.375" IsExpanded="true" />
+      <Diagram DiagramId="66e5ae1afab34f158273672e3c7d39d0" Name="Diagram1">
+        <EntityTypeShape EntityType="DesignProModel.Comentario" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Mensaje" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Portafolio" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Proyecto" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Seguimiento" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Tag" Width="1.5" PointX="5.25" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Usuario" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DesignProModel.Valoracion" Width="1.5" PointX="8.25" PointY="10.25" IsExpanded="true" />
         <AssociationConnector Association="DesignProModel.FK_Comentario_Proyecto" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Comentario_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Mensaje_Usuario" ManuallyRouted="false" />
