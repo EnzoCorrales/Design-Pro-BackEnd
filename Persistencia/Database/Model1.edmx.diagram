@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4421799534cc4f77877042b7099442a6" Name="Diagram1">
+      <Diagram DiagramId="52b86df45cd04085be677dbc3ba492b4" Name="Diagram1">
         <EntityTypeShape EntityType="DesignProModel.Comentario" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DesignProModel.Mensaje" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DesignProModel.Portafolio" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
@@ -17,7 +17,7 @@
         <AssociationConnector Association="DesignProModel.FK_Comentario_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Mensaje_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Mensaje_Usuario1" ManuallyRouted="false" />
-        <AssociationConnector Association="DesignProModel.FK_Portafolio1_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="DesignProModel.FK_Portafolio_Proyecto" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Proyecto_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Tags_Proyecto" ManuallyRouted="false" />
         <AssociationConnector Association="DesignProModel.FK_Valoraciones_Proyecto" ManuallyRouted="false" />

@@ -319,11 +319,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Orden" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Portafolio1_Proyecto" FromRole="Portafolio" ToRole="Proyecto" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Portafolio_Proyecto" FromRole="Portafolio" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Proyecto">
           <Key>
@@ -338,7 +338,7 @@
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FechaPub" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Proyecto" FromRole="Proyecto" ToRole="Comentario" />
-          <NavigationProperty Name="Portafolio" Relationship="Self.FK_Portafolio1_Proyecto" FromRole="Proyecto" ToRole="Portafolio" />
+          <NavigationProperty Name="Portafolio" Relationship="Self.FK_Portafolio_Proyecto" FromRole="Proyecto" ToRole="Portafolio" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Proyecto_Usuario" FromRole="Proyecto" ToRole="Usuario" />
           <NavigationProperty Name="Tag" Relationship="Self.FK_Tags_Proyecto" FromRole="Proyecto" ToRole="Tag" />
           <NavigationProperty Name="Valoracion" Relationship="Self.FK_Valoraciones_Proyecto" FromRole="Proyecto" ToRole="Valoracion" />
@@ -375,10 +375,10 @@
           <Property Name="Profesion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ImgPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
           <NavigationProperty Name="Mensaje" Relationship="Self.FK_Mensaje_Usuario" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Mensaje1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Usuario" ToRole="Mensaje" />
@@ -447,7 +447,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Portafolio1_Proyecto">
+        <Association Name="FK_Portafolio_Proyecto">
           <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Portafolio" Type="Self.Portafolio" Multiplicity="*" />
           <ReferentialConstraint>
@@ -562,7 +562,7 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Mensaje" EntitySet="Mensaje" />
           </AssociationSet>
-          <AssociationSet Name="FK_Portafolio1_Proyecto" Association="Self.FK_Portafolio1_Proyecto">
+          <AssociationSet Name="FK_Portafolio_Proyecto" Association="Self.FK_Portafolio_Proyecto">
             <End Role="Proyecto" EntitySet="Proyecto" />
             <End Role="Portafolio" EntitySet="Portafolio" />
           </AssociationSet>
@@ -678,6 +678,7 @@
                 <ScalarProperty Name="UrlWeb" ColumnName="UrlWeb" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
