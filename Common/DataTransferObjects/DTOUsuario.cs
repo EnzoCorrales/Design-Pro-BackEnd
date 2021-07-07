@@ -37,7 +37,6 @@ namespace Common.DataTransferObjects
         public string Empresa { get; set; }
         [MaxLength(int.MaxValue)]
         public string ImgPerfil { get; set; }
-        [DataType(DataType.Text)]
         public string UrlWeb { get; set; }
         [MaxLength(100)]
         public string Password { get; set; }

@@ -14,7 +14,7 @@ namespace Common.DataTransferObjects
         public string Asunto { get; set; }
         [Required(ErrorMessage = "El contenido es requerido"), MaxLength(5000)]
         public string Contenido { get; set; }
-        public System.DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         [Required(ErrorMessage = "El remitente es requerido")]
         public int IdUsuarioE { get; set; }
         [Required(ErrorMessage = "El receptor es requerido")]
