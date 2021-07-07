@@ -21,7 +21,7 @@ namespace Common.DataTransferObjects
         public int Id { get; set; }
         [Required(ErrorMessage = "El título es requerido"), MaxLength(100)]
         public string Titulo { get; set; }
-        [Required(ErrorMessage = "La portada es requerida"), MaxLength(int.MaxValue)]
+        [Required(ErrorMessage = "La portada es requerida")]
         public string Portada { get; set; }
         public int IdAutor { get; set; }
         [Required(ErrorMessage = "Las visitas son requeridas")]
