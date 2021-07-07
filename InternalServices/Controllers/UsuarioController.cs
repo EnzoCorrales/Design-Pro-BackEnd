@@ -19,35 +19,38 @@ namespace InternalServices.Controllers
         [AllowAnonymous]
         [HttpPost]
         public IHttpActionResult Register([FromBody] DTOUsuario usuario)
-        {
-            DTOBaseResponse response = new DTOBaseResponse();
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+        { 
             try
             {
-                if(usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
+                DTOBaseResponse response = new DTOBaseResponse();
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+
+                if (usuario.Password == null || usuario.Password.Equals("") || usuario.Password == "")
                     throw new ArgumentException("Contraseña vacía");
 
-                if (!DateTime.TryParseExact(usuario.FNac, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
-                    throw new ArgumentException("Debe ingresar la fecha con formato dd-MM-yyyy");
+                var s = new string[] { "dd/MM/yyyy", "dd-MM-yyyy" , "yyyy-MM-dd"};
 
-                if(mantenimiento.Get(usuario.Correo) != null)
+                if (!DateTime.TryParseExact(usuario.FNac, s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Fecha incorrecta");
+
+                if (mantenimiento.Get(usuario.Correo) != null)
                     throw new ArgumentException("Correo en uso");
 
                 mantenimiento.Create(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
+                response.Usuario.Password = null;
                 response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
                 response.Success = true;
+                return Ok(response);
             }
             catch (ArgumentException ex)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
             }
-
-            return Ok(response);
         }
 
         // localhost:{puerto}/api/usuario/Login
@@ -56,9 +59,9 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Login(string correo, string password)
         {
-            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
+                DTOBaseResponse response = new DTOBaseResponse();
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
 
                 if (!mantenimiento.ValidarUsuario(correo, password))
@@ -66,6 +69,7 @@ namespace InternalServices.Controllers
 
                 response.Success = true;
                 response.Usuario = mantenimiento.Get(correo);
+                response.Usuario.Password = null;
                 response.Token = TokenManager.GenerateTokenJwt(correo, mantenimiento.Get(correo).Id);
 
                 return Ok(response);
@@ -77,7 +81,7 @@ namespace InternalServices.Controllers
 
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!")); // normalmente son problemas con la base de datos
             }
         }
 
@@ -87,16 +91,18 @@ namespace InternalServices.Controllers
         [AuthenticateUser]
         [HttpPut]
         public IHttpActionResult Update(DTOUsuario usuario)
-
         {
-            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
+                DTOBaseResponse response = new DTOBaseResponse();
+
                 if (! (TokenManager.VerificarXCorreo(Request.Headers.Authorization.Parameter,usuario.Correo) && TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, usuario.Id))) // se fija que el usuario que esta intentando modificar sea el que esta loggeado
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
-                if (!DateTime.TryParseExact(usuario.FNac, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
-                    throw new ArgumentException("Debe ingresar la fecha con formato dd-MM-yyyy");
+                var s = new string[] { "dd/MM/yyyy", "dd-MM-yyyy", "yyyy-MM-dd" };
+
+                if (!DateTime.TryParseExact(usuario.FNac, s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Fecha incorrecta");
 
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
                 mantenimiento.Update(usuario);
@@ -115,7 +121,7 @@ namespace InternalServices.Controllers
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!")); // normalmente son problemas con la base de datos
             }
         }
 
@@ -152,7 +158,7 @@ namespace InternalServices.Controllers
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
             } 
         }
 
@@ -165,6 +171,7 @@ namespace InternalServices.Controllers
             try
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+
                 if (mantenimiento.Get(id) == null)
                     throw new ArgumentException("Usuario no existe");
 
@@ -179,7 +186,7 @@ namespace InternalServices.Controllers
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
             }
         }
 
@@ -189,10 +196,11 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Seguir(DTOSeguimiento seguir)
         {
-            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
-            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
+                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
+
                 if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
                     throw new ArgumentException("Usuario no existente");
 
@@ -216,7 +224,7 @@ namespace InternalServices.Controllers
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
             }
         }
 
@@ -226,10 +234,11 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult DejarDeSeguir(DTOSeguimiento seguir)
         {
-            MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
-            MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
             try
             {
+                MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
+                MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
+
                 if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
                     throw new ArgumentNullException("Usuario no existente");
 
@@ -253,7 +262,7 @@ namespace InternalServices.Controllers
             }
             catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
             }
         }
 
@@ -261,30 +270,66 @@ namespace InternalServices.Controllers
         // Devuelve una lista con todos los seguidores del usuario dado el id
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<DTOUsuario> GetAllSeguidores(int id)
+        public IHttpActionResult GetAllSeguidores(int id)
         {
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            return mantenimiento.GetAllSeguidores(id);
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                if (mantenimiento.Get(id) == null)
+                    throw new ArgumentException("Usuario no existente");
+
+                return Ok(mantenimiento.GetAllSeguidores(id));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
+            }
         }
 
         // localhost:{puerto}/api/usuario/GetAllSiguiendo?id={idUsuario}
         // Devuelve una lista con todos los siguiendo del usuario dado el id
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<DTOUsuario> GetAllSiguiendo(int id)
+        public IHttpActionResult GetAllSiguiendo(int id)
         {
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            return mantenimiento.GetAllSiguiendo(id);
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+
+                if(mantenimiento.Get(id) == null)
+                    throw new ArgumentException("Usuario no existente");
+
+                return Ok(mantenimiento.GetAllSiguiendo(id));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
+            }
         }
 
         // localhost:{puerto}/api/usuario/GetAll
         // Devuelve una lista con todos los usuarios registrados
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<DTOUsuario> GetAll()
+        public IHttpActionResult GetAll()
         {
-            MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
-            return mantenimiento.GetAll();
+            try
+            {
+                MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
+                return Ok(mantenimiento.GetAll());
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));// normalmente son problemas con la base de datos
+            }
         }
     }
 }

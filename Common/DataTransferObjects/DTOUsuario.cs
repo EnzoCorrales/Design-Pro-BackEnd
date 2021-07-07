@@ -35,6 +35,7 @@ namespace Common.DataTransferObjects
         public string Profesion { get; set; }
         [MaxLength(50)]
         public string Empresa { get; set; }
+        [MaxLength(int.MaxValue)]
         public string ImgPerfil { get; set; }
         public string UrlWeb { get; set; }
         [MaxLength(100)]

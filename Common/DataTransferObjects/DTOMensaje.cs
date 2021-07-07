@@ -20,5 +20,7 @@ namespace Common.DataTransferObjects
         [Required(ErrorMessage = "El receptor es requerido")]
         public int IdUsuarioR { get; set; }
         public bool Visto { get; set; }
+        public string NombreE { get; set; }
+        public string NombreR { get; set; }
     }
 }
