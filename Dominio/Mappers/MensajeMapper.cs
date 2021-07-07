@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Globalization;
 
 /// <summary>
 // una clase que mappea los DTO a Entidades y viceversa; también mappea colecciones de Entidades a colecciones de DTO y viceversa
@@ -26,7 +25,7 @@ namespace Dominio.Mappers
                 Id = mensaje.Id,
                 Asunto = mensaje.Asunto,
                 Contenido = mensaje.Contenido,
-                Fecha = mensaje.Fecha.ToShortDateString(),
+                Fecha = mensaje.Fecha,
                 IdUsuarioE = mensaje.IdUsuarioE,
                 IdUsuarioR = mensaje.IdUsuarioR,
                 Visto = mensaje.Visto,
@@ -43,7 +42,7 @@ namespace Dominio.Mappers
                 Id = mensaje.Id,
                 Asunto = mensaje.Asunto,
                 Contenido = mensaje.Contenido,
-                Fecha = this.ParseToDateType(mensaje.Fecha),
+                Fecha = mensaje.Fecha,
                 IdUsuarioE = mensaje.IdUsuarioE,
                 IdUsuarioR = mensaje.IdUsuarioR,
                 Visto = mensaje.Visto,
@@ -63,7 +62,7 @@ namespace Dominio.Mappers
                     Id = men.Id,
                     Asunto = men.Asunto,
                     Contenido = men.Contenido,
-                    Fecha = men.Fecha.ToShortDateString(),
+                    Fecha = men.Fecha,
                     IdUsuarioE = men.IdUsuarioE,
                     IdUsuarioR = men.IdUsuarioR,
                     Visto = men.Visto,
@@ -86,7 +85,7 @@ namespace Dominio.Mappers
                     Id = men.Id,
                     Asunto = men.Asunto,
                     Contenido = men.Contenido,
-                    Fecha = DateTime.ParseExact(men.Fecha, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    Fecha = men.Fecha,
                     IdUsuarioE = men.IdUsuarioE,
                     IdUsuarioR = men.IdUsuarioR,
                     Visto = men.Visto,
@@ -94,12 +93,6 @@ namespace Dominio.Mappers
                 mensaje.Add(m);
             }
             return mensaje;
-        }
-
-        public System.DateTime ParseToDateType(string date)
-        {
-            string inputFormat = "yyyy-MM-dd";
-            return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
         }
     }
 }
