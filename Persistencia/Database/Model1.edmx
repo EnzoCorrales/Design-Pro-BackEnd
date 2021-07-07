@@ -78,7 +78,6 @@
           <Property Name="Profesion" Type="varchar" MaxLength="100" />
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
           <Property Name="ImgPerfil" Type="varchar(max)" />
-          <Property Name="Descripcion" Type="text" />
           <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
           <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Ciudad" Type="varchar" MaxLength="50" />
@@ -380,7 +379,6 @@
           <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
           <NavigationProperty Name="Mensaje" Relationship="Self.FK_Mensaje_Usuario" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Mensaje1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Usuario" ToRole="Mensaje" />
@@ -680,7 +678,6 @@
                 <ScalarProperty Name="UrlWeb" ColumnName="UrlWeb" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
