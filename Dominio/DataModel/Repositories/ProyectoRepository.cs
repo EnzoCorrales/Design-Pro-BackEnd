@@ -41,6 +41,16 @@ namespace Dominio.DataModel.Repositories
             return this._context.Proyecto.Select(a => a).ToList();
         }
 
+        public List<Proyecto> GetProyectosValorados(List<int> ids)
+        {
+            List<Proyecto> resultado = new List<Proyecto>();
+            foreach (var id in ids)
+            {
+                resultado.AddRange(this._context.Proyecto.Where(a => a.IdAutor == id));
+            }
+            return resultado;
+        }
+
         public List<Proyecto> GetAllByIds(List<int> ids)
         {
             List<Proyecto> resultado = new List<Proyecto>();

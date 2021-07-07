@@ -12,10 +12,7 @@ namespace Common.DataTransferObjects
 
         public DTOProyecto()
         {
-            this.Comentarios = new HashSet<DTOComentario>();
-            this.Tags = new HashSet<DTOTag>();
-            this.Valoraciones = new HashSet<DTOValoracion>();
-            this.Portafolios = new HashSet<DTOPortafolio>();
+
         }
 
         public int Id { get; set; }
@@ -33,6 +30,7 @@ namespace Common.DataTransferObjects
         [Required(ErrorMessage ="La fecha de publicación es requerida, formato dd-mm-yyyy")]
         public string FechaPub { get; set; }
         public string NombreAutor { get; set; }
+        public string UbicacionAutor { get; set; }
 
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }

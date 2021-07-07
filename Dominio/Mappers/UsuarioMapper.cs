@@ -15,10 +15,17 @@ namespace Dominio.Mappers
 {
     public class UsuarioMapper
     {
+        private ComentarioMapper _comentario = new ComentarioMapper();
+        private MensajeMapper _mensaje = new MensajeMapper();
+        private ProyectoMapper _proyecto = new ProyectoMapper();
+        private SeguimientoMapper _seguimiento = new SeguimientoMapper();
+        private ValoracionMapper _valoracion = new ValoracionMapper();
         public DTOUsuario MapToObject(Usuario usuario)
         {
             if (usuario == null)
                 return null;
+
+
 
             return new DTOUsuario()
             {
@@ -34,13 +41,13 @@ namespace Dominio.Mappers
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
                 Descripcion = usuario.Descripcion,
-                Comentarios = ComentarioMapper.MapToCollectionObject(usuario.Comentario),
-                MensajesE = MensajeMapper.MapToCollectionObject(usuario.Mensaje),
-                MensajesR = MensajeMapper.MapToCollectionObject(usuario.Mensaje1),
-                Proyectos = ProyectoMapper.MapToCollectionObject(usuario.Proyecto),
-                Seguidores = SeguimientoMapper.MapToCollectionObject(usuario.Seguimiento1),
-                Siguiendo = SeguimientoMapper.MapToCollectionObject(usuario.Seguimiento),
-                PValorados = ValoracionMapper.MapToCollectionObject(usuario.Valoracion),
+                Comentarios = _comentario.MapToCollectionObject(usuario.Comentario),
+                MensajesE = _mensaje.MapToCollectionObject(usuario.Mensaje),
+                MensajesR = _mensaje.MapToCollectionObject(usuario.Mensaje1),
+                Proyectos = _proyecto.MapToCollectionObject(usuario.Proyecto),
+                Seguidores = _seguimiento.MapToCollectionObject(usuario.Seguimiento1),
+                Siguiendo = _seguimiento.MapToCollectionObject(usuario.Seguimiento),
+                PValorados = _valoracion.MapToCollectionObject(usuario.Valoracion),
             };
         }
 
@@ -63,13 +70,13 @@ namespace Dominio.Mappers
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
                 Descripcion = usuario.Descripcion,
-                Comentario = ComentarioMapper.MapToCollectionEntity(usuario.Comentarios),
-                Mensaje = MensajeMapper.MapToCollectionEntity(usuario.MensajesE),
-                Mensaje1 = MensajeMapper.MapToCollectionEntity(usuario.MensajesR),
-                Proyecto = ProyectoMapper.MapToCollectionEntity(usuario.Proyectos),
-                Seguimiento1 = SeguimientoMapper.MapToCollectionEntity(usuario.Seguidores),
-                Seguimiento = SeguimientoMapper.MapToCollectionEntity(usuario.Siguiendo),
-                Valoracion = ValoracionMapper.MapToCollectionEntity(usuario.PValorados),
+                Comentario = _comentario.MapToCollectionEntity(usuario.Comentarios),
+                Mensaje = _mensaje.MapToCollectionEntity(usuario.MensajesE),
+                Mensaje1 = _mensaje.MapToCollectionEntity(usuario.MensajesR),
+                Proyecto = _proyecto.MapToCollectionEntity(usuario.Proyectos),
+                Seguimiento1 = _seguimiento.MapToCollectionEntity(usuario.Seguidores),
+                Seguimiento = _seguimiento.MapToCollectionEntity(usuario.Siguiendo),
+                Valoracion = _valoracion.MapToCollectionEntity(usuario.PValorados),
             };
         }
 
@@ -86,13 +93,13 @@ namespace Dominio.Mappers
 
             return DateTime.Now;
         }
-        /*
-        public static HashSet<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)
+        
+        public List<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)
         {
             if (usuarios == null)
                 return null;
 
-            var usuario = new HashSet<Usuario>();
+            var usuario = new List<Usuario>();
             foreach (var usu in usuarios)
             {
                 var u = new Usuario()
@@ -101,32 +108,32 @@ namespace Dominio.Mappers
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
-                    FNac = usu.FNac,
+                    FNac = this.ParseToDateType(usu.FNac),
                     Pais = usu.Pais,
                     Profesion = usu.Profesion,
                     Empresa = usu.Empresa,
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Password = usu.Password,
-                    Comentario = ComentarioMapper.MapToCollectionEntity(usu.Comentarios),
-                    Mensaje = MensajeMapper.MapToCollectionEntity(usu.MensajesE),
-                    Mensaje1 = MensajeMapper.MapToCollectionEntity(usu.MensajesR),
-                    Proyecto = ProyectoMapper.MapToCollectionEntity(usu.Proyectos),
-                    Seguimiento1 = SeguimientoMapper.MapToCollectionEntity(usu.Seguidores),
-                    Seguimiento = SeguimientoMapper.MapToCollectionEntity(usu.Siguiendo),
-                    Valoracion = ValoracionMapper.MapToCollectionEntity(usu.PValorados),
+                    Comentario = _comentario.MapToCollectionEntity(usu.Comentarios),
+                    Mensaje = _mensaje.MapToCollectionEntity(usu.MensajesE),
+                    Mensaje1 = _mensaje.MapToCollectionEntity(usu.MensajesR),
+                    Proyecto = _proyecto.MapToCollectionEntity(usu.Proyectos),
+                    Seguimiento1 = _seguimiento.MapToCollectionEntity(usu.Seguidores),
+                    Seguimiento = _seguimiento.MapToCollectionEntity(usu.Siguiendo),
+                    Valoracion = _valoracion.MapToCollectionEntity(usu.PValorados),
                 };
                 usuario.Add(u);
             }
             return usuario;
         }
         
-        public static HashSet<DTOUsuario> MapToCollectionObject(ICollection<Usuario> usuarios)
+        public List<DTOUsuario> MapToCollectionObject(ICollection<Usuario> usuarios)
         {
             if (usuarios == null)
                 return null;
 
-            var usuario = new HashSet<DTOUsuario>();
+            var usuario = new List<DTOUsuario>();
             foreach (var usu in usuarios)
             {
                 var u = new DTOUsuario()
@@ -135,24 +142,24 @@ namespace Dominio.Mappers
                     Nombre = usu.Nombre,
                     Apellido = usu.Apellido,
                     Correo = usu.Correo,
-                    FNac = usu.FNac,
+                    FNac = usu.FNac.ToShortDateString(),
                     Pais = usu.Pais,
                     Profesion = usu.Profesion,
                     Empresa = usu.Empresa,
                     ImgPerfil = usu.ImgPerfil,
                     UrlWeb = usu.UrlWeb,
                     Password = usu.Password,
-                    Comentarios = ComentarioMapper.MapToCollectionObject(usu.Comentario),
-                    MensajesE = MensajeMapper.MapToCollectionObject(usu.Mensaje),
-                    MensajesR = MensajeMapper.MapToCollectionObject(usu.Mensaje1),
-                    Proyectos = ProyectoMapper.MapToCollectionObject(usu.Proyecto),
-                    Seguidores = SeguimientoMapper.MapToCollectionObject(usu.Seguimiento1),
-                    Siguiendo = SeguimientoMapper.MapToCollectionObject(usu.Seguimiento),
-                    PValorados = ValoracionMapper.MapToCollectionObject(usu.Valoracion),
+                    Comentarios = _comentario.MapToCollectionObject(usu.Comentario),
+                    MensajesE = _mensaje.MapToCollectionObject(usu.Mensaje),
+                    MensajesR = _mensaje.MapToCollectionObject(usu.Mensaje1),
+                    Proyectos = _proyecto.MapToCollectionObject(usu.Proyecto),
+                    Seguidores = _seguimiento.MapToCollectionObject(usu.Seguimiento1),
+                    Siguiendo = _seguimiento.MapToCollectionObject(usu.Seguimiento),
+                    PValorados = _valoracion.MapToCollectionObject(usu.Valoracion),
                 };
                 usuario.Add(u);
             }
             return usuario;
-        }*/
+        }
     }
 }

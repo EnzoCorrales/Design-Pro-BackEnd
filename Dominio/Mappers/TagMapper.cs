@@ -40,12 +40,12 @@ namespace Dominio.Mappers
             };
         }
 
-        public static HashSet<DTOTag> MapToCollectionObject(ICollection<Tag> tags)
+        public List<DTOTag> MapToCollectionObject(ICollection<Tag> tags)
         {
             if (tags == null)
                 return null;
 
-            var tag = new HashSet<DTOTag>();
+            var tag = new List<DTOTag>();
             foreach (var ta in tags)
             {
                 var t = new DTOTag()
@@ -59,12 +59,12 @@ namespace Dominio.Mappers
             return tag;
         }
 
-        public static HashSet<Tag> MapToCollectionEntity(ICollection<DTOTag> tags)
+        public List<Tag> MapToCollectionEntity(ICollection<DTOTag> tags)
         {
             if (tags == null)
                 return null;
 
-            var tag = new HashSet<Tag>();
+            var tag = new List<Tag>();
             foreach (var ta in tags)
             {
                 var t = new Tag()

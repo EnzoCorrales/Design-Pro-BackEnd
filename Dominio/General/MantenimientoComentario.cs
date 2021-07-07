@@ -73,7 +73,7 @@ namespace Dominio.General
                 var repository = new ComentarioRepository(context);
                 var U_repository = new UsuarioRepository(context);
                 var c = _mapper.MapToObject(repository.Get(id));
-                c.Nombre = U_repository.Get(c.IdUsuario).Nombre;
+                c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
                 return c;
             }
         }
@@ -103,7 +103,7 @@ namespace Dominio.General
                 foreach (var comentario in lista)
                 {
                     var c = _mapper.MapToObject(comentario);
-                    c.Nombre = U_repository.Get(idUsuario).Nombre;
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
                     resultado.Add(c);
                 }
 
@@ -124,7 +124,7 @@ namespace Dominio.General
                 foreach (var comentario in lista)
                 {
                     var c = _mapper.MapToObject(comentario);
-                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre;
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
                     resultado.Add(c);
                 }
 
@@ -145,7 +145,7 @@ namespace Dominio.General
                 foreach (var comentario in lista)
                 {
                     var c = _mapper.MapToObject(comentario);
-                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre;
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
                     resultado.Add(c);
                 }
 

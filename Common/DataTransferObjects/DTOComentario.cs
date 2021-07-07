@@ -14,7 +14,6 @@ namespace Common.DataTransferObjects
         public System.DateTime Fecha { get; set; }
         public int IdUsuario { get; set; }
         public int IdProyecto { get; set; }
-
         public string Nombre { get; set; }
 
     }

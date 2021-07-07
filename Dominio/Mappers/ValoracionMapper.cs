@@ -36,12 +36,12 @@ namespace Dominio.Mappers
             };
         }
 
-        public static HashSet<DTOValoracion> MapToCollectionObject(ICollection<Valoracion> valoraciones)
+        public List<DTOValoracion> MapToCollectionObject(ICollection<Valoracion> valoraciones)
         {
             if (valoraciones == null)
                 return null;
 
-            var valoracion = new HashSet<DTOValoracion>();
+            var valoracion = new List<DTOValoracion>();
             foreach (var val in valoraciones)
             {
                 var v = new DTOValoracion()
@@ -55,12 +55,12 @@ namespace Dominio.Mappers
             return valoracion;
         }
 
-        public static HashSet<Valoracion> MapToCollectionEntity(ICollection<DTOValoracion> valoraciones)
+        public List<Valoracion> MapToCollectionEntity(ICollection<DTOValoracion> valoraciones)
         {
             if (valoraciones == null)
                 return null;
 
-            var valoracion = new HashSet<Valoracion>();
+            var valoracion = new List<Valoracion>();
             foreach (var val in valoraciones)
             {
                 var v = new Valoracion()
