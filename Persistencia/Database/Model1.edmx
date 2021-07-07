@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DesignProModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DesignProModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Comentario">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Contenido" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
           <Property Name="IdUsuario" Type="int" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
         </EntityType>
@@ -20,9 +20,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Asunto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Asunto" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Contenido" Type="varchar" MaxLength="5000" Nullable="false" />
-          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
           <Property Name="IdUsuarioE" Type="int" Nullable="false" />
           <Property Name="IdUsuarioR" Type="int" Nullable="false" />
           <Property Name="Visto" Type="bit" Nullable="false" />
@@ -31,7 +31,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Contenido" Type="varchar(max)" Nullable="false" />
           <Property Name="Orden" Type="int" Nullable="false" />
@@ -42,7 +42,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Titulo" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Portada" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Portada" Type="varchar(max)" Nullable="false" />
           <Property Name="IdAutor" Type="int" Nullable="false" />
           <Property Name="Visitas" Type="int" Nullable="false" />
           <Property Name="Categoria" Type="varchar" MaxLength="50" Nullable="false" />
@@ -69,6 +69,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Apellido" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Correo" Type="varchar" MaxLength="50" Nullable="false" />
@@ -76,12 +77,11 @@
           <Property Name="Pais" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Profesion" Type="varchar" MaxLength="100" />
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
-          <Property Name="ImgPerfil" Type="varchar" MaxLength="100" />
-          <Property Name="Descripcion" Type="text" />
+          <Property Name="ImgPerfil" Type="varchar(max)" />
           <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Ciudad" Type="varchar" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Valoracion">
           <Key>
@@ -142,9 +142,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Portafolio_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Portafolio" Type="Self.Portafolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -287,8 +285,7 @@
             <End Role="Valoracion" EntitySet="Valoracion" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DesignProModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -298,7 +295,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Contenido" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Comentario_Proyecto" FromRole="Comentario" ToRole="Proyecto" />
@@ -309,9 +306,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Asunto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Asunto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdUsuarioE" Type="Int32" Nullable="false" />
           <Property Name="IdUsuarioR" Type="Int32" Nullable="false" />
           <Property Name="Visto" Type="Boolean" Nullable="false" />
@@ -326,7 +323,7 @@
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Orden" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Portafolio_Proyecto" FromRole="Portafolio" ToRole="Proyecto" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Portafolio1_Proyecto" FromRole="Portafolio" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Proyecto">
           <Key>
@@ -334,14 +331,14 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Portada" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Portada" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdAutor" Type="Int32" Nullable="false" />
           <Property Name="Visitas" Type="Int32" Nullable="false" />
           <Property Name="Categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FechaPub" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Proyecto" FromRole="Proyecto" ToRole="Comentario" />
-          <NavigationProperty Name="Portafolio" Relationship="Self.FK_Portafolio_Proyecto" FromRole="Proyecto" ToRole="Portafolio" />
+          <NavigationProperty Name="Portafolio" Relationship="Self.FK_Portafolio1_Proyecto" FromRole="Proyecto" ToRole="Portafolio" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Proyecto_Usuario" FromRole="Proyecto" ToRole="Usuario" />
           <NavigationProperty Name="Tag" Relationship="Self.FK_Tags_Proyecto" FromRole="Proyecto" ToRole="Tag" />
           <NavigationProperty Name="Valoracion" Relationship="Self.FK_Valoraciones_Proyecto" FromRole="Proyecto" ToRole="Valoracion" />
@@ -369,6 +366,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
@@ -376,12 +374,11 @@
           <Property Name="Pais" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Profesion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImgPerfil" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ImgPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
           <NavigationProperty Name="Mensaje" Relationship="Self.FK_Mensaje_Usuario" FromRole="Usuario" ToRole="Mensaje" />
           <NavigationProperty Name="Mensaje1" Relationship="Self.FK_Mensaje_Usuario1" FromRole="Usuario" ToRole="Mensaje" />
@@ -450,10 +447,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Portafolio_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+        <Association Name="FK_Portafolio1_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Portafolio" Type="Self.Portafolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -567,7 +562,7 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Mensaje" EntitySet="Mensaje" />
           </AssociationSet>
-          <AssociationSet Name="FK_Portafolio_Proyecto" Association="Self.FK_Portafolio_Proyecto">
+          <AssociationSet Name="FK_Portafolio1_Proyecto" Association="Self.FK_Portafolio1_Proyecto">
             <End Role="Proyecto" EntitySet="Proyecto" />
             <End Role="Portafolio" EntitySet="Portafolio" />
           </AssociationSet>
@@ -671,6 +666,7 @@
           <EntitySetMapping Name="Usuario">
             <EntityTypeMapping TypeName="DesignProModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
                 <ScalarProperty Name="Correo" ColumnName="Correo" />
@@ -679,11 +675,10 @@
                 <ScalarProperty Name="Profesion" ColumnName="Profesion" />
                 <ScalarProperty Name="Empresa" ColumnName="Empresa" />
                 <ScalarProperty Name="ImgPerfil" ColumnName="ImgPerfil" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="UrlWeb" ColumnName="UrlWeb" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -713,7 +708,7 @@
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
