@@ -2,6 +2,7 @@
 using Persistencia.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,9 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
+                FechaPub = proyecto.FechaPub.ToShortDateString(),
                 Comentarios = ComentarioMapper.MapToCollectionObject(proyecto.Comentario),
-                Imagenes = ImagenMapper.MapToCollectionObject(proyecto.Imagen),
-                Videos = VideoMapper.MapToCollectionObject(proyecto.Video),
-                Textos = TextoMapper.MapToCollectionObject(proyecto.Texto),
+                Portafolios = PortafolioMapper.MapToCollectionObject(proyecto.Portafolio),
                 Tags = TagMapper.MapToCollectionObject(proyecto.Tag),
                 Valoraciones = ValoracionMapper.MapToCollectionObject(proyecto.Valoracion),
             };
@@ -52,11 +51,9 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
+                FechaPub = ParseToDateType(proyecto.FechaPub),
                 Comentario = ComentarioMapper.MapToCollectionEntity(proyecto.Comentarios),
-                Imagen = ImagenMapper.MapToCollectionEntity(proyecto.Imagenes),
-                Video = VideoMapper.MapToCollectionEntity(proyecto.Videos),
-                Texto = TextoMapper.MapToCollectionEntity(proyecto.Textos),
+                Portafolio = PortafolioMapper.MapToCollectionEntity(proyecto.Portafolios),
                 Tag = TagMapper.MapToCollectionEntity(proyecto.Tags),
                 Valoracion = ValoracionMapper.MapToCollectionEntity(proyecto.Valoraciones),
             };
@@ -79,11 +76,9 @@ namespace Dominio.Mappers
                     Visitas = pro.Visitas,
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
+                    FechaPub = ParseToDateType(pro.FechaPub),
                     Comentario = ComentarioMapper.MapToCollectionEntity(pro.Comentarios),
-                    Imagen = ImagenMapper.MapToCollectionEntity(pro.Imagenes),
-                    Video = VideoMapper.MapToCollectionEntity(pro.Videos),
-                    Texto = TextoMapper.MapToCollectionEntity(pro.Textos),
+                    Portafolio = PortafolioMapper.MapToCollectionEntity(pro.Portafolios),
                     Tag = TagMapper.MapToCollectionEntity(pro.Tags),
                     Valoracion = ValoracionMapper.MapToCollectionEntity(pro.Valoraciones),
                 };
@@ -109,17 +104,29 @@ namespace Dominio.Mappers
                     Visitas = pro.Visitas,
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
+                    FechaPub = pro.FechaPub.ToShortDateString(),
                     Comentarios = ComentarioMapper.MapToCollectionObject(pro.Comentario),
-                    Imagenes = ImagenMapper.MapToCollectionObject(pro.Imagen),
-                    Videos = VideoMapper.MapToCollectionObject(pro.Video),
-                    Textos = TextoMapper.MapToCollectionObject(pro.Texto),
+                    Portafolios = PortafolioMapper.MapToCollectionObject(pro.Portafolio),
                     Tags = TagMapper.MapToCollectionObject(pro.Tag),
                     Valoraciones = ValoracionMapper.MapToCollectionObject(pro.Valoracion),
                 };
                 proyecto.Add(p);
             }
             return proyecto;
+        }
+
+        public static System.DateTime ParseToDateType(string date)
+        {
+            if (DateTime.TryParseExact(date, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                return DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime di))
+                return DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime die))
+                return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return DateTime.Now;
         }
     }
 }

@@ -28,23 +28,22 @@ namespace Common.DataTransferObjects
         [EmailAddress(ErrorMessage = "El correo es inválido")]
         public string Correo { get; set; }
         [Required(ErrorMessage = "La fecha de nacimiento es requerida")]
-        public System.DateTime FNac { get; set; }
+        public string FNac { get; set; }
         [Required(ErrorMessage = "El país es requerido")]
         public string Pais { get; set; }
         [MaxLength(50)]
         public string Profesion { get; set; }
         [MaxLength(50)]
         public string Empresa { get; set; }
-        [DataType(DataType.Text)]
+        [MaxLength(int.MaxValue)]
         public string ImgPerfil { get; set; }
-        [DataType(DataType.Text)]
         public string UrlWeb { get; set; }
         [MaxLength(100)]
-        public string Descripcion { get; set; }
-        [Required(ErrorMessage = "La contraseña es requerida"), MinLength(6)]
         public string Password { get; set; }
         [MaxLength(50)]
         public string Ciudad { get; set; }
+        [MaxLength(500)]
+        public string Descripcion { get; set; }
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
         public virtual ICollection<DTOMensaje> MensajesE { get; set; }

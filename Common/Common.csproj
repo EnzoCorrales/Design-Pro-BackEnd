@@ -49,8 +49,8 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.2.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -58,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,15 +69,13 @@
   <ItemGroup>
     <Compile Include="DataTransferObjects\DTOBaseResponse.cs" />
     <Compile Include="DataTransferObjects\DTOComentario.cs" />
-    <Compile Include="DataTransferObjects\DTOImagen.cs" />
     <Compile Include="DataTransferObjects\DTOMensaje.cs" />
+    <Compile Include="DataTransferObjects\DTOPortafolio.cs" />
     <Compile Include="DataTransferObjects\DTOProyecto.cs" />
     <Compile Include="DataTransferObjects\DTOSeguimiento.cs" />
     <Compile Include="DataTransferObjects\DTOTag.cs" />
-    <Compile Include="DataTransferObjects\DTOTexto.cs" />
     <Compile Include="DataTransferObjects\DTOUsuario.cs" />
     <Compile Include="DataTransferObjects\DTOValoracion.cs" />
-    <Compile Include="DataTransferObjects\DTOVideo.cs" />
     <Compile Include="Exceptions\ValidateException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

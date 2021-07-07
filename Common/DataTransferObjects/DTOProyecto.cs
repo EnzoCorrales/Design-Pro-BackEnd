@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,36 +9,39 @@ namespace Common.DataTransferObjects
 {
     public class DTOProyecto
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+
         public DTOProyecto()
         {
             this.Comentarios = new HashSet<DTOComentario>();
-            this.Imagenes = new HashSet<DTOImagen>();
             this.Tags = new HashSet<DTOTag>();
-            this.Textos = new HashSet<DTOTexto>();
-            this.Videos = new HashSet<DTOVideo>();
             this.Valoraciones = new HashSet<DTOValoracion>();
+            this.Portafolios = new HashSet<DTOPortafolio>();
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "El título es requerido"), MaxLength(100)]
         public string Titulo { get; set; }
+        [Required(ErrorMessage = "La portada es requerida"), MaxLength(int.MaxValue)]
         public string Portada { get; set; }
         public int IdAutor { get; set; }
+        [Required(ErrorMessage = "Las visitas son requeridas")]
         public int Visitas { get; set; }
+        [Required(ErrorMessage = "Una categoría es requerida"), MaxLength(50)]
         public string Categoria { get; set; }
+        [Required(ErrorMessage = "La descripción es requerida"), MaxLength(200)]
         public string Descripcion { get; set; }
-        public System.DateTime FechaPub { get; set; }
+        [Required(ErrorMessage ="La fecha de publicación es requerida, formato dd-mm-yyyy")]
+        public string FechaPub { get; set; }
+        public string NombreAutor { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DTOImagen> Imagenes { get; set; }
+
         public virtual ICollection<DTOTag> Tags { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DTOTexto> Textos { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
         public virtual ICollection<DTOValoracion> Valoraciones { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DTOVideo> Videos { get; set; }
+
+        public virtual ICollection<DTOPortafolio> Portafolios { get; set; }
+
     }
 }

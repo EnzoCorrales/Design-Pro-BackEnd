@@ -22,41 +22,28 @@ namespace Dominio.General
 
         public void Create(DTOMensaje dtomensaje)
         {
-            try
+
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new MensajeRepository(context);
+                var repository = new MensajeRepository(context);
 
-                    var mensaje = _mapper.MapToEntity(dtomensaje);
+                var mensaje = _mapper.MapToEntity(dtomensaje);
 
-                    repository.Create(mensaje);
+                repository.Create(mensaje);
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
         public void Update(DTOMensaje dtoMensaje)
         {
-            try
+            using (var context = new DesignProDB())
             {
-                using (var context = new DesignProDB())
-                {
-                    var repository = new MensajeRepository(context);
+                var repository = new MensajeRepository(context);
 
-                    repository.Update(_mapper.MapToEntity(dtoMensaje));
+                repository.Update(_mapper.MapToEntity(dtoMensaje));
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                context.SaveChanges();
             }
         }
 
@@ -65,7 +52,11 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
+                var U_repository = new UsuarioRepository(context);
+                var m = _mapper.MapToObject(repository.Get(id));
+                m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
+                m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                return m;
             }
         }
 
@@ -74,13 +65,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAllByEmisor(idUsuario);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
                 foreach (var mensaje in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(mensaje));
+                    var m = _mapper.MapToObject(mensaje);
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    resultado.Add(m);
                 }
 
                 return resultado;
@@ -92,13 +87,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAllByReceptor(idUsuario);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
                 foreach (var mensaje in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(mensaje));
+                    var m = _mapper.MapToObject(mensaje);
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    resultado.Add(m);
                 }
 
                 return resultado;
@@ -110,13 +109,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetConversacion(idUsuario1, idUsuario2);
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
                 foreach (var mensaje in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(mensaje));
+                    var m = _mapper.MapToObject(mensaje);
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    resultado.Add(m);
                 }
 
                 return resultado;
@@ -128,13 +131,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new MensajeRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAll();
 
                 List<DTOMensaje> resultado = new List<DTOMensaje>();
 
                 foreach (var mensaje in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(mensaje));
+                    var m = _mapper.MapToObject(mensaje);
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    resultado.Add(m);
                 }
 
                 return resultado;

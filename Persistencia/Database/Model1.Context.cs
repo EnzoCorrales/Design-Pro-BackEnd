@@ -26,14 +26,12 @@ namespace Persistencia.Database
         }
     
         public virtual DbSet<Comentario> Comentario { get; set; }
-        public virtual DbSet<Imagen> Imagen { get; set; }
         public virtual DbSet<Mensaje> Mensaje { get; set; }
+        public virtual DbSet<Portafolio> Portafolio { get; set; }
         public virtual DbSet<Proyecto> Proyecto { get; set; }
         public virtual DbSet<Seguimiento> Seguimiento { get; set; }
         public virtual DbSet<Tag> Tag { get; set; }
-        public virtual DbSet<Texto> Texto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Valoracion> Valoracion { get; set; }
-        public virtual DbSet<Video> Video { get; set; }
     }
 }

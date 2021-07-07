@@ -18,11 +18,9 @@ namespace Persistencia.Database
         public Proyecto()
         {
             this.Comentario = new HashSet<Comentario>();
-            this.Imagen = new HashSet<Imagen>();
+            this.Portafolio = new HashSet<Portafolio>();
             this.Tag = new HashSet<Tag>();
-            this.Texto = new HashSet<Texto>();
             this.Valoracion = new HashSet<Valoracion>();
-            this.Video = new HashSet<Video>();
         }
     
         public int Id { get; set; }
@@ -37,15 +35,11 @@ namespace Persistencia.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comentario> Comentario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Imagen> Imagen { get; set; }
+        public virtual ICollection<Portafolio> Portafolio { get; set; }
         public virtual Usuario Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tag> Tag { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Texto> Texto { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Valoracion> Valoracion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Video> Video { get; set; }
     }
 }

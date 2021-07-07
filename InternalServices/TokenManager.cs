@@ -5,36 +5,89 @@ using System.Web;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace InternalServices
 {
     public class TokenManager
     {
-        public static string GenerateTokenJwt(string correo)
+        private const string Secret = "db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==";
+        public static string GenerateTokenJwt(string correo, int id)
         {
-            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
-            var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
-            var issuerToken = ConfigurationManager.AppSettings["JWT_ISSUER_TOKEN"];
-            var expireTime = ConfigurationManager.AppSettings["JWT_EXPIRE_MINUTES"];
+            var symmetricKey = Convert.FromBase64String(Secret);
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var now = DateTime.UtcNow;
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                        {
+                            new Claim("correo", correo),
+                            new Claim("id", id.ToString())
+                        }),
 
-            // create a claimsIdentity
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, correo) });
+                Expires = now.AddMinutes(Convert.ToInt32(60)),
 
-            // create token to the user
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var jwtSecurityToken = tokenHandler.CreateJwtSecurityToken(
-                audience: audienceToken,
-                issuer: issuerToken,
-                subject: claimsIdentity,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(expireTime)),
-                signingCredentials: signingCredentials);
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-            var jwtTokenString = tokenHandler.WriteToken(jwtSecurityToken);
-            return jwtTokenString;
+            SecurityToken securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.WriteToken(securityToken);
+
+            return token;
+        }
+
+        public static ClaimsPrincipal GetPrincipal(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+                if (jwtToken == null)
+                    return null;
+
+                var symmetricKey = Convert.FromBase64String(Secret);
+
+                var validationParameters = new TokenValidationParameters()
+                {
+                    RequireExpirationTime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(symmetricKey)
+                };
+
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+
+                return principal;
+            }
+
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static bool VerificarXCorreo(string token, string correo)
+        {
+            var principal = TokenManager.GetPrincipal(token);
+            var identity = principal?.Identity as ClaimsIdentity;
+            var verificar = identity.FindFirst("correo").Value.ToString();
+            if (verificar.Equals(correo))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool VerificarXId(string token, int id)
+        {
+            var principal = TokenManager.GetPrincipal(token);
+            var identity = principal?.Identity as ClaimsIdentity;
+            var verificar = identity.FindFirst("id").Value.ToString();
+            if (id.ToString().Equals(verificar))
+                return true;
+            else
+                return false;
         }
     }
 }
