@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,83 +16,127 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/proyecto/Create
         // Crea un proyecto
+        [ValidateProyectoModel]
         [AuthenticateUser]
         [HttpPost]
         public IHttpActionResult Create(DTOProyecto proyecto)
         {
             DTOBaseResponse response = new DTOBaseResponse();
+            MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
             try
             {
-                if (TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, proyecto.IdAutor)) // se fija que el proyecto que se vaya a crear sea del usuario loggeado
-                {
-                    MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-                    mantenimiento.Create(proyecto);
-                    response.Success = true;
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.ToString();
-            }
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, proyecto.IdAutor)) // se fija que el proyecto que se vaya a crear sea del usuario loggeado
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
-            return Ok(response);
+                if (U_mantenimiento.Get(proyecto.IdAutor) == null)
+                    throw new ArgumentException("Usuario no existente");
+
+                var s = new string[] { "dd/MM/yyyy", "dd-MM-yyyy" , "yyyy-MM-dd"};
+
+                if (!DateTime.TryParseExact(proyecto.FechaPub, s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                    throw new ArgumentException("Fecha incorrecta");
+
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+                mantenimiento.Create(proyecto);
+                response.Success = true;
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         // localhost:{puerto}/api/proyecto/Remove?id={id}
         // Elimina un poryecto por id de proyecto
         [AuthenticateUser]
-        [HttpPost]
+        [HttpDelete]
         public IHttpActionResult Remove(int id)
         {
             DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-                if (TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, mantenimiento.GetIdAutor(id))) // se fija que el proyecto que esta intentando eliminar sea del usuario que esta loggeado
-                {
-                    mantenimiento.Remove(id);
-                    response.Success = true;
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Error = ex.ToString();
-            }
+                if (!mantenimiento.ExisteProyecto(id))
+                    throw new ArgumentException("Proyecto no existente");
 
-            return Ok(response);
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, mantenimiento.Get(id).IdAutor)) // se fija que el proyecto que esta intentando eliminar sea del usuario que esta loggeado
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                mantenimiento.Remove(id);
+                response.Success = true;
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         // localhost:{puerto}/api/proyecto/Get?id={id}
         // Devuelve un proyecto dado el id
         [AllowAnonymous]
+        [HttpGet]
         public IHttpActionResult Get(int id)
         {
             MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            var proyecto = mantenimiento.Get(id);
+            try
+            {
+                if (mantenimiento.ExisteProyecto(id))
+                    throw new ArgumentException("Proyecto no existente");
 
-            if (proyecto == null)
-                return NotFound();
-
-            return Ok(proyecto);
+                return Ok(mantenimiento.Get(id));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         // localhost:{puerto}/api/proyecto/GetAll?idUsuario={idUsuario}
         // Devuelve todos los proyectos que tiene un usuario en especifico dado el id
         [AllowAnonymous]
-        public IEnumerable<DTOProyecto> GetAll(int idUsuario)
+        [HttpGet]
+        public IHttpActionResult GetAll(int idUsuario)
         {
+
             MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            return mantenimiento.GetAll(idUsuario);
+            MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+            try
+            {
+                if (U_mantenimiento.Get(idUsuario) == null)
+                    throw new ArgumentException("Usuario no existente");
+                
+                return Ok(mantenimiento.GetAll(idUsuario));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
     }
 }

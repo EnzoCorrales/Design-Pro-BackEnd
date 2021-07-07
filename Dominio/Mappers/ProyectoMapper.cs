@@ -2,6 +2,7 @@
 using Persistencia.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
+                FechaPub = proyecto.FechaPub.ToShortDateString(),
                 Comentarios = ComentarioMapper.MapToCollectionObject(proyecto.Comentario),
                 Portafolios = PortafolioMapper.MapToCollectionObject(proyecto.Portafolio),
                 Tags = TagMapper.MapToCollectionObject(proyecto.Tag),
@@ -50,7 +51,7 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
+                FechaPub = ParseToDateType(proyecto.FechaPub),
                 Comentario = ComentarioMapper.MapToCollectionEntity(proyecto.Comentarios),
                 Portafolio = PortafolioMapper.MapToCollectionEntity(proyecto.Portafolios),
                 Tag = TagMapper.MapToCollectionEntity(proyecto.Tags),
@@ -75,7 +76,7 @@ namespace Dominio.Mappers
                     Visitas = pro.Visitas,
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
+                    FechaPub = ParseToDateType(pro.FechaPub),
                     Comentario = ComentarioMapper.MapToCollectionEntity(pro.Comentarios),
                     Portafolio = PortafolioMapper.MapToCollectionEntity(pro.Portafolios),
                     Tag = TagMapper.MapToCollectionEntity(pro.Tags),
@@ -103,7 +104,7 @@ namespace Dominio.Mappers
                     Visitas = pro.Visitas,
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
+                    FechaPub = pro.FechaPub.ToShortDateString(),
                     Comentarios = ComentarioMapper.MapToCollectionObject(pro.Comentario),
                     Portafolios = PortafolioMapper.MapToCollectionObject(pro.Portafolio),
                     Tags = TagMapper.MapToCollectionObject(pro.Tag),
@@ -112,6 +113,20 @@ namespace Dominio.Mappers
                 proyecto.Add(p);
             }
             return proyecto;
+        }
+
+        public static System.DateTime ParseToDateType(string date)
+        {
+            if (DateTime.TryParseExact(date, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                return DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime di))
+                return DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime die))
+                return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return DateTime.Now;
         }
     }
 }
