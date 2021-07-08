@@ -20,6 +20,7 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Create(DTOMensaje mensaje)
         {
+            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
@@ -28,7 +29,7 @@ namespace InternalServices.Controllers
             }
             catch (ValidateException e)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message));
             }
             catch (Exception e)
             {
@@ -48,7 +49,6 @@ namespace InternalServices.Controllers
         // localhost:{puerto}/api/mensaje/Visto
         // Actualiza el mensaje a visto
         [AuthenticateUser]
-        [ValidateMensajeModel]
         [HttpPut]
         public IHttpActionResult Visto(DTOMensaje mensaje)
         {

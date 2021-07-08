@@ -12,16 +12,13 @@ namespace Common.DataTransferObjects
 
         public DTOProyecto()
         {
-            this.Comentarios = new HashSet<DTOComentario>();
-            this.Tags = new HashSet<DTOTag>();
-            this.Valoraciones = new HashSet<DTOValoracion>();
-            this.Portafolios = new HashSet<DTOPortafolio>();
+
         }
 
         public int Id { get; set; }
         [Required(ErrorMessage = "El título es requerido"), MaxLength(100)]
         public string Titulo { get; set; }
-        [Required(ErrorMessage = "La portada es requerida"), MaxLength(int.MaxValue)]
+        [Required(ErrorMessage = "La portada es requerida")]
         public string Portada { get; set; }
         public int IdAutor { get; set; }
         [Required(ErrorMessage = "Las visitas son requeridas")]
@@ -33,6 +30,7 @@ namespace Common.DataTransferObjects
         [Required(ErrorMessage ="La fecha de publicación es requerida, formato dd-mm-yyyy")]
         public string FechaPub { get; set; }
         public string NombreAutor { get; set; }
+        public string UbicacionAutor { get; set; }
 
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }

@@ -15,6 +15,10 @@ namespace Dominio.Mappers
 {
     public class ProyectoMapper
     {
+        private ComentarioMapper _comentario = new ComentarioMapper();
+        private PortafolioMapper _portafolio = new PortafolioMapper();
+        private TagMapper _tag = new TagMapper(); 
+        private ValoracionMapper _valoracion = new ValoracionMapper();
         public DTOProyecto MapToObject(Proyecto proyecto)
         {
             if (proyecto == null)
@@ -30,10 +34,10 @@ namespace Dominio.Mappers
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
                 FechaPub = proyecto.FechaPub.ToShortDateString(),
-                Comentarios = ComentarioMapper.MapToCollectionObject(proyecto.Comentario),
-                Portafolios = PortafolioMapper.MapToCollectionObject(proyecto.Portafolio),
-                Tags = TagMapper.MapToCollectionObject(proyecto.Tag),
-                Valoraciones = ValoracionMapper.MapToCollectionObject(proyecto.Valoracion),
+                Comentarios = _comentario.MapToCollectionObject(proyecto.Comentario),
+                Portafolios = _portafolio.MapToCollectionObject(proyecto.Portafolio),
+                Tags = _tag.MapToCollectionObject(proyecto.Tag),
+                Valoraciones = _valoracion.MapToCollectionObject(proyecto.Valoracion),
             };
         }
 
@@ -52,19 +56,19 @@ namespace Dominio.Mappers
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
                 FechaPub = ParseToDateType(proyecto.FechaPub),
-                Comentario = ComentarioMapper.MapToCollectionEntity(proyecto.Comentarios),
-                Portafolio = PortafolioMapper.MapToCollectionEntity(proyecto.Portafolios),
-                Tag = TagMapper.MapToCollectionEntity(proyecto.Tags),
-                Valoracion = ValoracionMapper.MapToCollectionEntity(proyecto.Valoraciones),
+                Comentario = _comentario.MapToCollectionEntity(proyecto.Comentarios),
+                Portafolio = _portafolio.MapToCollectionEntity(proyecto.Portafolios),
+                Tag = _tag.MapToCollectionEntity(proyecto.Tags),
+                Valoracion = _valoracion.MapToCollectionEntity(proyecto.Valoraciones),
             };
         }
 
-        public static HashSet<Proyecto> MapToCollectionEntity(ICollection<DTOProyecto> proyectos)
+        public List<Proyecto> MapToCollectionEntity(ICollection<DTOProyecto> proyectos)
         {
             if (proyectos == null)
                 return null;
 
-            var proyecto = new HashSet<Proyecto>();
+            var proyecto = new List<Proyecto>();
             foreach (var pro in proyectos)
             {
                 var p = new Proyecto()
@@ -77,22 +81,22 @@ namespace Dominio.Mappers
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
                     FechaPub = ParseToDateType(pro.FechaPub),
-                    Comentario = ComentarioMapper.MapToCollectionEntity(pro.Comentarios),
-                    Portafolio = PortafolioMapper.MapToCollectionEntity(pro.Portafolios),
-                    Tag = TagMapper.MapToCollectionEntity(pro.Tags),
-                    Valoracion = ValoracionMapper.MapToCollectionEntity(pro.Valoraciones),
+                    Comentario = _comentario.MapToCollectionEntity(pro.Comentarios),
+                    Portafolio = _portafolio.MapToCollectionEntity(pro.Portafolios),
+                    Tag = _tag.MapToCollectionEntity(pro.Tags),
+                    Valoracion = _valoracion.MapToCollectionEntity(pro.Valoraciones),
                 };
                 proyecto.Add(p);
             }
             return proyecto;
         }
 
-        public static HashSet<DTOProyecto> MapToCollectionObject(ICollection<Proyecto> proyectos)
+        public List<DTOProyecto> MapToCollectionObject(ICollection<Proyecto> proyectos)
         {
             if (proyectos == null)
                 return null;
 
-            var proyecto = new HashSet<DTOProyecto>();
+            var proyecto = new List<DTOProyecto>();
             foreach (var pro in proyectos)
             {
                 var p = new DTOProyecto()
@@ -105,10 +109,10 @@ namespace Dominio.Mappers
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
                     FechaPub = pro.FechaPub.ToShortDateString(),
-                    Comentarios = ComentarioMapper.MapToCollectionObject(pro.Comentario),
-                    Portafolios = PortafolioMapper.MapToCollectionObject(pro.Portafolio),
-                    Tags = TagMapper.MapToCollectionObject(pro.Tag),
-                    Valoraciones = ValoracionMapper.MapToCollectionObject(pro.Valoracion),
+                    Comentarios = _comentario.MapToCollectionObject(pro.Comentario),
+                    Portafolios = _portafolio.MapToCollectionObject(pro.Portafolio),
+                    Tags = _tag.MapToCollectionObject(pro.Tag),
+                    Valoraciones = _valoracion.MapToCollectionObject(pro.Valoracion),
                 };
                 proyecto.Add(p);
             }

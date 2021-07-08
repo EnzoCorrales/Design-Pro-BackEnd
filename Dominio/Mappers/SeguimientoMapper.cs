@@ -36,12 +36,12 @@ namespace Dominio.Mappers
             };
         }
 
-        public static HashSet<DTOSeguimiento> MapToCollectionObject(ICollection<Seguimiento> seguimientos)
+        public List<DTOSeguimiento> MapToCollectionObject(ICollection<Seguimiento> seguimientos)
         {
             if (seguimientos == null)
                 return null;
 
-            var seguimiento = new HashSet<DTOSeguimiento>();
+            var seguimiento = new List<DTOSeguimiento>();
             foreach (var seg in seguimientos)
             {
                 var s = new DTOSeguimiento()
@@ -55,12 +55,12 @@ namespace Dominio.Mappers
             return seguimiento;
         }
 
-        public static HashSet<Seguimiento> MapToCollectionEntity(ICollection<DTOSeguimiento> seguimientos)
+        public List<Seguimiento> MapToCollectionEntity(ICollection<DTOSeguimiento> seguimientos)
         {
             if (seguimientos == null)
                 return null;
 
-            var seguimiento = new HashSet<Seguimiento>();
+            var seguimiento = new List<Seguimiento>();
             foreach (var seg in seguimientos)
             {
                 var s = new Seguimiento()
