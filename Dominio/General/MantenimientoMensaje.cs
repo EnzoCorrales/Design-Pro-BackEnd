@@ -54,8 +54,8 @@ namespace Dominio.General
                 var repository = new MensajeRepository(context);
                 var U_repository = new UsuarioRepository(context);
                 var m = _mapper.MapToObject(repository.Get(id));
-                m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
-                m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre + " " + U_repository.Get(m.IdUsuarioE).Apellido;
+                m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre + " " + U_repository.Get(m.IdUsuarioR).Apellido;
                 return m;
             }
         }
@@ -73,8 +73,8 @@ namespace Dominio.General
                 foreach (var mensaje in lista)
                 {
                     var m = _mapper.MapToObject(mensaje);
-                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
-                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre + " " + U_repository.Get(m.IdUsuarioE).Apellido;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre + " " + U_repository.Get(m.IdUsuarioR).Apellido;
                     resultado.Add(m);
                 }
 
@@ -95,8 +95,8 @@ namespace Dominio.General
                 foreach (var mensaje in lista)
                 {
                     var m = _mapper.MapToObject(mensaje);
-                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
-                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre + " " + U_repository.Get(m.IdUsuarioE).Apellido;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre + " " + U_repository.Get(m.IdUsuarioR).Apellido;
                     resultado.Add(m);
                 }
 
@@ -117,8 +117,8 @@ namespace Dominio.General
                 foreach (var mensaje in lista)
                 {
                     var m = _mapper.MapToObject(mensaje);
-                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
-                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre + " " + U_repository.Get(m.IdUsuarioE).Apellido;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre + " " + U_repository.Get(m.IdUsuarioR).Apellido;
                     resultado.Add(m);
                 }
 
@@ -139,8 +139,8 @@ namespace Dominio.General
                 foreach (var mensaje in lista)
                 {
                     var m = _mapper.MapToObject(mensaje);
-                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre;
-                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre;
+                    m.NombreE = U_repository.Get(m.IdUsuarioE).Nombre + " " + U_repository.Get(m.IdUsuarioE).Apellido;
+                    m.NombreR = U_repository.Get(m.IdUsuarioR).Nombre + " " + U_repository.Get(m.IdUsuarioR).Apellido;
                     resultado.Add(m);
                 }
 

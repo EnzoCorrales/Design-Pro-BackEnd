@@ -49,12 +49,12 @@ namespace Dominio.Mappers
             };
         }
 
-        public static HashSet<DTOMensaje> MapToCollectionObject(ICollection<Mensaje> mensajes)
+        public List<DTOMensaje> MapToCollectionObject(ICollection<Mensaje> mensajes)
         {
             if (mensajes == null)
                 return null;
 
-            var mensaje = new HashSet<DTOMensaje>();
+            var mensaje = new List<DTOMensaje>();
             foreach (var men in mensajes)
             {
                 var m = new DTOMensaje()
@@ -72,12 +72,12 @@ namespace Dominio.Mappers
             return mensaje;
         }
 
-        public static HashSet<Mensaje> MapToCollectionEntity(ICollection<DTOMensaje> mensajes)
+        public List<Mensaje> MapToCollectionEntity(ICollection<DTOMensaje> mensajes)
         {
             if (mensajes == null)
                 return null;
 
-            var mensaje = new HashSet<Mensaje>();
+            var mensaje = new List<Mensaje>();
             foreach (var men in mensajes)
             {
                 var m = new Mensaje()

@@ -34,7 +34,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProyecto" Type="int" Nullable="false" />
           <Property Name="Contenido" Type="varchar(max)" Nullable="false" />
-          <Property Name="Orden" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Proyecto">
           <Key>
@@ -79,7 +78,7 @@
           <Property Name="Empresa" Type="varchar" MaxLength="50" />
           <Property Name="ImgPerfil" Type="varchar(max)" />
           <Property Name="UrlWeb" Type="varchar" MaxLength="100" />
-          <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar(max)" Nullable="false" />
           <Property Name="Ciudad" Type="varchar" MaxLength="50" />
           <Property Name="Descripcion" Type="varchar" MaxLength="200" />
         </EntityType>
@@ -322,7 +321,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProyecto" Type="Int32" Nullable="false" />
           <Property Name="Contenido" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Orden" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Portafolio_Proyecto" FromRole="Portafolio" ToRole="Proyecto" />
         </EntityType>
         <EntityType Name="Proyecto">
@@ -376,7 +374,7 @@
           <Property Name="Empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ImgPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UrlWeb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Comentario" Relationship="Self.FK_Comentario_Usuario" FromRole="Usuario" ToRole="Comentario" />
@@ -627,7 +625,6 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
                 <ScalarProperty Name="Contenido" ColumnName="Contenido" />
-                <ScalarProperty Name="Orden" ColumnName="Orden" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

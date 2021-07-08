@@ -40,7 +40,6 @@ namespace Dominio.DataModel.Repositories
             }
             return ids;
         }
-
         public List<Usuario> GetAllSeguidores(int id, DesignProDB c)
         {
             var repositorySeguimiento = new SeguimientoRepository(c);
