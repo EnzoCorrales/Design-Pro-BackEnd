@@ -15,6 +15,7 @@ namespace InternalServices.Controllers
     {
         // localhost:{puerto}/api/mensaje/Create
         // Crea un mensaje
+        [AuthenticateUser]
         [ValidateMensajeModel]
         [HttpPost]
         public IHttpActionResult Create(DTOMensaje mensaje)
@@ -38,6 +39,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/GetAllByReceptor?id={idUsuario}
         // Devuelve todos los mensajes recibidos por un usuario en especifico dado un id
+        [AuthenticateUser]
         public IEnumerable<DTOMensaje> GetAllByReceptor(int id)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
@@ -46,6 +48,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/Visto
         // Actualiza el mensaje a visto
+        [AuthenticateUser]
         [HttpPut]
         public IHttpActionResult Visto(DTOMensaje mensaje)
         {
@@ -63,6 +66,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/GetAll
         // Devuelve todos los mensajes que existen en la BD
+        [AuthenticateUser]
         public IEnumerable<DTOMensaje> GetAll()
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
@@ -71,6 +75,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/GetAllByEmisor?idUsuario={idUsuario}
         // Devuelve todos los mensajes enviados por un usuario en especifico dado un id
+        [AuthenticateUser]
         public IEnumerable<DTOMensaje> GetAllByEmisor(int idUsuario)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
@@ -80,6 +85,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/GetConversacion?idUsuario1={idUsuario1}&idUsuario2={idUsuario2}
         // Devuelve la conversacion ordenada por fecha entre dos usuarios dado sus id respectivamente
+        [AuthenticateUser]
         public IEnumerable<DTOMensaje> GetConversacion(int idUsuario1, int idUsuario2)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();
@@ -88,6 +94,7 @@ namespace InternalServices.Controllers
 
         // localhost:{puerto}/api/mensaje/Get?id={id}
         // Devuelve un mensaje dado su id
+        [AuthenticateUser]
         public IHttpActionResult Get(int id)
         {
             MantenimientoMensaje mantenimiento = new MantenimientoMensaje();

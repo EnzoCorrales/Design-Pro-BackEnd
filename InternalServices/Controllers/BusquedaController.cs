@@ -11,16 +11,6 @@ namespace InternalServices.Controllers
 {
     public class BusquedaController : ApiController
     {
-        // localhost:{puerto}/api/busqueda/GetAll
-        // Devuelve todos los proyectos de la BD, lo que vendria a hacer si hace una busqueda con parametros vacios(?
-        [AllowAnonymous]
-        [HttpGet]
-        public IHttpActionResult GetAll()
-        {
-            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            return Ok(mantenimiento.GetAll());
-        }
-
         // localhost:{puerto}/api/busqueda/Busqueda?busqueda={busqueda}
         // Devuelve una lista con los proyectos que coinciden con el resultado de busqueda
         [AllowAnonymous]

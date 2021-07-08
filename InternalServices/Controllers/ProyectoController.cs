@@ -121,7 +121,8 @@ namespace InternalServices.Controllers
         // Devuelve todos los proyectos que tiene un usuario en especifico dado el id
         [AllowAnonymous]
         [HttpGet]
-        public IHttpActionResult GetAll(int idUsuario)
+
+        public IHttpActionResult GetAllFromUser(int idUsuario)
         {
             try
             {
@@ -142,6 +143,17 @@ namespace InternalServices.Controllers
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
             }
         }
+
+        // localhost:{puerto}/api/busqueda/GetAll
+        // Devuelve todos los proyectos de la BD, lo que vendria a hacer si hace una busqueda con parametros vacios(?
+        [AllowAnonymous]
+        [HttpGet]
+        public IHttpActionResult GetAll()
+        {
+            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+            return Ok(mantenimiento.GetAll());
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult GetProyectosValorados(int idUsuario) // devuelve una lista con los proyectos valorados dado el id del usuario
