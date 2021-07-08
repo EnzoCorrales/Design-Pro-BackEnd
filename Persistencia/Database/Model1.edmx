@@ -141,9 +141,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Portafolio_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Portafolio" Type="Self.Portafolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
@@ -448,9 +446,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Portafolio_Proyecto">
-          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
           <End Role="Portafolio" Type="Self.Portafolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proyecto">
