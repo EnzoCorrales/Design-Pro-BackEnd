@@ -33,12 +33,11 @@ namespace InternalServices.Controllers
                 if (!DateTime.TryParseExact(usuario.FNac, s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
                     throw new ArgumentException("Fecha incorrecta");
 
-                if (mantenimiento.Get(usuario.Correo) != null)
+                if (mantenimiento.ExisteUsuario(usuario.Correo))
                     throw new ArgumentException("Correo en uso");
 
                 mantenimiento.Create(usuario);
                 response.Usuario = mantenimiento.Get(usuario.Correo);
-                response.Usuario.Password = null;
                 response.Token = TokenManager.GenerateTokenJwt(usuario.Correo, mantenimiento.Get(usuario.Correo).Id);
                 response.Success = true;
                 return Ok(response);
@@ -64,12 +63,14 @@ namespace InternalServices.Controllers
                 DTOBaseResponse response = new DTOBaseResponse();
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
 
+                if (!mantenimiento.ExisteUsuario(correo))
+                    throw new ArgumentException("Usuario no existente");
+
                 if (!mantenimiento.ValidarUsuario(correo, password))
                     throw new ArgumentException("Credenciales no válidas");
 
                 response.Success = true;
                 response.Usuario = mantenimiento.Get(correo);
-                response.Usuario.Password = null;
                 response.Token = TokenManager.GenerateTokenJwt(correo, mantenimiento.Get(correo).Id);
 
                 return Ok(response);
@@ -140,7 +141,7 @@ namespace InternalServices.Controllers
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, id)) // se fija que el usuario que esta intentando eliminar sea el que esta loggeado
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
                 
-                if (mantenimiento.Get(id) == null) // se fija si existe el usuario que esta intentando eliminar
+                if (!mantenimiento.ExisteUsuario(id)) // se fija si existe el usuario que esta intentando eliminar
                     throw new ArgumentException("Usuario no existe");
 
                 mantenimiento.Remove(id);
@@ -172,7 +173,7 @@ namespace InternalServices.Controllers
             {
                 MantenimientoUsuario mantenimiento = new MantenimientoUsuario();
 
-                if (mantenimiento.Get(id) == null)
+                if (!mantenimiento.ExisteUsuario(id))
                     throw new ArgumentException("Usuario no existe");
 
                 var usuario = mantenimiento.Get(id);
@@ -200,9 +201,6 @@ namespace InternalServices.Controllers
             {
                 MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
                 MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
-
-                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
-                    throw new ArgumentException("Usuario no existente");
 
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
@@ -238,9 +236,6 @@ namespace InternalServices.Controllers
             {
                 MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
                 MantenimientoUsuario mantenimiento_U = new MantenimientoUsuario();
-
-                if (seguir.IdSeguidor.ToString() == "" || seguir.IdUsuario.ToString() == "" || mantenimiento_U.Get(seguir.IdSeguidor) == null || mantenimiento_U.Get(seguir.IdUsuario) == null)
-                    throw new ArgumentNullException("Usuario no existente");
 
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, seguir.IdSeguidor))
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");

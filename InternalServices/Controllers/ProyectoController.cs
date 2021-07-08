@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -21,14 +23,15 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Create(DTOProyecto proyecto)
         {
-            DTOBaseResponse response = new DTOBaseResponse();
-            MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
             try
             {
+                DTOBaseResponse response = new DTOBaseResponse();
+                MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+
                 if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, proyecto.IdAutor)) // se fija que el proyecto que se vaya a crear sea del usuario loggeado
                     throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
-                if (U_mantenimiento.Get(proyecto.IdAutor) == null)
+                if (!U_mantenimiento.ExisteUsuario(proyecto.IdAutor))
                     throw new ArgumentException("Usuario no existente");
 
                 var s = new string[] { "dd/MM/yyyy", "dd-MM-yyyy" , "yyyy-MM-dd"};
@@ -61,9 +64,9 @@ namespace InternalServices.Controllers
         [HttpDelete]
         public IHttpActionResult Remove(int id)
         {
-            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
+                DTOBaseResponse response = new DTOBaseResponse();
                 MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
                 if (!mantenimiento.ExisteProyecto(id))
                     throw new ArgumentException("Proyecto no existente");
@@ -95,9 +98,10 @@ namespace InternalServices.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
             try
             {
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+
                 if (mantenimiento.ExisteProyecto(id))
                     throw new ArgumentException("Proyecto no existente");
 
@@ -117,17 +121,52 @@ namespace InternalServices.Controllers
         // Devuelve todos los proyectos que tiene un usuario en especifico dado el id
         [AllowAnonymous]
         [HttpGet]
-        public IHttpActionResult GetAll(int idUsuario)
-        {
 
-            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+        public IHttpActionResult GetAllFromUser(int idUsuario)
+        {
             try
             {
-                if (U_mantenimiento.Get(idUsuario) == null)
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+                MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+
+                if (!U_mantenimiento.ExisteUsuario(idUsuario))
                     throw new ArgumentException("Usuario no existente");
                 
                 return Ok(mantenimiento.GetAll(idUsuario));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
+        }
+
+        // localhost:{puerto}/api/busqueda/GetAll
+        // Devuelve todos los proyectos de la BD, lo que vendria a hacer si hace una busqueda con parametros vacios(?
+        [AllowAnonymous]
+        [HttpGet]
+        public IHttpActionResult GetAll()
+        {
+            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+            return Ok(mantenimiento.GetAll());
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IHttpActionResult GetProyectosValorados(int idUsuario) // devuelve una lista con los proyectos valorados dado el id del usuario
+        {
+            try
+            {
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+                MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+
+                if (!U_mantenimiento.ExisteUsuario(idUsuario))
+                    throw new ArgumentException("Usuario no existente");
+
+                return Ok(mantenimiento.GetProyectosValorados(idUsuario));
             }
             catch (ArgumentException ex)
             {

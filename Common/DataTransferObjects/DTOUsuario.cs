@@ -11,13 +11,7 @@ namespace Common.DataTransferObjects
     {
         public DTOUsuario()
         {
-            this.Comentarios = new HashSet<DTOComentario>();
-            this.MensajesE = new HashSet<DTOMensaje>();
-            this.MensajesR = new HashSet<DTOMensaje>();
-            this.Proyectos = new HashSet<DTOProyecto>();
-            this.Seguidores = new HashSet<DTOSeguimiento>();
-            this.Siguiendo = new HashSet<DTOSeguimiento>();
-            this.PValorados = new HashSet<DTOValoracion>();
+
         }        
         public int Id { get; set; }
         [Required(ErrorMessage = "El nombre es requerido"), MaxLength(50)]
@@ -35,8 +29,8 @@ namespace Common.DataTransferObjects
         public string Profesion { get; set; }
         [MaxLength(50)]
         public string Empresa { get; set; }
-        [MaxLength(int.MaxValue)]
         public string ImgPerfil { get; set; }
+        [DataType(DataType.Text)]
         public string UrlWeb { get; set; }
         [MaxLength(100)]
         public string Password { get; set; }

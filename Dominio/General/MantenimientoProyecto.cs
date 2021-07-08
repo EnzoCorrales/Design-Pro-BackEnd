@@ -69,10 +69,7 @@ namespace Dominio.General
             using(var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
-                var U_repository = new UsuarioRepository(context);
-                var p = _mapper.MapToObject(repository.Get(id));
-                p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
-                return p;
+                return AgregarDatosAutor(_mapper.MapToObject(repository.Get(id)));
             }
         }
 
@@ -93,17 +90,13 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
-                var U_repository = new UsuarioRepository(context);
-                var lista = repository.GetBusquedaXTitulo(busqueda);
-
+                var proyectos = _mapper.MapToCollectionObject(repository.GetBusquedaXTitulo(busqueda));
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
-
-                foreach (var proyecto in lista)
+                foreach (var proyecto in proyectos)
                 {
-                    var p = _mapper.MapToObject(proyecto);
-                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
-                    resultado.Add(p);
+                    resultado.Add(AgregarDatosAutor(proyecto));
                 }
+
                 return resultado;
             }
         }
@@ -114,16 +107,13 @@ namespace Dominio.General
             {
                 var P_repository = new ProyectoRepository(context);
                 var U_repository = new UsuarioRepository(context);
-                var lista = P_repository.GetBusquedaXAutor(U_repository.GetIdsByNombre(busqueda));
-
+                var proyectos = _mapper.MapToCollectionObject(P_repository.GetBusquedaXAutor(U_repository.GetIdsByNombre(busqueda)));
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
-
-                foreach (var proyecto in lista)
+                foreach (var proyecto in proyectos)
                 {
-                    var p = _mapper.MapToObject(proyecto);
-                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
-                    resultado.Add(p);
+                    resultado.Add(AgregarDatosAutor(proyecto));
                 }
+
                 return resultado;
             }
         }
@@ -134,16 +124,11 @@ namespace Dominio.General
             {
                 var P_repository = new ProyectoRepository(context);
                 var T_repository = new TagRepository(context);
-                var U_repository = new UsuarioRepository(context);
-                var lista = P_repository.GetAllByIds(T_repository.GetIdsByTag(busqueda));
-
+                var proyectos = _mapper.MapToCollectionObject(P_repository.GetAllByIds(T_repository.GetIdsByTag(busqueda)));
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
-
-                foreach (var proyecto in lista)
+                foreach (var proyecto in proyectos)
                 {
-                    var p = _mapper.MapToObject(proyecto);
-                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
-                    resultado.Add(p);
+                    resultado.Add(AgregarDatosAutor(proyecto));
                 }
                 return resultado;
             }
@@ -157,17 +142,33 @@ namespace Dominio.General
                 var repository = new ProyectoRepository(context);
                 var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAll();
-
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
 
                 foreach (var proyecto in lista)
                 {
                     var p = _mapper.MapToObject(proyecto);
-                    p.NombreAutor = U_repository.Get(p.IdAutor).Nombre;
-                    resultado.Add(p);
+                    resultado.Add(AgregarDatosAutor(p));
                 }
 
                 return resultado;
+            }
+        }
+
+        public List<DTOProyecto> GetProyectosValorados(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ProyectoRepository(context);
+                var U_repository = new UsuarioRepository(context);
+                var valoraciones = U_repository.Get(idUsuario).Valoracion;
+                List<DTOProyecto> proyectos = new List<DTOProyecto>();
+                for (var x = 0; x < valoraciones.Count; x++)
+                {
+                    var proyecto = _mapper.MapToObject(repository.Get(valoraciones.ElementAt(x).IdProyecto));
+                    proyectos.Add(AgregarDatosAutor(proyecto));
+                }
+
+                return proyectos;
             }
         }
         /// <summary>
@@ -180,21 +181,30 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ProyectoRepository(context);
-                var u_repository = new UsuarioRepository(context);
-                var lista = repository.GetAll(idUsuario);
-
+                var proyectos = _mapper.MapToCollectionObject(repository.GetAll(idUsuario));
                 List<DTOProyecto> resultado = new List<DTOProyecto>();
-
-                foreach (var proyecto in lista)
+                foreach (var proyecto in proyectos)
                 {
-                    var p = _mapper.MapToObject(proyecto);
-                    p.NombreAutor = u_repository.Get(idUsuario).Nombre;
-                    resultado.Add(p);
+                    resultado.Add(AgregarDatosAutor(proyecto));
                 }
-
                 return resultado;
             }
         }
 
+        public DTOProyecto AgregarDatosAutor(DTOProyecto proyecto)
+        {
+            using (var context = new DesignProDB())
+            {
+                var u_repository = new UsuarioRepository(context);
+                proyecto.NombreAutor = u_repository.Get(proyecto.IdAutor).Nombre + " " + u_repository.Get(proyecto.IdAutor).Apellido;
+                proyecto.UbicacionAutor = u_repository.Get(proyecto.IdAutor).Ciudad + ", " + u_repository.Get(proyecto.IdAutor).Pais;
+                for (var x = 0; x < proyecto.Comentarios.Count; x++)
+                {
+                    proyecto.Comentarios.ElementAt(x).Nombre = u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Nombre + " " + u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Apellido;
+                }
+
+                return proyecto;
+            }
+        }
     }
 }
