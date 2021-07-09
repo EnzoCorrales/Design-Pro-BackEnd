@@ -138,7 +138,7 @@ namespace Dominio.General
                 resultado.ElementAt(x).Proyectos = null;
                 resultado.ElementAt(x).PValorados = null;
                 resultado.ElementAt(x).Seguidores = null;
-                resultado.ElementAt(x).Siguiendo = null;
+                //resultado.ElementAt(x).Siguiendo = null;
                 resultado.ElementAt(x).MensajesE = null;
                 resultado.ElementAt(x).MensajesR = null;
                 resultado.ElementAt(x).Comentarios = null;
@@ -152,7 +152,7 @@ namespace Dominio.General
             usuario.Proyectos = null;
             usuario.PValorados = null;
             usuario.Seguidores = null;
-            usuario.Siguiendo = null;
+            //usuario.Siguiendo = null;
             usuario.MensajesE = null;
             usuario.MensajesR = null;
             usuario.Comentarios = null;
