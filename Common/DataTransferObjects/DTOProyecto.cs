@@ -33,6 +33,7 @@ namespace Common.DataTransferObjects
         public string UbicacionAutor { get; set; }
         public string ImgAutor { get; set; }
         public int Likes { get; set; }
+        public int CantComentarios { get; set; }
 
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }

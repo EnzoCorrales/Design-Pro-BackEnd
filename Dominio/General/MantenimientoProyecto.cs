@@ -208,6 +208,7 @@ namespace Dominio.General
                 proyecto.UbicacionAutor = u_repository.Get(proyecto.IdAutor).Ciudad + ", " + u_repository.Get(proyecto.IdAutor).Pais;
                 proyecto.ImgAutor = u_repository.Get(proyecto.IdAutor).ImgPerfil;
                 proyecto.Likes = u_repository.Get(proyecto.IdAutor).Proyecto.FirstOrDefault(a => a.Id == proyecto.Id).Valoracion.Count;
+                proyecto.CantComentarios = proyecto.Comentarios.Count;
                 for (var x = 0; x < proyecto.Comentarios.Count; x++)
                 {
                     proyecto.Comentarios.ElementAt(x).Nombre = u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Nombre + " " + u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Apellido;
