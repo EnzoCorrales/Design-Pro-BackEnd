@@ -46,9 +46,9 @@ namespace InternalServices.Controllers
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la opración!"));
             }
         }
 
@@ -197,6 +197,7 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult Seguir(DTOSeguimiento seguir)
         {
+            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
@@ -209,8 +210,9 @@ namespace InternalServices.Controllers
                     throw new ArgumentException("Este usuario ya sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
 
                 mantenimiento.Seguir(seguir);
+                response.Usuario = mantenimiento_U.Get(seguir.IdSeguidor);
 
-                return Ok(true);
+                return Ok(response);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -232,6 +234,7 @@ namespace InternalServices.Controllers
         [HttpPost]
         public IHttpActionResult DejarDeSeguir(DTOSeguimiento seguir)
         {
+            DTOBaseResponse response = new DTOBaseResponse();
             try
             {
                 MantenimientoSeguimiento mantenimiento = new MantenimientoSeguimiento();
@@ -244,8 +247,9 @@ namespace InternalServices.Controllers
                     throw new ArgumentException("Este usuario no sigue a " + mantenimiento_U.Get(seguir.IdUsuario).Nombre);
 
                 mantenimiento.DejarDeSeguir(seguir);
+                response.Usuario = mantenimiento_U.Get(seguir.IdSeguidor);
 
-                return Ok(true);
+                return Ok(response);
             }
             catch (UnauthorizedAccessException ex)
             {
