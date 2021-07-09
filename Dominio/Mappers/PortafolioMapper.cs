@@ -10,32 +10,6 @@ namespace Dominio.Mappers
 {
     public class PortafolioMapper
     {
-        public DTOPortafolio MapToObject(Portafolio portafolio)
-        {
-            if (portafolio == null)
-                return null;
-
-            return new DTOPortafolio()
-            {
-                Id = portafolio.Id,
-                IdProyecto = portafolio.IdProyecto,
-                Contenido = portafolio.Contenido,
-            };
-        }
-
-        public Portafolio MapToEntity(DTOPortafolio portafolio)
-        {
-            if (portafolio == null)
-                return null;
-
-            return new Portafolio()
-            {
-                Id = portafolio.Id,
-                IdProyecto = portafolio.IdProyecto,
-                Contenido = portafolio.Contenido,
-            };
-        }
-
         public List<DTOPortafolio> MapToCollectionObject(ICollection<Portafolio> portafolios)
         {
             if (portafolios == null)

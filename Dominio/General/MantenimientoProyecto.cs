@@ -130,6 +130,7 @@ namespace Dominio.General
                 {
                     resultado.Add(AgregarDatosAutor(proyecto));
                 }
+
                 return resultado;
             }
         }
@@ -171,10 +172,6 @@ namespace Dominio.General
                 return proyectos;
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="correo"></param>
         /// <returns>una lista con los proyectos dado un cierto usuario</returns>
         public List<DTOProyecto> GetAll(int idUsuario)
         {
@@ -187,7 +184,18 @@ namespace Dominio.General
                 {
                     resultado.Add(AgregarDatosAutor(proyecto));
                 }
+
                 return resultado;
+            }
+        }
+
+        public void VisitarProyecto(int idProyecto)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ProyectoRepository(context);
+                repository.VisitarProyecto(idProyecto);
+                context.SaveChanges();
             }
         }
 
@@ -198,6 +206,8 @@ namespace Dominio.General
                 var u_repository = new UsuarioRepository(context);
                 proyecto.NombreAutor = u_repository.Get(proyecto.IdAutor).Nombre + " " + u_repository.Get(proyecto.IdAutor).Apellido;
                 proyecto.UbicacionAutor = u_repository.Get(proyecto.IdAutor).Ciudad + ", " + u_repository.Get(proyecto.IdAutor).Pais;
+                proyecto.ImgAutor = u_repository.Get(proyecto.IdAutor).ImgPerfil;
+                proyecto.Likes = u_repository.Get(proyecto.IdAutor).Proyecto.FirstOrDefault(a => a.Id == proyecto.Id).Valoracion.Count;
                 for (var x = 0; x < proyecto.Comentarios.Count; x++)
                 {
                     proyecto.Comentarios.ElementAt(x).Nombre = u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Nombre + " " + u_repository.Get(proyecto.Comentarios.ElementAt(x).IdUsuario).Apellido;

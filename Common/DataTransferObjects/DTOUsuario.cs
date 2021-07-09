@@ -38,13 +38,9 @@ namespace Common.DataTransferObjects
         public string Ciudad { get; set; }
         [MaxLength(500)]
         public string Descripcion { get; set; }
+        public int Visitas { get; set;}
+        public int Seguidores { get; set; }
+        public int Likes { get; set; }
 
-        public virtual ICollection<DTOComentario> Comentarios { get; set; }
-        public virtual ICollection<DTOMensaje> MensajesE { get; set; }
-        public virtual ICollection<DTOMensaje> MensajesR { get; set; }
-        public virtual ICollection<DTOProyecto> Proyectos { get; set; }
-        public virtual ICollection<DTOSeguimiento> Seguidores { get; set; }
-        public virtual ICollection<DTOSeguimiento> Siguiendo { get; set; }
-        public virtual ICollection<DTOValoracion> PValorados { get; set; }
     }
 }

@@ -23,8 +23,7 @@ namespace Dominio.DataModel.Repositories
 
         public void Remove(int id)
         {
-            var entity = this.Get(id);
-            this._context.Seguimiento.Remove(entity);
+            this._context.Seguimiento.Remove(this.Get(id));
         }
 
         public void RemoveByUsuario(int idUsuario)

@@ -15,11 +15,6 @@ namespace Dominio.Mappers
 {
     public class UsuarioMapper
     {
-        private ComentarioMapper _comentario = new ComentarioMapper();
-        private MensajeMapper _mensaje = new MensajeMapper();
-        private ProyectoMapper _proyecto = new ProyectoMapper();
-        private SeguimientoMapper _seguimiento = new SeguimientoMapper();
-        private ValoracionMapper _valoracion = new ValoracionMapper();
         public DTOUsuario MapToObject(Usuario usuario)
         {
             if (usuario == null)
@@ -42,13 +37,6 @@ namespace Dominio.Mappers
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
                 Descripcion = usuario.Descripcion,
-                Comentarios = _comentario.MapToCollectionObject(usuario.Comentario),
-                MensajesE = _mensaje.MapToCollectionObject(usuario.Mensaje),
-                MensajesR = _mensaje.MapToCollectionObject(usuario.Mensaje1),
-                Proyectos = _proyecto.MapToCollectionObject(usuario.Proyecto),
-                Seguidores = _seguimiento.MapToCollectionObject(usuario.Seguimiento1),
-                Siguiendo = _seguimiento.MapToCollectionObject(usuario.Seguimiento),
-                PValorados = _valoracion.MapToCollectionObject(usuario.Valoracion),
             };
         }
 
@@ -72,13 +60,13 @@ namespace Dominio.Mappers
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
                 Descripcion = usuario.Descripcion,
-                Comentario = _comentario.MapToCollectionEntity(usuario.Comentarios),
-                Mensaje = _mensaje.MapToCollectionEntity(usuario.MensajesE),
-                Mensaje1 = _mensaje.MapToCollectionEntity(usuario.MensajesR),
-                Proyecto = _proyecto.MapToCollectionEntity(usuario.Proyectos),
-                Seguimiento1 = _seguimiento.MapToCollectionEntity(usuario.Seguidores),
-                Seguimiento = _seguimiento.MapToCollectionEntity(usuario.Siguiendo),
-                Valoracion = _valoracion.MapToCollectionEntity(usuario.PValorados),
+                Comentario = null,
+                Mensaje = null,
+                Mensaje1 = null,
+                Proyecto = null,
+                Seguimiento1 = null,
+                Seguimiento = null,
+                Valoracion = null,
             };
         }
 
@@ -94,74 +82,6 @@ namespace Dominio.Mappers
                 return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             return DateTime.Now;
-        }
-        
-        public List<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)
-        {
-            if (usuarios == null)
-                return null;
-
-            var usuario = new List<Usuario>();
-            foreach (var usu in usuarios)
-            {
-                var u = new Usuario()
-                {
-                    Id = usu.Id,
-                    Nombre = usu.Nombre,
-                    Apellido = usu.Apellido,
-                    Correo = usu.Correo,
-                    FNac = this.ParseToDateType(usu.FNac),
-                    Pais = usu.Pais,
-                    Profesion = usu.Profesion,
-                    Empresa = usu.Empresa,
-                    ImgPerfil = usu.ImgPerfil,
-                    UrlWeb = usu.UrlWeb,
-                    Password = usu.Password,
-                    Comentario = _comentario.MapToCollectionEntity(usu.Comentarios),
-                    Mensaje = _mensaje.MapToCollectionEntity(usu.MensajesE),
-                    Mensaje1 = _mensaje.MapToCollectionEntity(usu.MensajesR),
-                    Proyecto = _proyecto.MapToCollectionEntity(usu.Proyectos),
-                    Seguimiento1 = _seguimiento.MapToCollectionEntity(usu.Seguidores),
-                    Seguimiento = _seguimiento.MapToCollectionEntity(usu.Siguiendo),
-                    Valoracion = _valoracion.MapToCollectionEntity(usu.PValorados),
-                };
-                usuario.Add(u);
-            }
-            return usuario;
-        }
-        
-        public List<DTOUsuario> MapToCollectionObject(ICollection<Usuario> usuarios)
-        {
-            if (usuarios == null)
-                return null;
-
-            var usuario = new List<DTOUsuario>();
-            foreach (var usu in usuarios)
-            {
-                var u = new DTOUsuario()
-                {
-                    Id = usu.Id,
-                    Nombre = usu.Nombre,
-                    Apellido = usu.Apellido,
-                    Correo = usu.Correo,
-                    FNac = usu.FNac.ToShortDateString(),
-                    Pais = usu.Pais,
-                    Profesion = usu.Profesion,
-                    Empresa = usu.Empresa,
-                    ImgPerfil = usu.ImgPerfil,
-                    UrlWeb = usu.UrlWeb,
-                    Password = usu.Password,
-                    Comentarios = _comentario.MapToCollectionObject(usu.Comentario),
-                    MensajesE = _mensaje.MapToCollectionObject(usu.Mensaje),
-                    MensajesR = _mensaje.MapToCollectionObject(usu.Mensaje1),
-                    Proyectos = _proyecto.MapToCollectionObject(usu.Proyecto),
-                    Seguidores = _seguimiento.MapToCollectionObject(usu.Seguimiento1),
-                    Siguiendo = _seguimiento.MapToCollectionObject(usu.Seguimiento),
-                    PValorados = _valoracion.MapToCollectionObject(usu.Valoracion),
-                };
-                usuario.Add(u);
-            }
-            return usuario;
-        }
+        }      
     }
 }
