@@ -48,51 +48,5 @@ namespace Dominio.Mappers
                 Visto = mensaje.Visto,
             };
         }
-
-        public List<DTOMensaje> MapToCollectionObject(ICollection<Mensaje> mensajes)
-        {
-            if (mensajes == null)
-                return null;
-
-            var mensaje = new List<DTOMensaje>();
-            foreach (var men in mensajes)
-            {
-                var m = new DTOMensaje()
-                {
-                    Id = men.Id,
-                    Asunto = men.Asunto,
-                    Contenido = men.Contenido,
-                    Fecha = men.Fecha,
-                    IdUsuarioE = men.IdUsuarioE,
-                    IdUsuarioR = men.IdUsuarioR,
-                    Visto = men.Visto,
-                };
-                mensaje.Add(m);
-            }
-            return mensaje;
-        }
-
-        public List<Mensaje> MapToCollectionEntity(ICollection<DTOMensaje> mensajes)
-        {
-            if (mensajes == null)
-                return null;
-
-            var mensaje = new List<Mensaje>();
-            foreach (var men in mensajes)
-            {
-                var m = new Mensaje()
-                {
-                    Id = men.Id,
-                    Asunto = men.Asunto,
-                    Contenido = men.Contenido,
-                    Fecha = men.Fecha,
-                    IdUsuarioE = men.IdUsuarioE,
-                    IdUsuarioR = men.IdUsuarioR,
-                    Visto = men.Visto,
-                };
-                mensaje.Add(m);
-            }
-            return mensaje;
-        }
     }
 }

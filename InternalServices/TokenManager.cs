@@ -26,7 +26,7 @@ namespace InternalServices
                             new Claim("id", id.ToString())
                         }),
 
-                Expires = now.AddMinutes(Convert.ToInt32(60)),
+                Expires = now.AddMinutes(Convert.ToInt32(120)),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -70,6 +70,8 @@ namespace InternalServices
 
         public static bool VerificarXCorreo(string token, string correo)
         {
+            if (token == null || token == "" || token.Equals(""))
+                return false;
             var principal = TokenManager.GetPrincipal(token);
             var identity = principal?.Identity as ClaimsIdentity;
             var verificar = identity.FindFirst("correo").Value.ToString();
@@ -81,6 +83,8 @@ namespace InternalServices
 
         public static bool VerificarXId(string token, int id)
         {
+            if (token == null || token == "" || token.Equals(""))
+                return false;
             var principal = TokenManager.GetPrincipal(token);
             var identity = principal?.Identity as ClaimsIdentity;
             var verificar = identity.FindFirst("id").Value.ToString();

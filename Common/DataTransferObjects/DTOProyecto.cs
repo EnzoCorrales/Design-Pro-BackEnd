@@ -31,13 +31,14 @@ namespace Common.DataTransferObjects
         public string FechaPub { get; set; }
         public string NombreAutor { get; set; }
         public string UbicacionAutor { get; set; }
+        public string ImgAutor { get; set; }
+        public int Likes { get; set; }
+        public int CantComentarios { get; set; }
 
 
         public virtual ICollection<DTOComentario> Comentarios { get; set; }
 
         public virtual ICollection<DTOTag> Tags { get; set; }
-
-        public virtual ICollection<DTOValoracion> Valoraciones { get; set; }
 
         public virtual ICollection<DTOPortafolio> Portafolios { get; set; }
 
