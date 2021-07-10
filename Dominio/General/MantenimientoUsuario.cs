@@ -1,13 +1,11 @@
 ﻿using Dominio.Mappers;
-using Dominio.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Common.DataTransferObjects;
 using Dominio.DataModel.Repositories;
 using Persistencia.Database;
-using Common.Exceptions;
+using Microsoft.AspNet.Identity;
 
 namespace Dominio.General
 {
@@ -19,60 +17,61 @@ namespace Dominio.General
         {
             this._mapper = new UsuarioMapper();
         }
-
         public void Create(DTOUsuario dtousuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var current = repository.Get(dtousuario.Correo);
-
-                if (current != null)
-                    throw new ValidateException("Correo en uso");
-
-                var usuario = _mapper.MapToEntity(dtousuario);
-
-                repository.Create(usuario);
+                dtousuario.Password = this.HashPassword(dtousuario.Password);
+                repository.Create(_mapper.MapToEntity(dtousuario));
 
                 context.SaveChanges();
             }
         }
-
         public bool ValidarUsuario(string correo, string password)
         {
-              using (var context = new DesignProDB())
-              {
-                    var repository = new UsuarioRepository(context);
-                    var usuario = repository.Get(correo);
-                    if (usuario.Password.Equals(password))
-                        return true;
-                    else
-                        return false;
-              }
-        }
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                var hasher = new PasswordHasher();
 
+                if (hasher.VerifyHashedPassword(repository.Get(correo).Password, password) != PasswordVerificationResult.Failed)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public bool ExisteUsuario(string correo)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                if (repository.Get(correo) == null)
+                    return false;
+                else
+                    return true;
+            }
+        }
+        public bool ExisteUsuario(int id)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                if (repository.Get(id) == null)
+                    return false;
+                else
+                    return true;
+            }
+        }
         public void Update(DTOUsuario dtousuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var current = repository.Get(dtousuario.Id);
-
-                //System.Diagnostics.Debug.WriteLine(current.Password + " curr pass || curr cor " + current.Correo + " curr cor || dto cor " + dtousuario.Correo + " dto cor || dto pass  " + dtousuario.Password);
-
-                if (dtousuario.Correo != "")
-                {
-                    if (current.Correo != dtousuario.Correo && repository.Get(dtousuario.Correo) != null)
-                    {
-                        throw new Exception("Correo en uso");
-                    }
-                }
-                
                 repository.Update(_mapper.MapToEntity(dtousuario));
                 context.SaveChanges();
             }
         }
-
         public void Remove(int idUsuario)
         {
             using (var context = new DesignProDB())
@@ -86,77 +85,125 @@ namespace Dominio.General
                 context.SaveChanges();
             }
         }
-
         public DTOUsuario Get(int id)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
+                return this.AgregarDatos(_mapper.MapToObject(repository.Get(id)));
             }
         }
-
         public DTOUsuario Get(string correo)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return _mapper.MapToObject(repository.Get(correo));
+                return this.AgregarDatos(_mapper.MapToObject(repository.Get(correo)));
             }
         }
-
         public List<DTOUsuario> GetAllSeguidores(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var lista = repository.GetAllSeguidores(idUsuario, context);
-
                 List<DTOUsuario> resultado = new List<DTOUsuario>();
-
+                var lista = repository.GetAllSeguidores(idUsuario, context);
                 foreach (var usuario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(usuario));
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
                 }
 
                 return resultado;
             }
         }
-
         public List<DTOUsuario> GetAllSiguiendo(int idUsuario)
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var lista = repository.GetAllSiguiendo(idUsuario, context);
-
                 List<DTOUsuario> resultado = new List<DTOUsuario>();
-
+                var lista = repository.GetAllSiguiendo(idUsuario, context);
                 foreach (var usuario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(usuario));
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
                 }
 
                 return resultado;
             }
         }
-
         public List<DTOUsuario> GetAll()
         {
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                var lista = repository.GetAll();
-
                 List<DTOUsuario> resultado = new List<DTOUsuario>();
-
-                foreach (var usuario in lista)
+                var lista = repository.GetAll();
+                foreach(var usuario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(usuario));
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
                 }
 
                 return resultado;
             }
+        }
+        public string HashPassword(string password)
+        {
+            var hasher = new PasswordHasher();
+            return hasher.HashPassword(password);
+        }
+
+        public int GetVisitasTotales(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                var proyectos = repository.Get(idUsuario).Proyecto;
+                var visitas = 0;
+                foreach (var proyecto in proyectos)
+                {
+                    visitas = visitas + proyecto.Visitas;
+                }
+
+                return visitas;
+            }
+        }
+
+        public int GetLikesTotales(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                var proyectos = repository.Get(idUsuario).Proyecto;
+                var likes = 0;
+                foreach(var proyecto in proyectos)
+                {
+                    likes = likes + proyecto.Valoracion.Count;
+                }
+
+                return likes;
+            }
+        }
+
+        public int GetSeguidores(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                return repository.Get(idUsuario).Seguimiento1.Count;
+            }
+        }
+
+        public DTOUsuario AgregarDatos(DTOUsuario usuario)
+        {
+            usuario.Likes = this.GetLikesTotales(usuario.Id);
+            usuario.Visitas = this.GetVisitasTotales(usuario.Id);
+            usuario.Seguidores = this.GetSeguidores(usuario.Id);
+            usuario.Password = null;
+
+            return usuario;
         }
     }
 }

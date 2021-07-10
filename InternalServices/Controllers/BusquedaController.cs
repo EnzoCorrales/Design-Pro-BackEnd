@@ -11,21 +11,11 @@ namespace InternalServices.Controllers
 {
     public class BusquedaController : ApiController
     {
-        // localhost:{puerto}/api/busqueda/GetAll
-        // Devuelve todos los proyectos de la BD, lo que vendria a hacer si hace una busqueda con parametros vacios(?
-        [AllowAnonymous]
-        [HttpGet]
-        public IEnumerable<DTOProyecto> GetAll()
-        {
-            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            return mantenimiento.GetAll();
-        }
-
         // localhost:{puerto}/api/busqueda/Busqueda?busqueda={busqueda}
         // Devuelve una lista con los proyectos que coinciden con el resultado de busqueda
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<DTOProyecto> Busqueda(string busqueda)
+        public IHttpActionResult Busqueda(string busqueda)
         {
             try
             {
@@ -61,7 +51,7 @@ namespace InternalServices.Controllers
                     resultado.Add(proyecto);
                 }
 
-                return resultado;
+                return Ok(resultado);
             }
             catch (Exception)
             {

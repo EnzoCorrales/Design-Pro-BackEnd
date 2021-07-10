@@ -11,13 +11,7 @@ namespace Common.DataTransferObjects
     {
         public DTOUsuario()
         {
-            this.Comentarios = new HashSet<DTOComentario>();
-            this.MensajesE = new HashSet<DTOMensaje>();
-            this.MensajesR = new HashSet<DTOMensaje>();
-            this.Proyectos = new HashSet<DTOProyecto>();
-            this.Seguidores = new HashSet<DTOSeguimiento>();
-            this.Siguiendo = new HashSet<DTOSeguimiento>();
-            this.PValorados = new HashSet<DTOValoracion>();
+
         }        
         public int Id { get; set; }
         [Required(ErrorMessage = "El nombre es requerido"), MaxLength(50)]
@@ -44,13 +38,9 @@ namespace Common.DataTransferObjects
         public string Ciudad { get; set; }
         [MaxLength(500)]
         public string Descripcion { get; set; }
+        public int Visitas { get; set;}
+        public int Seguidores { get; set; }
+        public int Likes { get; set; }
 
-        public virtual ICollection<DTOComentario> Comentarios { get; set; }
-        public virtual ICollection<DTOMensaje> MensajesE { get; set; }
-        public virtual ICollection<DTOMensaje> MensajesR { get; set; }
-        public virtual ICollection<DTOProyecto> Proyectos { get; set; }
-        public virtual ICollection<DTOSeguimiento> Seguidores { get; set; }
-        public virtual ICollection<DTOSeguimiento> Siguiendo { get; set; }
-        public virtual ICollection<DTOValoracion> PValorados { get; set; }
     }
 }

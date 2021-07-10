@@ -41,6 +41,16 @@ namespace Dominio.DataModel.Repositories
             return this._context.Proyecto.Select(a => a).ToList();
         }
 
+        public List<Proyecto> GetProyectosValorados(List<int> ids)
+        {
+            List<Proyecto> resultado = new List<Proyecto>();
+            foreach (var id in ids)
+            {
+                resultado.AddRange(this._context.Proyecto.Where(a => a.IdAutor == id));
+            }
+            return resultado;
+        }
+
         public List<Proyecto> GetAllByIds(List<int> ids)
         {
             List<Proyecto> resultado = new List<Proyecto>();
@@ -49,6 +59,13 @@ namespace Dominio.DataModel.Repositories
                 resultado.Add(this._context.Proyecto.FirstOrDefault(a => a.Id == id));
             }
             return resultado;
+        }
+
+        public void VisitarProyecto(int idProyecto)
+        {
+            var entity = this.Get(idProyecto);
+
+            entity.Visitas++;
         }
 
         public List<Proyecto> GetAll(int idUsuario)

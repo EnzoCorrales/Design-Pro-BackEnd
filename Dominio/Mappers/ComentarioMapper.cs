@@ -2,6 +2,7 @@
 using Persistencia.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,12 +45,12 @@ namespace Dominio.Mappers
             };
         }
 
-        public static HashSet<DTOComentario> MapToCollectionObject(ICollection<Comentario> comentarios)
+        public List<DTOComentario> MapToCollectionObject(ICollection<Comentario> comentarios)
         {
             if (comentarios == null)
                 return null;
 
-            var comentario = new HashSet<DTOComentario>();
+            var comentario = new List<DTOComentario>();
             foreach (var com in comentarios)
             {
                 var c = new DTOComentario()
@@ -65,12 +66,12 @@ namespace Dominio.Mappers
             return comentario;
         }
 
-        public static HashSet<Comentario> MapToCollectionEntity(ICollection<DTOComentario> comentarios)
+        public List<Comentario> MapToCollectionEntity(ICollection<DTOComentario> comentarios)
         {
             if (comentarios == null)
                 return null;
 
-            var comentario = new HashSet<Comentario>();
+            var comentario = new List<Comentario>();
             foreach (var com in comentarios)
             {
                 var c = new Comentario()

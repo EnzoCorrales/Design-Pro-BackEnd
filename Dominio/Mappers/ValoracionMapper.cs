@@ -35,43 +35,5 @@ namespace Dominio.Mappers
                 IdProyecto = valoracion.IdProyecto,
             };
         }
-
-        public static HashSet<DTOValoracion> MapToCollectionObject(ICollection<Valoracion> valoraciones)
-        {
-            if (valoraciones == null)
-                return null;
-
-            var valoracion = new HashSet<DTOValoracion>();
-            foreach (var val in valoraciones)
-            {
-                var v = new DTOValoracion()
-                {
-                    Id = val.Id,
-                    IdUsuario = val.IdUsuario,
-                    IdProyecto = val.IdProyecto,
-                };
-                valoracion.Add(v);
-            }
-            return valoracion;
-        }
-
-        public static HashSet<Valoracion> MapToCollectionEntity(ICollection<DTOValoracion> valoraciones)
-        {
-            if (valoraciones == null)
-                return null;
-
-            var valoracion = new HashSet<Valoracion>();
-            foreach (var val in valoraciones)
-            {
-                var v = new Valoracion()
-                {
-                    Id = val.Id,
-                    IdUsuario = val.IdUsuario,
-                    IdProyecto = val.IdProyecto,
-                };
-                valoracion.Add(v);
-            }
-            return valoracion;
-        }
     }
 }

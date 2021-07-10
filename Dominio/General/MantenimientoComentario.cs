@@ -71,7 +71,22 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
-                return _mapper.MapToObject(repository.Get(id));
+                var U_repository = new UsuarioRepository(context);
+                var c = _mapper.MapToObject(repository.Get(id));
+                c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                return c;
+            }
+        }
+
+        public bool ExisteComentario(int id)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new ComentarioRepository(context);
+                if (repository.Get(id) == null)
+                    return false;
+                else
+                    return true;
             }
         }
 
@@ -80,13 +95,16 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAllByUsuario(idUsuario);
 
                 List<DTOComentario> resultado = new List<DTOComentario>();
 
                 foreach (var comentario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(comentario));
+                    var c = _mapper.MapToObject(comentario);
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                    resultado.Add(c);
                 }
 
                 return resultado;
@@ -98,13 +116,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAllByProyecto(idProyecto);
 
                 List<DTOComentario> resultado = new List<DTOComentario>();
 
                 foreach (var comentario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(comentario));
+                    var c = _mapper.MapToObject(comentario);
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                    c.ImgAutor = U_repository.Get(c.IdUsuario).ImgPerfil;
+                    resultado.Add(c);
                 }
 
                 return resultado;
@@ -116,13 +138,17 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new ComentarioRepository(context);
+                var U_repository = new UsuarioRepository(context);
                 var lista = repository.GetAll();
 
                 List<DTOComentario> resultado = new List<DTOComentario>();
 
                 foreach (var comentario in lista)
                 {
-                    resultado.Add(_mapper.MapToObject(comentario));
+                    var c = _mapper.MapToObject(comentario);
+                    c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                    c.ImgAutor = U_repository.Get(c.IdUsuario).ImgPerfil;
+                    resultado.Add(c);
                 }
 
                 return resultado;

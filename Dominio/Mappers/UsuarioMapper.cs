@@ -20,6 +20,8 @@ namespace Dominio.Mappers
             if (usuario == null)
                 return null;
 
+
+
             return new DTOUsuario()
             {
                 Id = usuario.Id,
@@ -28,18 +30,13 @@ namespace Dominio.Mappers
                 Correo = usuario.Correo,
                 FNac = usuario.FNac.ToShortDateString(),
                 Pais = usuario.Pais,
+                Ciudad = usuario.Ciudad,
                 Profesion = usuario.Profesion,
                 Empresa = usuario.Empresa,
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
-                Comentarios = ComentarioMapper.MapToCollectionObject(usuario.Comentario),
-                MensajesE = MensajeMapper.MapToCollectionObject(usuario.Mensaje),
-                MensajesR = MensajeMapper.MapToCollectionObject(usuario.Mensaje1),
-                Proyectos = ProyectoMapper.MapToCollectionObject(usuario.Proyecto),
-                Seguidores = SeguimientoMapper.MapToCollectionObject(usuario.Seguimiento1),
-                Siguiendo = SeguimientoMapper.MapToCollectionObject(usuario.Seguimiento),
-                PValorados = ValoracionMapper.MapToCollectionObject(usuario.Valoracion),
+                Descripcion = usuario.Descripcion,
             };
         }
 
@@ -56,93 +53,35 @@ namespace Dominio.Mappers
                 Correo = usuario.Correo,
                 FNac = this.ParseToDateType(usuario.FNac),
                 Pais = usuario.Pais,
+                Ciudad = usuario.Ciudad,
                 Profesion = usuario.Profesion,
                 Empresa = usuario.Empresa,
                 ImgPerfil = usuario.ImgPerfil,
                 UrlWeb = usuario.UrlWeb,
                 Password = usuario.Password,
-                Comentario = ComentarioMapper.MapToCollectionEntity(usuario.Comentarios),
-                Mensaje = MensajeMapper.MapToCollectionEntity(usuario.MensajesE),
-                Mensaje1 = MensajeMapper.MapToCollectionEntity(usuario.MensajesR),
-                Proyecto = ProyectoMapper.MapToCollectionEntity(usuario.Proyectos),
-                Seguimiento1 = SeguimientoMapper.MapToCollectionEntity(usuario.Seguidores),
-                Seguimiento = SeguimientoMapper.MapToCollectionEntity(usuario.Siguiendo),
-                Valoracion = ValoracionMapper.MapToCollectionEntity(usuario.PValorados),
+                Descripcion = usuario.Descripcion,
+                Comentario = null,
+                Mensaje = null,
+                Mensaje1 = null,
+                Proyecto = null,
+                Seguimiento1 = null,
+                Seguimiento = null,
+                Valoracion = null,
             };
         }
 
         public System.DateTime ParseToDateType(string date)
         {
-            string inputFormat = "dd-MM-yyyy";
-            return DateTime.ParseExact(date, inputFormat, CultureInfo.InvariantCulture);
-        }
-        /*
-        public static HashSet<Usuario> MapToCollectionEntity(ICollection<DTOUsuario> usuarios)
-        {
-            if (usuarios == null)
-                return null;
+            if (DateTime.TryParseExact(date, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                return DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-            var usuario = new HashSet<Usuario>();
-            foreach (var usu in usuarios)
-            {
-                var u = new Usuario()
-                {
-                    Id = usu.Id,
-                    Nombre = usu.Nombre,
-                    Apellido = usu.Apellido,
-                    Correo = usu.Correo,
-                    FNac = usu.FNac,
-                    Pais = usu.Pais,
-                    Profesion = usu.Profesion,
-                    Empresa = usu.Empresa,
-                    ImgPerfil = usu.ImgPerfil,
-                    UrlWeb = usu.UrlWeb,
-                    Password = usu.Password,
-                    Comentario = ComentarioMapper.MapToCollectionEntity(usu.Comentarios),
-                    Mensaje = MensajeMapper.MapToCollectionEntity(usu.MensajesE),
-                    Mensaje1 = MensajeMapper.MapToCollectionEntity(usu.MensajesR),
-                    Proyecto = ProyectoMapper.MapToCollectionEntity(usu.Proyectos),
-                    Seguimiento1 = SeguimientoMapper.MapToCollectionEntity(usu.Seguidores),
-                    Seguimiento = SeguimientoMapper.MapToCollectionEntity(usu.Siguiendo),
-                    Valoracion = ValoracionMapper.MapToCollectionEntity(usu.PValorados),
-                };
-                usuario.Add(u);
-            }
-            return usuario;
-        }
-        
-        public static HashSet<DTOUsuario> MapToCollectionObject(ICollection<Usuario> usuarios)
-        {
-            if (usuarios == null)
-                return null;
+            if (DateTime.TryParseExact(date, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime di))
+                return DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
 
-            var usuario = new HashSet<DTOUsuario>();
-            foreach (var usu in usuarios)
-            {
-                var u = new DTOUsuario()
-                {
-                    Id = usu.Id,
-                    Nombre = usu.Nombre,
-                    Apellido = usu.Apellido,
-                    Correo = usu.Correo,
-                    FNac = usu.FNac,
-                    Pais = usu.Pais,
-                    Profesion = usu.Profesion,
-                    Empresa = usu.Empresa,
-                    ImgPerfil = usu.ImgPerfil,
-                    UrlWeb = usu.UrlWeb,
-                    Password = usu.Password,
-                    Comentarios = ComentarioMapper.MapToCollectionObject(usu.Comentario),
-                    MensajesE = MensajeMapper.MapToCollectionObject(usu.Mensaje),
-                    MensajesR = MensajeMapper.MapToCollectionObject(usu.Mensaje1),
-                    Proyectos = ProyectoMapper.MapToCollectionObject(usu.Proyecto),
-                    Seguidores = SeguimientoMapper.MapToCollectionObject(usu.Seguimiento1),
-                    Siguiendo = SeguimientoMapper.MapToCollectionObject(usu.Seguimiento),
-                    PValorados = ValoracionMapper.MapToCollectionObject(usu.Valoracion),
-                };
-                usuario.Add(u);
-            }
-            return usuario;
-        }*/
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime die))
+                return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return DateTime.Now;
+        }      
     }
 }

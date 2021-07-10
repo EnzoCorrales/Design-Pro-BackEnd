@@ -11,5 +11,6 @@ namespace Common.DataTransferObjects
         public int IdUsuario { get; set; }
         public int IdSeguidor { get; set; }
         public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }

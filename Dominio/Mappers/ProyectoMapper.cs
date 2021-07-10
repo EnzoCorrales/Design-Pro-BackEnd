@@ -2,6 +2,7 @@
 using Persistencia.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace Dominio.Mappers
 {
     public class ProyectoMapper
     {
+        private ComentarioMapper _comentario = new ComentarioMapper();
+        private PortafolioMapper _portafolio = new PortafolioMapper();
+        private TagMapper _tag = new TagMapper(); 
         public DTOProyecto MapToObject(Proyecto proyecto)
         {
             if (proyecto == null)
@@ -28,13 +32,10 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
-                Comentarios = ComentarioMapper.MapToCollectionObject(proyecto.Comentario),
-                Imagenes = ImagenMapper.MapToCollectionObject(proyecto.Imagen),
-                Videos = VideoMapper.MapToCollectionObject(proyecto.Video),
-                Textos = TextoMapper.MapToCollectionObject(proyecto.Texto),
-                Tags = TagMapper.MapToCollectionObject(proyecto.Tag),
-                Valoraciones = ValoracionMapper.MapToCollectionObject(proyecto.Valoracion),
+                FechaPub = proyecto.FechaPub.ToShortDateString(),
+                Comentarios = _comentario.MapToCollectionObject(proyecto.Comentario),
+                Portafolios = _portafolio.MapToCollectionObject(proyecto.Portafolio),
+                Tags = _tag.MapToCollectionObject(proyecto.Tag),
             };
         }
 
@@ -52,52 +53,20 @@ namespace Dominio.Mappers
                 Visitas = proyecto.Visitas,
                 Categoria = proyecto.Categoria,
                 Descripcion = proyecto.Descripcion,
-                FechaPub = proyecto.FechaPub,
-                Comentario = ComentarioMapper.MapToCollectionEntity(proyecto.Comentarios),
-                Imagen = ImagenMapper.MapToCollectionEntity(proyecto.Imagenes),
-                Video = VideoMapper.MapToCollectionEntity(proyecto.Videos),
-                Texto = TextoMapper.MapToCollectionEntity(proyecto.Textos),
-                Tag = TagMapper.MapToCollectionEntity(proyecto.Tags),
-                Valoracion = ValoracionMapper.MapToCollectionEntity(proyecto.Valoraciones),
+                FechaPub = ParseToDateType(proyecto.FechaPub),
+                Comentario = _comentario.MapToCollectionEntity(proyecto.Comentarios),
+                Portafolio = _portafolio.MapToCollectionEntity(proyecto.Portafolios),
+                Tag = _tag.MapToCollectionEntity(proyecto.Tags),
+                Valoracion = null,
             };
         }
 
-        public static HashSet<Proyecto> MapToCollectionEntity(ICollection<DTOProyecto> proyectos)
+        public List<DTOProyecto> MapToCollectionObject(ICollection<Proyecto> proyectos)
         {
             if (proyectos == null)
                 return null;
 
-            var proyecto = new HashSet<Proyecto>();
-            foreach (var pro in proyectos)
-            {
-                var p = new Proyecto()
-                {
-                    Id = pro.Id,
-                    Titulo = pro.Titulo,
-                    Portada = pro.Portada,
-                    IdAutor = pro.IdAutor,
-                    Visitas = pro.Visitas,
-                    Categoria = pro.Categoria,
-                    Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
-                    Comentario = ComentarioMapper.MapToCollectionEntity(pro.Comentarios),
-                    Imagen = ImagenMapper.MapToCollectionEntity(pro.Imagenes),
-                    Video = VideoMapper.MapToCollectionEntity(pro.Videos),
-                    Texto = TextoMapper.MapToCollectionEntity(pro.Textos),
-                    Tag = TagMapper.MapToCollectionEntity(pro.Tags),
-                    Valoracion = ValoracionMapper.MapToCollectionEntity(pro.Valoraciones),
-                };
-                proyecto.Add(p);
-            }
-            return proyecto;
-        }
-
-        public static HashSet<DTOProyecto> MapToCollectionObject(ICollection<Proyecto> proyectos)
-        {
-            if (proyectos == null)
-                return null;
-
-            var proyecto = new HashSet<DTOProyecto>();
+            var proyecto = new List<DTOProyecto>();
             foreach (var pro in proyectos)
             {
                 var p = new DTOProyecto()
@@ -109,17 +78,28 @@ namespace Dominio.Mappers
                     Visitas = pro.Visitas,
                     Categoria = pro.Categoria,
                     Descripcion = pro.Descripcion,
-                    FechaPub = pro.FechaPub,
-                    Comentarios = ComentarioMapper.MapToCollectionObject(pro.Comentario),
-                    Imagenes = ImagenMapper.MapToCollectionObject(pro.Imagen),
-                    Videos = VideoMapper.MapToCollectionObject(pro.Video),
-                    Textos = TextoMapper.MapToCollectionObject(pro.Texto),
-                    Tags = TagMapper.MapToCollectionObject(pro.Tag),
-                    Valoraciones = ValoracionMapper.MapToCollectionObject(pro.Valoracion),
+                    FechaPub = pro.FechaPub.ToShortDateString(),
+                    Comentarios = _comentario.MapToCollectionObject(pro.Comentario),
+                    Portafolios = _portafolio.MapToCollectionObject(pro.Portafolio),
+                    Tags = _tag.MapToCollectionObject(pro.Tag),
                 };
                 proyecto.Add(p);
             }
             return proyecto;
+        }
+
+        public static System.DateTime ParseToDateType(string date)
+        {
+            if (DateTime.TryParseExact(date, "dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime d))
+                return DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "dd-MM-yyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime di))
+                return DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out DateTime die))
+                return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return DateTime.Now;
         }
     }
 }

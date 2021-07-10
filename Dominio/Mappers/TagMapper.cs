@@ -14,38 +14,13 @@ namespace Dominio.Mappers
 {
     public class TagMapper
     {
-        public DTOTag MapToObject(Tag tag)
-        {
-            if (tag == null)
-                return null;
 
-            return new DTOTag()
-            {
-                Id = tag.Id,
-                IdProyecto = tag.IdProyecto,
-                Tag = tag.Tag1,
-            };
-        }
-
-        public Tag MapToEntity(DTOTag tag)
-        {
-            if (tag == null)
-                return null;
-
-            return new Tag()
-            {
-                Id = tag.Id,
-                IdProyecto = tag.IdProyecto,
-                Tag1 = tag.Tag,
-            };
-        }
-
-        public static HashSet<DTOTag> MapToCollectionObject(ICollection<Tag> tags)
+        public List<DTOTag> MapToCollectionObject(ICollection<Tag> tags)
         {
             if (tags == null)
                 return null;
 
-            var tag = new HashSet<DTOTag>();
+            var tag = new List<DTOTag>();
             foreach (var ta in tags)
             {
                 var t = new DTOTag()
@@ -59,12 +34,12 @@ namespace Dominio.Mappers
             return tag;
         }
 
-        public static HashSet<Tag> MapToCollectionEntity(ICollection<DTOTag> tags)
+        public List<Tag> MapToCollectionEntity(ICollection<DTOTag> tags)
         {
             if (tags == null)
                 return null;
 
-            var tag = new HashSet<Tag>();
+            var tag = new List<Tag>();
             foreach (var ta in tags)
             {
                 var t = new Tag()
