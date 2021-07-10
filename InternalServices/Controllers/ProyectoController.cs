@@ -102,7 +102,7 @@ namespace InternalServices.Controllers
             {
                 MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
 
-                if (mantenimiento.ExisteProyecto(id))
+                if (!mantenimiento.ExisteProyecto(id))
                     throw new ArgumentException("Proyecto no existente");
 
                 return Ok(mantenimiento.Get(id));
@@ -121,7 +121,6 @@ namespace InternalServices.Controllers
         // Devuelve todos los proyectos que tiene un usuario en especifico dado el id
         [AllowAnonymous]
         [HttpGet]
-
         public IHttpActionResult GetAllFromUser(int idUsuario)
         {
             try
@@ -150,11 +149,125 @@ namespace InternalServices.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
-            MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
-            return Ok(mantenimiento.GetAll());
+            try
+            {
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+                return Ok(mantenimiento.GetAll());
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
+        }
+
+        [AuthenticateUser]
+        [HttpPost]
+        public IHttpActionResult ValorarProyecto(DTOValoracion valoracion)// Endpoint para dar like a un proyecto
+        {
+            try
+            {
+                MantenimientoProyecto p_mantenimiento = new MantenimientoProyecto();
+                MantenimientoValoracion mantenimiento = new MantenimientoValoracion();
+
+                var token = Request.Headers.Authorization.Parameter;
+
+                if (token == null || token == "" || token.Equals(""))
+                    throw new ArgumentException("Debe iniciar sesion para dar like a un proyecto");
+
+                if (!TokenManager.VerificarXId(token, valoracion.IdUsuario)) 
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (!p_mantenimiento.ExisteProyecto(valoracion.IdProyecto))
+                    throw new ArgumentException("Proyecto no existente");
+
+                if (mantenimiento.LoValoro(valoracion.IdUsuario, valoracion.IdProyecto))
+                    throw new ArgumentException("Este usuario ya dio like a este proyecto");
+
+                mantenimiento.ValorarProyecto(valoracion);
+
+                return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
+        }
+
+        [AuthenticateUser]
+        [HttpDelete]
+        public IHttpActionResult QuitarValoracion(DTOValoracion valoracion)// enpoint para sacarle el like a un proyecto
+        {
+            try
+            {
+                MantenimientoProyecto p_mantenimiento = new MantenimientoProyecto();
+                MantenimientoValoracion mantenimiento = new MantenimientoValoracion();
+                var token = Request.Headers.Authorization.Parameter;
+
+                if (token == null || token == "" || token.Equals(""))
+                    throw new ArgumentException("Debe iniciar sesion para quitar like a un proyecto");
+
+                if (!TokenManager.VerificarXId(token, valoracion.IdUsuario))
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
+
+                if (!p_mantenimiento.ExisteProyecto(valoracion.IdProyecto))
+                    throw new ArgumentException("Proyecto no existente");
+
+                if (!mantenimiento.LoValoro(valoracion.IdUsuario, valoracion.IdProyecto))
+                    throw new ArgumentException("Este usuario no dio like a este proyecto");
+
+                mantenimiento.QuitarValoracion(valoracion);
+
+                return Ok(true);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
         }
 
         [AllowAnonymous]
+        [HttpPut]
+        public IHttpActionResult VisitarProyecto(int idProyecto)// agrega un +1 al contador de visitas de un proyecto
+        {
+            try
+            {
+                MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
+
+                if(!mantenimiento.ExisteProyecto(idProyecto))
+                    throw new ArgumentException("Proyecto no existente");
+
+                mantenimiento.VisitarProyecto(idProyecto);
+
+                return Ok(true);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
+            }
+        }
+
+
+        [AuthenticateUser]
         [HttpGet]
         public IHttpActionResult GetProyectosValorados(int idUsuario) // devuelve una lista con los proyectos valorados dado el id del usuario
         {
@@ -162,6 +275,9 @@ namespace InternalServices.Controllers
             {
                 MantenimientoProyecto mantenimiento = new MantenimientoProyecto();
                 MantenimientoUsuario U_mantenimiento = new MantenimientoUsuario();
+
+                if (!TokenManager.VerificarXId(Request.Headers.Authorization.Parameter, idUsuario))
+                    throw new UnauthorizedAccessException("Se ha denegado la autorización para esta solicitud");
 
                 if (!U_mantenimiento.ExisteUsuario(idUsuario))
                     throw new ArgumentException("Usuario no existente");

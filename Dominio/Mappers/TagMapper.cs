@@ -14,31 +14,6 @@ namespace Dominio.Mappers
 {
     public class TagMapper
     {
-        public DTOTag MapToObject(Tag tag)
-        {
-            if (tag == null)
-                return null;
-
-            return new DTOTag()
-            {
-                Id = tag.Id,
-                IdProyecto = tag.IdProyecto,
-                Tag = tag.Tag1,
-            };
-        }
-
-        public Tag MapToEntity(DTOTag tag)
-        {
-            if (tag == null)
-                return null;
-
-            return new Tag()
-            {
-                Id = tag.Id,
-                IdProyecto = tag.IdProyecto,
-                Tag1 = tag.Tag,
-            };
-        }
 
         public List<DTOTag> MapToCollectionObject(ICollection<Tag> tags)
         {

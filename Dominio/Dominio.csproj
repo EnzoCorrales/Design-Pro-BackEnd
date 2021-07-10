@@ -136,11 +136,13 @@
     <Compile Include="DataModel\Repositories\SeguimientoRepository.cs" />
     <Compile Include="DataModel\Repositories\TagRepository.cs" />
     <Compile Include="DataModel\Repositories\UsuarioRepository.cs" />
+    <Compile Include="DataModel\Repositories\ValoracionRepository.cs" />
     <Compile Include="General\MantenimientoComentario.cs" />
     <Compile Include="General\MantenimientoMensaje.cs" />
     <Compile Include="General\MantenimientoProyecto.cs" />
     <Compile Include="General\MantenimientoSeguimiento.cs" />
     <Compile Include="General\MantenimientoUsuario.cs" />
+    <Compile Include="General\MantenimientoValoracion.cs" />
     <Compile Include="Mappers\ComentarioMapper.cs" />
     <Compile Include="Mappers\MensajeMapper.cs" />
     <Compile Include="Mappers\PortafolioMapper.cs" />

@@ -90,7 +90,7 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return this.SinColecciones(_mapper.MapToObject(repository.Get(id)));
+                return this.AgregarDatos(_mapper.MapToObject(repository.Get(id)));
             }
         }
         public DTOUsuario Get(string correo)
@@ -98,7 +98,7 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return this.SinColecciones(_mapper.MapToObject(repository.Get(correo)));
+                return this.AgregarDatos(_mapper.MapToObject(repository.Get(correo)));
             }
         }
         public List<DTOUsuario> GetAllSeguidores(int idUsuario)
@@ -106,7 +106,15 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return SinColecciones(_mapper.MapToCollectionObject(repository.GetAllSeguidores(idUsuario, context)));
+                List<DTOUsuario> resultado = new List<DTOUsuario>();
+                var lista = repository.GetAllSeguidores(idUsuario, context);
+                foreach (var usuario in lista)
+                {
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
+                }
+
+                return resultado;
             }
         }
         public List<DTOUsuario> GetAllSiguiendo(int idUsuario)
@@ -114,7 +122,15 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return SinColecciones(_mapper.MapToCollectionObject(repository.GetAllSiguiendo(idUsuario, context)));
+                List<DTOUsuario> resultado = new List<DTOUsuario>();
+                var lista = repository.GetAllSiguiendo(idUsuario, context);
+                foreach (var usuario in lista)
+                {
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
+                }
+
+                return resultado;
             }
         }
         public List<DTOUsuario> GetAll()
@@ -122,7 +138,15 @@ namespace Dominio.General
             using (var context = new DesignProDB())
             {
                 var repository = new UsuarioRepository(context);
-                return SinColecciones(_mapper.MapToCollectionObject(repository.GetAll()));
+                List<DTOUsuario> resultado = new List<DTOUsuario>();
+                var lista = repository.GetAll();
+                foreach(var usuario in lista)
+                {
+                    var u = _mapper.MapToObject(usuario);
+                    resultado.Add(AgregarDatos(u));
+                }
+
+                return resultado;
             }
         }
         public string HashPassword(string password)
@@ -130,32 +154,54 @@ namespace Dominio.General
             var hasher = new PasswordHasher();
             return hasher.HashPassword(password);
         }
-        public List<DTOUsuario> SinColecciones(List<DTOUsuario> resultado)// devuelve el dto del usuario sin los datos inecesarios como las colecciones
-        {
-            for (var x = 0; x < resultado.Count; x++)
-            {
-                resultado.ElementAt(x).Password = null;
-                resultado.ElementAt(x).Proyectos = null;
-                resultado.ElementAt(x).PValorados = null;
-                resultado.ElementAt(x).Seguidores = null;
-                resultado.ElementAt(x).Siguiendo = null;
-                resultado.ElementAt(x).MensajesE = null;
-                resultado.ElementAt(x).MensajesR = null;
-                resultado.ElementAt(x).Comentarios = null;
-            }
 
-            return resultado;
-        }
-        public DTOUsuario SinColecciones(DTOUsuario usuario)
+        public int GetVisitasTotales(int idUsuario)
         {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                var proyectos = repository.Get(idUsuario).Proyecto;
+                var visitas = 0;
+                foreach (var proyecto in proyectos)
+                {
+                    visitas = visitas + proyecto.Visitas;
+                }
+
+                return visitas;
+            }
+        }
+
+        public int GetLikesTotales(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                var proyectos = repository.Get(idUsuario).Proyecto;
+                var likes = 0;
+                foreach(var proyecto in proyectos)
+                {
+                    likes = likes + proyecto.Valoracion.Count;
+                }
+
+                return likes;
+            }
+        }
+
+        public int GetSeguidores(int idUsuario)
+        {
+            using (var context = new DesignProDB())
+            {
+                var repository = new UsuarioRepository(context);
+                return repository.Get(idUsuario).Seguimiento1.Count;
+            }
+        }
+
+        public DTOUsuario AgregarDatos(DTOUsuario usuario)
+        {
+            usuario.Likes = this.GetLikesTotales(usuario.Id);
+            usuario.Visitas = this.GetVisitasTotales(usuario.Id);
+            usuario.Seguidores = this.GetSeguidores(usuario.Id);
             usuario.Password = null;
-            usuario.Proyectos = null;
-            usuario.PValorados = null;
-            usuario.Seguidores = null;
-            usuario.Siguiendo = null;
-            usuario.MensajesE = null;
-            usuario.MensajesR = null;
-            usuario.Comentarios = null;
 
             return usuario;
         }

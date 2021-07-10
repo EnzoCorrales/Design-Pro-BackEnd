@@ -61,6 +61,13 @@ namespace Dominio.DataModel.Repositories
             return resultado;
         }
 
+        public void VisitarProyecto(int idProyecto)
+        {
+            var entity = this.Get(idProyecto);
+
+            entity.Visitas++;
+        }
+
         public List<Proyecto> GetAll(int idUsuario)
         {
             return this._context.Proyecto.Where(a => a.IdAutor == idUsuario).ToList();
