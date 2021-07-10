@@ -15,6 +15,7 @@ namespace Common.DataTransferObjects
         public int IdUsuario { get; set; }
         public int IdProyecto { get; set; }
         public string Nombre { get; set; }
+        public string ImgAutor { get; set; }
 
     }
 }

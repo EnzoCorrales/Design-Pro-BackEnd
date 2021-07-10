@@ -31,12 +31,36 @@ namespace InternalServices.Controllers
 
                 MantenimientoComentario mantenimiento = new MantenimientoComentario();
                 mantenimiento.Create(comentario);
-                response.Success = true;
-                return Ok(response);
+                return Ok(true);
             }
             catch (UnauthorizedAccessException ex)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, e));
+            }
+        }
+
+        // localhost:{puerto}/api/comentario/GetAllByProyecto?idProyecto={idProyecto}
+        // Devuelve todos los comentarios de un proyecto dada la id del proyecto
+        [AllowAnonymous]
+        [HttpGet]
+        public IHttpActionResult GetAllByProyecto(int idProyecto)
+        {
+            try
+            {
+                MantenimientoProyecto p_mantenimiento = new MantenimientoProyecto();
+                if (!p_mantenimiento.ExisteProyecto(idProyecto))
+                    throw new ArgumentException("Proyecto no existente");
+
+                MantenimientoComentario mantenimiento = new MantenimientoComentario();
+                return Ok(mantenimiento.GetAllByProyecto(idProyecto));
             }
             catch (ArgumentException ex)
             {
@@ -139,31 +163,6 @@ namespace InternalServices.Controllers
 
             return Ok(proyecto);
         }*/
-
-        // localhost:{puerto}/api/comentario/GetAllByProyecto?idProyecto={idProyecto}
-        // Devuelve todos los comentarios de un proyecto dada la id del proyecto
-        [AllowAnonymous]
-        [HttpGet]
-        public IHttpActionResult GetAllByProyecto(int idProyecto)
-        {
-            try
-            {
-                MantenimientoProyecto p_mantenimiento = new MantenimientoProyecto();
-                if(!p_mantenimiento.ExisteProyecto(idProyecto))
-                    throw new ArgumentException("Proyecto no existente");
-
-                MantenimientoComentario mantenimiento = new MantenimientoComentario();
-                return Ok(mantenimiento.GetAllByProyecto(idProyecto));
-            }
-            catch (ArgumentException ex)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message));
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fallo al procesar la operación!"));
-            } 
-        }
 
         // localhost:{puerto}/api/comentario/GetAllByUsuario?idUsuario={idUsuario}
         // Devuelve todos los comentarios de un usuario dado el correo

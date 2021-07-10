@@ -125,6 +125,7 @@ namespace Dominio.General
                 {
                     var c = _mapper.MapToObject(comentario);
                     c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                    c.ImgAutor = U_repository.Get(c.IdUsuario).ImgPerfil;
                     resultado.Add(c);
                 }
 
@@ -146,6 +147,7 @@ namespace Dominio.General
                 {
                     var c = _mapper.MapToObject(comentario);
                     c.Nombre = U_repository.Get(c.IdUsuario).Nombre + " " + U_repository.Get(c.IdUsuario).Apellido;
+                    c.ImgAutor = U_repository.Get(c.IdUsuario).ImgPerfil;
                     resultado.Add(c);
                 }
 
